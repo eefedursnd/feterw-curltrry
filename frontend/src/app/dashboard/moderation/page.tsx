@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { punishAPI, userAPI } from 'haze.bio/api';
 import ModerationDashboardContent from 'haze.bio/components/content/ModerationDashboardContent';
 import { HasStaffPermission } from 'haze.bio/utils/staff';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
     try {
@@ -22,5 +23,9 @@ async function getData() {
 export default async function ModerationDashboardPage() {
     await getData();
     
-    return <ModerationDashboardContent />;
+    return (
+        <ProtectedRoute>
+            <ModerationDashboardContent />
+        </ProtectedRoute>
+    );
 }

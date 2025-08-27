@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { analyticsAPI } from 'haze.bio/api';
 import AnalyticsContent from 'haze.bio/components/content/AnalyticsContent';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
   try {
@@ -15,5 +16,9 @@ async function getData() {
 
 export default async function AnalyticsPage() {
   const { analyticsData } = await getData();
-  return <AnalyticsContent initialData={analyticsData} />;
+  return (
+    <ProtectedRoute>
+      <AnalyticsContent initialData={analyticsData} />
+    </ProtectedRoute>
+  );
 }

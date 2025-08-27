@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { profileAPI, userAPI, viewAPI } from 'haze.bio/api';
 import DashboardContent from 'haze.bio/components/content/DashboardContent';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
   try {
@@ -16,5 +17,9 @@ async function getData() {
 export default async function DashboardPage() {
   const { viewsData } = await getData();
 
-  return <DashboardContent view={viewsData} />;
+  return (
+    <ProtectedRoute>
+      <DashboardContent view={viewsData} />
+    </ProtectedRoute>
+  );
 }

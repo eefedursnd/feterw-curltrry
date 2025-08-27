@@ -2,6 +2,8 @@ import { templateAPI, userAPI } from 'haze.bio/api';
 import TemplatesContent from 'haze.bio/components/content/TemplatesContent';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
+export const dynamic = "force-dynamic";
 
 async function getData() {
   try {
@@ -45,8 +47,12 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
 export default async function TemplatesPage() {
   const { templates, shareableTemplates } = await getData();
-  return <TemplatesContent
-    initialTemplates={templates}
-    initialShareableTemplates={shareableTemplates}
-  />;
+  return (
+    <ProtectedRoute>
+      <TemplatesContent
+        initialTemplates={templates}
+        initialShareableTemplates={shareableTemplates}
+      />
+    </ProtectedRoute>
+  );
 }

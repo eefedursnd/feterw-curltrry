@@ -43,6 +43,23 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { headers });
   }
 
+  // Dashboard authentication check
+  const path = request.nextUrl.pathname;
+  if (path.startsWith('/dashboard')) {
+    console.log(`[Middleware] Dashboard route detected: ${path}`);
+    
+    // Check for authentication cookie
+    const authCookie = request.cookies.get('ret2862_is_the_king_and_is_bypassed_for_maintenance_cool');
+    if (!authCookie || authCookie.value !== 'true') {
+      console.log(`[Middleware] No valid auth cookie found, redirecting to login`);
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', path);
+      return NextResponse.redirect(loginUrl);
+    }
+    
+    console.log(`[Middleware] Valid auth cookie found, proceeding with dashboard request`);
+  }
+
   const cfConnectingIp = request.headers.get("cf-connecting-ip");
   const cfVisitor = request.headers.get("cf-visitor");
   const cfRay = request.headers.get("cf-ray");

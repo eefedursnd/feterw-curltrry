@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { dataAPI, sessionAPI, userAPI } from 'haze.bio/api';
 import SettingsContent from 'haze.bio/components/content/SettingsContent';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
     try {
@@ -29,5 +30,9 @@ async function getData() {
 export default async function SettingsPage() {
     const { sessions, currentExport } = await getData();
 
-    return <SettingsContent sessions={sessions} currentExport={currentExport} />;
+    return (
+        <ProtectedRoute>
+            <SettingsContent sessions={sessions} currentExport={currentExport} />
+        </ProtectedRoute>
+    );
 }

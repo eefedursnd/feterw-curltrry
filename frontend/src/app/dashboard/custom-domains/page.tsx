@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { domainAPI, userAPI } from 'haze.bio/api';
 import DomainsContent from 'haze.bio/components/content/DomainsContent';
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
   try {
@@ -40,6 +41,8 @@ export default async function DomainsPage() {
   }
 
   return (
-    <DomainsContent initialAvailableDomains={data.availableDomains || []} initialUserDomains={data.userDomains || []} />
+    <ProtectedRoute>
+      <DomainsContent initialAvailableDomains={data.availableDomains || []} initialUserDomains={data.userDomains || []} />
+    </ProtectedRoute>
   );
 }

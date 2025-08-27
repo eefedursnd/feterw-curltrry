@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { applyAPI } from 'haze.bio/api';
 import ApplicationsContent from "haze.bio/components/content/ApplicationsContent";
+import ProtectedRoute from 'haze.bio/components/auth/ProtectedRoute';
 
 async function getData() {
   try {
@@ -26,5 +27,9 @@ async function getData() {
 
 export default async function ApplicationsPage() {
   const { applications, openPositions, positions } = await getData();
-  return <ApplicationsContent initialApplications={applications} initialOpenPositions={openPositions} initialPositions={positions || []} />;
+  return (
+    <ProtectedRoute>
+      <ApplicationsContent initialApplications={applications} initialOpenPositions={openPositions} initialPositions={positions || []} />
+    </ProtectedRoute>
+  );
 }
