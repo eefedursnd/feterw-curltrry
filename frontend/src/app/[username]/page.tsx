@@ -13,7 +13,7 @@ import MediaPlayer from 'haze.bio/components/widgets/audio/MediaPlayer';
 import ClientEffectsContainer from 'haze.bio/components/ui/ClientEffectsContainer';
 import MinimalisticTemplate from 'haze.bio/components/templates/MinimalisticTemplate';
 
-export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{username: string }> }) {
   const { username } = await params;
   const { user } = await getProfileData(username);
 
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
   const description = user.profile?.description || 'All your links, in one place';
 
   let imageUrl;
-  imageUrl = `https://api.cutz.lol/api/images/user/${user.uid}`;
+  imageUrl = `https://api.cutz.lol/api/images/user/${user.uid}?t=${Date.now()}`;
 
   return {
     title,

@@ -26,16 +26,13 @@ type EmailContent struct {
 }
 
 func (ms *MailService) SendTemplateEmail(content *EmailContent) error {
-	templateContent, err := utils.FetchTemplateFromGitHub(content.Body)
+	templateService := utils.NewEmailTemplateService()
+	templateContent, err := templateService.GetTemplate(content.Body)
 	if err != nil {
 		return err
 	}
 
-	emailBody := utils.ReplaceTemplatePlaceholders(string(templateContent), content.Data)
-
-	if utils.IsMarkdownText(emailBody) {
-		emailBody = string(blackfriday.Run([]byte(emailBody)))
-	}
+	emailBody := utils.ReplaceTemplatePlaceholders(templateContent, content.Data)
 
 	emailToSend := &EmailContent{
 		To:      content.To,

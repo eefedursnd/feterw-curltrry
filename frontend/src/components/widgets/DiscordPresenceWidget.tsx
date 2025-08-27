@@ -196,7 +196,7 @@ function DiscordPresenceWidget({ profile, UID, presenceData }: DiscordPresenceWi
               </>
             ) : (
               <p className="text-sm text-zinc-500 mt-1 italic">
-                Must join discord.gg/hazebio to show your status
+                Must join discord.gg/cutz to show your status
               </p>
             )}
           </div>

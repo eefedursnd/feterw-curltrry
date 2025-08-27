@@ -30,7 +30,7 @@ func FetchTemplateFromGitHub(templateName string) (string, error) {
 		delete(templateCache.cache, templateName)
 	}
 
-	url := fmt.Sprintf("https://raw.githubusercontent.com/hazebio/haze.bio_templates/refs/heads/main/templates/%s.md", templateName)
+	url := fmt.Sprintf("https://raw.githubusercontent.com/eefedursnd/cutz.lol_templates/refs/heads/main/templates/%s.md", templateName)
 
 	client := &http.Client{
 		Timeout: 10 * time.Second,

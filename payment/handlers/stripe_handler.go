@@ -186,8 +186,8 @@ func (sh *StripeHandler) CreateCheckoutURL(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	successURL := "https://haze.bio/dashboard/"
-	cancelURL := "https://haze.bio/error?message=Your payment was cancelled. Try again or contact support."
+	successURL := "https://cutz.lol/dashboard/"
+	cancelURL := "https://cutz.lol/error?message=Your payment was cancelled. Try again or contact support."
 
 	stripe.Key = config.StripeSecretKey
 
