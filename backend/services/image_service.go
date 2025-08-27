@@ -137,7 +137,7 @@ func (is *ImageService) GenerateUserCard(user *models.User, profile *models.User
 	(&font.Drawer{Dst: img, Src: image.NewUniform(color.RGBA{255, 255, 255, 255}), Face: displayNameFace, Dot: fixed.P(displayNameX, displayNameY)}).DrawString(displayName)
 	usernameSize := 36
 	usernameFace := truetype.NewFace(poppinsRegular, &truetype.Options{Size: float64(usernameSize), DPI: 96, Hinting: font.HintingFull})
-	username := "haze.bio/" + user.Username
+	username := "cutz.lol/" + user.Username
 	usernameWidth := font.MeasureString(usernameFace, username).Ceil()
 	usernameX := (width - usernameWidth) / 2
 	usernameY := displayNameY + 70
