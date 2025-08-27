@@ -217,7 +217,7 @@ func (ets *EmailTemplateService) getPasswordResetTemplate() string {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4c1d95;
             padding: 30px;
             text-align: center;
         }
@@ -234,11 +234,11 @@ func (ets *EmailTemplateService) getPasswordResetTemplate() string {
             font-size: 16px;
             line-height: 1.6;
             margin-bottom: 30px;
-            color: #e0e0e0;
+            color: #ffffff;
         }
         .button {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4c1d95;
             color: #ffffff;
             text-decoration: none;
             padding: 15px 30px;
@@ -253,7 +253,7 @@ func (ets *EmailTemplateService) getPasswordResetTemplate() string {
         }
         .fallback-text {
             font-size: 14px;
-            color: #b0b0b0;
+            color: #ffffff;
             margin: 20px 0 10px 0;
         }
         .fallback-url {
@@ -263,12 +263,12 @@ func (ets *EmailTemplateService) getPasswordResetTemplate() string {
             word-break: break-all;
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            color: #667eea;
+            color: #ffffff;
             border: 1px solid #3a3a3a;
         }
         .expiration-notice {
             font-size: 14px;
-            color: #b0b0b0;
+            color: #ffffff;
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #3a3a3a;

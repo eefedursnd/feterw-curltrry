@@ -99,7 +99,7 @@ export default function ShareProfileModal({ isOpen, onClose, username }: SharePr
             </div>
             <div>
               <h3 className="text-base font-semibold text-white">Share Profile</h3>
-              <p className="text-xs text-white/60">Share your haze.bio profile with others</p>
+              <p className="text-xs text-white/60">Share your cutz.lol profile with others</p>
             </div>
           </div>
           

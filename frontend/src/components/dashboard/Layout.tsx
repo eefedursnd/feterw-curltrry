@@ -107,10 +107,7 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
       title: "Account",
       icon: Settings,
       items: [
-        {
-          path: '/dashboard/custom-domains', label: 'Custom Domains', icon: Globe, isNew: true,
-          //experimentalFeature: 'custom_domains',
-        },
+        
         { path: '/dashboard/applications', label: 'Applications', icon: ExternalLink },
         { path: '/dashboard/settings', label: 'Settings', icon: Settings },
       ]

@@ -26,7 +26,7 @@ class StatusAPI {
                 return {} as Status;
             }
 
-            return json as Status;
+            return json.data as Status;
         } catch (error) {
             console.error("Error fetching active status:", error);
             throw error;

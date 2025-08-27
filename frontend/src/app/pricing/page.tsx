@@ -112,7 +112,7 @@ export default function PricingPage() {
                                 </div>
 
                                 <div className="space-y-3 mb-6 flex-grow text-sm">
-                                    {["Free Custom Domains", "Basic Analytics", "Free Effects & Layouts"].map((feature, i) => (
+                                    				{["Basic Analytics", "Free Effects & Layouts"].map((feature, i) => (
                                         <div key={i} className="flex items-start gap-2">
                                             <div className="mt-0.5">
                                                 <CheckCircle className="w-5 h-5 text-zinc-500" />
@@ -155,7 +155,7 @@ export default function PricingPage() {
                                 <div className="space-y-3 mb-6 relative z-10">
                                     {[
                                         "All Free features",
-                                        "Premium Custom Domains",
+                                        
                                         "Remove cutz.lol branding",
                                         "Premium themes & effects",
                                         "Advanced analytics",
