@@ -167,8 +167,8 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl border border-zinc-800/50 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 w-full max-w-md overflow-hidden">
                 {/* Header with progress indicator */}
                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between relative">
                     <div className="flex items-center gap-3">
@@ -227,7 +227,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
 
                                                 <div
                                                     className={`relative w-full h-40 overflow-hidden rounded-lg cursor-pointer 
-                                                        ${!bannerUrl ? 'border-2 border-dashed border-zinc-700 hover:border-purple-600/50 bg-black/30' : 'bg-black/30'}`}
+                                                        ${!bannerUrl ? 'border-2 border-dashed border-zinc-700 hover:border-purple-600/50 bg-[#0E0E0E]/30' : 'bg-[#0E0E0E]/30'}`}
                                                     onClick={openFileUploadDialog}
                                                 >
                                                     {bannerUrl ? (
@@ -240,7 +240,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
                                                                 className="object-cover"
                                                                 draggable="false"
                                                             />
-                                                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                            <div className="absolute inset-0 bg-[#0E0E0E]/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
                                                                 <Upload className="w-8 h-8 text-white" />
                                                             </div>
                                                         </>
@@ -252,7 +252,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
                                                         </div>
                                                     )}
                                                     {isUploading && (
-                                                        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-black/40">
+                                                        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[#0E0E0E]/40">
                                                             <div
                                                                 className="h-full bg-purple-600/50 transition-all duration-300"
                                                                 style={{ width: `${uploadProgress}%` }}
@@ -296,7 +296,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
 
                                                 <input
                                                     type="text"
-                                                    className="w-full bg-black/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
+                                                    className="w-full bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
                                                     placeholder="e.g., Neon Glow Theme"
                                                     value={name}
                                                     onChange={(e) => setName(e.target.value)}
@@ -323,7 +323,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
                                                 <div className="flex gap-2">
                                                     <input
                                                         type="text"
-                                                        className="flex-grow bg-black/50 border border-zinc-800/50 rounded-lg py-2 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
+                                                        className="flex-grow bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg py-2 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
                                                         placeholder="Add a tag"
                                                         value={currentTag}
                                                         onChange={(e) => setCurrentTag(e.target.value)}
@@ -344,7 +344,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
                                                         {tags.map((tag: string, index: number) => (
                                                             <div
                                                                 key={index}
-                                                                className="bg-black/50 text-white/80 border border-zinc-800/50 px-2 py-1 rounded-full flex items-center gap-1.5"
+                                                                className="bg-[#0E0E0E]/50 text-white/80 border border-zinc-800/50 px-2 py-1 rounded-full flex items-center gap-1.5"
                                                             >
                                                                 <span className="text-xs">{tag}</span>
                                                                 <button
@@ -381,7 +381,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
                                                     Review how your template will appear in the gallery.
                                                 </p>
 
-                                                <div className="bg-black/50 border border-zinc-800/50 rounded-lg overflow-hidden">
+                                                <div className="bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg overflow-hidden">
                                                     {bannerUrl && (
                                                         <div className="relative w-full h-32">
                                                             <Image
@@ -472,7 +472,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
 
                 {/* Footer */}
                 {!isSuccess && (
-                    <div className="px-5 py-4 border-t border-zinc-800/50 flex justify-between bg-black">
+                                                <div className="px-5 py-4 border-t border-zinc-800/50 flex justify-between bg-[#0E0E0E]">
                         <div>
                             {currentStep > 0 ? (
                                 <button

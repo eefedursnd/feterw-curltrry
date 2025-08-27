@@ -422,7 +422,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-8 relative">
                 {/* Hero Section with Header */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                     <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -483,7 +483,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Social Links with SocialsSort */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <LinkIcon className="w-4 h-4 text-purple-400" />
@@ -504,7 +504,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                             </div>
 
                             {/* Tips */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Info className="w-4 h-4 text-purple-400" />
@@ -549,7 +549,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                         {/* Right Column - Side Content */}
                         <div className="space-y-6">
                             {/* Icon Settings */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Palette className="w-4 h-4 text-purple-400" />
@@ -598,7 +598,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                     transition-transform hover:scale-105 hover:border-purple-500/30 shadow-md"
                                                 style={{ backgroundColor: iconColor }}
                                             />
-                                            <div className="flex items-center gap-1 bg-black/40 px-3 py-2 rounded-lg border border-zinc-800/50">
+                                            <div className="flex items-center gap-1 bg-[#0E0E0E]/40 px-3 py-2 rounded-lg border border-zinc-800/50">
                                                 <span className="text-xs text-white/60">#</span>
                                                 <span className="text-sm text-white">
                                                     {iconColor.replace('#', '')}
@@ -613,7 +613,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                     {/* Preview */}
                                     <div className="p-4 bg-zinc-800/30 rounded-lg border border-zinc-800/50">
                                         <h3 className="text-sm font-medium text-white mb-3">Preview</h3>
-                                        <div className="bg-black/40 rounded-lg border border-zinc-800/60 p-3 flex flex-wrap gap-2 justify-center">
+                                        <div className="bg-[#0E0E0E]/40 rounded-lg border border-zinc-800/60 p-3 flex flex-wrap gap-2 justify-center">
                                             {['instagram', 'github', 'discord', 'x'].map(platform => {
                                                 const IconComponent = getIconComponent(platform);
                                                 return IconComponent ? (
@@ -635,7 +635,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                             </div>
 
                             {/* Quick Actions */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Settings className="w-4 h-4 text-purple-400" />
@@ -678,7 +678,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                 {activeTab === 'available' && (
                     <div className="space-y-6">
                         {/* Available Social Platforms */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800/50">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Award className="w-4 h-4 text-purple-400" />
@@ -719,7 +719,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                         </div>
 
                         {/* Help Section */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
                             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(168,85,247,0.15),transparent_70%)]"></div>
                             
                             <div className="relative flex flex-col md:flex-row gap-6 items-center">
@@ -753,12 +753,12 @@ export default function SocialsContent({ }: SocialsContentProps) {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         {/* Backdrop with blur */}
                         <div
-                            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+                            className="fixed inset-0 bg-[#0E0E0E]/70 backdrop-blur-sm"
                             onClick={handleCloseModal}
                         />
 
                         {/* Modal content */}
-                        <div className="relative bg-black rounded-xl border border-zinc-800/50 w-full max-w-md max-h-[85vh] overflow-y-auto m-4 z-10">
+                        <div className="relative bg-[#0E0E0E] rounded-xl border border-zinc-800/50 w-full max-w-md max-h-[85vh] overflow-y-auto m-4 z-10">
                             {/* Header */}
                             <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -784,7 +784,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                     <label className="block text-sm font-medium text-white mb-3">
                                         Platform
                                     </label>
-                                    <div className="flex items-center gap-3 p-2.5 bg-black/40 rounded-lg border border-zinc-800/60">
+                                    <div className="flex items-center gap-3 p-2.5 bg-[#0E0E0E]/40 rounded-lg border border-zinc-800/60">
                                         {getIconComponent(selectedPlatform) &&
                                             React.createElement(getIconComponent(selectedPlatform), {
                                                 size: 22,
@@ -821,7 +821,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                         className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border 
                                                         ${socialType === 'redirect'
                                                             ? 'bg-purple-600 text-white border-purple-700'
-                                                            : 'bg-black/40 border-zinc-800/60 text-white/70 hover:bg-zinc-800/40'
+                                                            : 'bg-[#0E0E0E]/40 border-zinc-800/60 text-white/70 hover:bg-zinc-800/40'
                                                         } transition-colors`}
                                                     >
                                                         <LinkIcon className="w-4 h-4" />
@@ -835,7 +835,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                         className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border 
                                                         ${socialType === 'copy_text'
                                                             ? 'bg-purple-600 text-white border-purple-700'
-                                                            : 'bg-black/40 border-zinc-800/60 text-white/70 hover:bg-zinc-800/40'
+                                                            : 'bg-[#0E0E0E]/40 border-zinc-800/60 text-white/70 hover:bg-zinc-800/40'
                                                         } transition-colors`}
                                                     >
                                                         <Copy className="w-4 h-4" />
@@ -917,7 +917,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                     value={customFullUrl}
                                                     onChange={(e) => setCustomFullUrl(e.target.value)}
                                                     placeholder="Enter text to copy"
-                                                    className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+                                                    className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg 
                                                     text-white text-sm placeholder-white/30 focus:outline-none
                                                     focus:border-purple-500/30 transition-colors"
                                                 />
@@ -927,7 +927,7 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                     value={customFullUrl}
                                                     onChange={(e) => setCustomFullUrl(e.target.value)}
                                                     placeholder="Enter full URL (e.g. https://example.com)"
-                                                    className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+                                                    className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg 
                                                     text-white text-sm placeholder-white/30 focus:outline-none
                                                     focus:border-purple-500/30 transition-colors"
                                                 />
@@ -946,12 +946,12 @@ export default function SocialsContent({ }: SocialsContentProps) {
                                                 value={socialUrl}
                                                 onChange={(e) => setSocialUrl(e.target.value)}
                                                 placeholder="Enter text to copy"
-                                                className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+                                                className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg 
                                                 text-white text-sm placeholder-white/30 focus:outline-none
                                                 focus:border-purple-500/30 transition-colors"
                                             />
                                         ) : (
-                                            <div className="flex items-center w-full bg-black/40 border border-zinc-800/60 rounded-lg overflow-hidden focus-within:border-purple-500/30 transition-colors">
+                                            <div className="flex items-center w-full bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg overflow-hidden focus-within:border-purple-500/30 transition-colors">
                                                 <div className="px-3 py-2.5 bg-zinc-800/80 text-white/50 text-sm border-r border-zinc-800/60 max-w-[50%] truncate">
                                                     {getBaseUrl(selectedPlatform)}
                                                 </div>

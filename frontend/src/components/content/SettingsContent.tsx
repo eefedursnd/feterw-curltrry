@@ -528,7 +528,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
     <DashboardLayout>
       <div className="max-w-[100rem] mx-auto space-y-8 relative">
         {/* Hero Section mit Header */}
-        <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+        <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -608,7 +608,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
             {activeSettingsTab === 'profile' && (
               <>
                 {/* Profilinformationen */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                   <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <BookUser className="w-4 h-4 text-purple-400" />
@@ -727,7 +727,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
                 </div>
 
                 {/* Discord Integration mit lila Akzenten */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                   <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <DiscordIcon className="w-4 h-4 text-purple-400" />
@@ -808,7 +808,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
             {activeSettingsTab === 'security' && (
               <>
                 {/* Authentifizierung mit lila Akzenten */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                   <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <Shield className="w-4 h-4 text-purple-400" />
@@ -963,7 +963,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
             {activeSettingsTab === 'account' && (
               <>
                 {/* Account-Verwaltung mit lila Akzenten */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                   <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <Settings className="w-4 h-4 text-purple-400" />
@@ -1043,7 +1043,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
                 </div>
 
                 {/* Danger Zone mit anderem Farbschema */}
-                <div className="bg-black rounded-xl border border-red-900/20 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-red-900/20 overflow-hidden">
                   <div className="px-5 py-4 border-b border-red-900/20 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-red-400" />
@@ -1149,7 +1149,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
             {activeSettingsTab === 'billing' && (
               <>
                 {/* Premium Subscription Status */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                   <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                       <Star className="w-4 h-4 text-purple-400" />
@@ -1220,7 +1220,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
           {/* Sidebar - 1/3 der Breite auf großen Bildschirmen */}
           <div className="space-y-6">
             {/* Account Status */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-zinc-800/50">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <UserIcon className="w-4 h-4 text-purple-400" />
@@ -1298,7 +1298,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-zinc-800/50">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <Settings className="w-4 h-4 text-purple-400" />
@@ -1350,8 +1350,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
         </div>
         {/* MFA QR Code Modal */}
         {showMfaQR && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1435,8 +1435,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
 
         {/* Password Modal */}
         {showPasswordModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1466,7 +1466,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
-                    className="w-full px-3 py-2 bg-black/50 border border-zinc-800/50 rounded-lg 
+                    className="w-full px-3 py-2 bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg 
                   text-white focus:outline-none focus:border-purple-500/30"
                   />
                 </div>
@@ -1480,7 +1480,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password"
-                    className="w-full px-3 py-2 bg-black/50 border border-zinc-800/50 rounded-lg 
+                    className="w-full px-3 py-2 bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg 
                   text-white focus:outline-none focus:border-purple-500/30"
                   />
                 </div>
@@ -1520,8 +1520,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
         )}
         {/* Email-Modal mit lila Akzenten */}
         {showEmailModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1668,8 +1668,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
 
         {/* Username-Modal mit lila Akzenten */}
         {showUsernameModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1690,7 +1690,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
 
               <div className="space-y-4">
                 <p className="text-sm text-white/60">
-                  Your username is how people find you on haze.bio. Choose something memorable and unique.
+                  Your username is how people find you on cutz.lol. Choose something memorable and unique.
                 </p>
 
                 <div className="p-3 bg-zinc-800/30 rounded-lg border border-zinc-800/50">
@@ -1707,7 +1707,7 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
                     text-white focus:outline-none focus:border-purple-500/30"
                     />
                     <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center justify-center text-xs font-medium text-white/40">
-                      haze.bio/
+                      cutz.lol/
                     </div>
                   </div>
                   <p className="mt-2 text-xs text-white/40">
@@ -1740,8 +1740,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
 
         {/* Display Name Modal mit lila Akzenten */}
         {showDisplayNameModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1804,8 +1804,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
 
         {/* Alias Modal mit lila Akzenten */}
         {showAliasModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -1959,8 +1959,8 @@ export default function SettingsContent({ sessions: initialSessions, currentExpo
         )}
 
         {showExportPasswordModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+          <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-amber-900/20 rounded-lg flex items-center justify-center">

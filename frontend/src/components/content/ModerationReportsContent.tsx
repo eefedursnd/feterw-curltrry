@@ -157,7 +157,7 @@ export default function ModerationReportsContent() {
                         {selectedReport && (
                             <button
                                 onClick={handleBackToList}
-                                className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors px-3 py-1.5 bg-black/50 hover:bg-zinc-900/80 rounded-lg border border-zinc-800/50"
+                                className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors px-3 py-1.5 bg-[#0E0E0E]/50 hover:bg-zinc-900/80 rounded-lg border border-zinc-800/50"
                             >
                                 <ArrowLeft size={16} />
                                 <span>Back to List</span>
@@ -171,7 +171,7 @@ export default function ModerationReportsContent() {
                     /* Report Detail View */
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Reported User Profile Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <UserIcon className="w-4 h-4 text-red-400" />
@@ -267,7 +267,7 @@ export default function ModerationReportsContent() {
                         </div>
 
                         {/* Report Details */}
-                        <div className="md:col-span-2 bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="md:col-span-2 bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Flag className="w-4 h-4 text-red-400" />
@@ -380,7 +380,7 @@ export default function ModerationReportsContent() {
                     </div>
                 ) : (
                     /* Reports List View */
-                    <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                    <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                         <div className="px-5 py-4 border-b border-zinc-800">
                             <h2 className="text-white font-semibold flex items-center gap-2">
                                 <Flag className="w-4 h-4 text-red-400" />

@@ -301,7 +301,7 @@ export default function CustomizationSettings({
     return (
         <>
             {/* Content & Identity */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Type className="w-4 h-4 text-purple-400" />
@@ -331,7 +331,7 @@ export default function CustomizationSettings({
                                 {contextUser?.has_premium && descriptionEditor ? (
                                     <>
                                         {descriptionToolbar}
-                                        <EditorContent editor={descriptionEditor} className={`w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm placeholder:text-white/40 border border-zinc-800/50 focus:outline-none focus:ring-2 focus:ring-purple-500/30 min-h-[80px]`} />
+                                        <EditorContent editor={descriptionEditor} className={`w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm placeholder:text-white/40 border border-zinc-800/50 focus:outline-none focus:ring-2 focus:ring-purple-500/30 min-h-[80px]`} />
                                     </>
                                 ) : (
                                     <textarea
@@ -341,7 +341,7 @@ export default function CustomizationSettings({
                                             handleSettingChange('description', e.target.value);
                                         }}
                                         placeholder="Tell others about yourself..."
-                                        className="w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm
+                                        className="w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm
                                         placeholder:text-white/40 border border-zinc-800/50 focus:outline-none
                                         focus:ring-2 focus:ring-purple-500/30 resize-none min-h-[80px]"
                                         maxLength={150}
@@ -375,14 +375,14 @@ export default function CustomizationSettings({
                                 {contextUser?.has_premium && pageEnterTextEditor ? (
                                     <>
                                         {pageEnterTextToolbar}
-                                        <EditorContent editor={pageEnterTextEditor} className={`w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm placeholder:text-white/40 border border-zinc-800/50 focus:outline-none focus:ring-2 focus:ring-purple-500/30 min-h-[80px]`} />
+                                        <EditorContent editor={pageEnterTextEditor} className={`w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm placeholder:text-white/40 border border-zinc-800/50 focus:outline-none focus:ring-2 focus:ring-purple-500/30 min-h-[80px]`} />
                                     </>
                                 ) : (
                                     <textarea
                                         value={profile.page_enter_text || ''}
                                         onChange={(e) => handleSettingChange('page_enter_text', e.target.value)}
                                         placeholder="click to enter..."
-                                        className="w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm
+                                        className="w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm
                                         placeholder:text-white/40 border border-zinc-800/50 focus:outline-none
                                         focus:ring-2 focus:ring-purple-500/30 resize-none min-h-[80px]"
                                         maxLength={50}
@@ -417,7 +417,7 @@ export default function CustomizationSettings({
                                     value={profile.location || ''}
                                     onChange={(e) => handleSettingChange('location', e.target.value)}
                                     placeholder="Your location..."
-                                    className="w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm
+                                    className="w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm
                                     placeholder:text-white/40 border border-zinc-800/50 focus:outline-none
                                     focus:ring-2 focus:ring-purple-500/30 resize-none min-h-[80px]"
                                     maxLength={15}
@@ -451,7 +451,7 @@ export default function CustomizationSettings({
                                     value={profile.occupation || ''}
                                     onChange={(e) => handleSettingChange('occupation', e.target.value)}
                                     placeholder="Your occupation..."
-                                    className="w-full flex-1 bg-black/40 rounded-lg p-2 text-white text-sm
+                                    className="w-full flex-1 bg-[#0E0E0E]/40 rounded-lg p-2 text-white text-sm
                                     placeholder:text-white/40 border border-zinc-800/50 focus:outline-none
                                     focus:ring-2 focus:ring-purple-500/30 resize-none min-h-[80px]"
                                     maxLength={25}
@@ -468,7 +468,7 @@ export default function CustomizationSettings({
             </div>
 
             {/* Media Uploads */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <ImageIcon className="w-4 h-4 text-purple-400" />
@@ -532,12 +532,12 @@ export default function CustomizationSettings({
                                             )}
 
                                             {/* FileUpload-style hover overlay */}
-                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-[#0E0E0E]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <Upload className="w-8 h-8 text-white" />
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className={`flex flex-col items-center justify-center h-full ${profile?.avatar_shape || 'rounded-2xl'} bg-black/30 border border-zinc-800/50 hover:border-purple-500/30 transition-all`}>
+                                        <div className={`flex flex-col items-center justify-center h-full ${profile?.avatar_shape || 'rounded-2xl'} bg-[#0E0E0E]/30 border border-zinc-800/50 hover:border-purple-500/30 transition-all`}>
                                             <div className="p-3 rounded-full bg-purple-800/10">
                                                 <Upload className="w-6 h-6 text-purple-400" />
                                             </div>
@@ -545,7 +545,7 @@ export default function CustomizationSettings({
                                     )}
 
                                     {isAvatarUploading && (
-                                        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-black/40">
+                                        <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[#0E0E0E]/40">
                                             <div
                                                 className="h-full bg-purple-500 transition-all duration-300"
                                                 style={{ width: `${avatarUploadProgress}%` }}
@@ -595,8 +595,8 @@ export default function CustomizationSettings({
                                                 key={shape.id}
                                                 className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center gap-2
                                     ${profile.avatar_shape === shape.id
-                                                        ? 'bg-black/40 border-purple-500/30'
-                                                        : 'bg-black/30 border-zinc-800/50 hover:border-purple-500/20'
+                                                        ? 'bg-[#0E0E0E]/40 border-purple-500/30'
+                                                        : 'bg-[#0E0E0E]/30 border-zinc-800/50 hover:border-purple-500/20'
                                                     }`}
                                                 onClick={() => handleSettingChange('avatar_shape', shape.id)}
                                             >
@@ -633,7 +633,7 @@ export default function CustomizationSettings({
                                         </div>
 
                                         <div className="space-y-2">
-                                            <div className="flex items-center justify-between bg-black/40 rounded-lg p-2.5 border border-zinc-800/50">
+                                            <div className="flex items-center justify-between bg-[#0E0E0E]/40 rounded-lg p-2.5 border border-zinc-800/50">
                                                 <div className="flex items-center gap-2">
                                                     <DiscordIcon size={14} className="text-white/80" />
                                                     <span className="text-xs text-white">Discord Avatar</span>
@@ -653,7 +653,7 @@ export default function CustomizationSettings({
                                                 </label>
                                             </div>
 
-                                            <div className="flex items-center justify-between bg-black/40 rounded-lg p-2.5 border border-zinc-800/50">
+                                            <div className="flex items-center justify-between bg-[#0E0E0E]/40 rounded-lg p-2.5 border border-zinc-800/50">
                                                 <div className="flex items-center gap-2">
                                                     <DiscordIcon size={14} className="text-white/80" />
                                                     <span className="text-xs text-white">Discord Decoration</span>
@@ -681,7 +681,7 @@ export default function CustomizationSettings({
                                             <span className="text-xs font-medium text-white">Discord Options</span>
                                         </div>
 
-                                        <Link href="/dashboard/settings" className="flex items-center justify-between bg-black/40 rounded-lg p-3 border border-zinc-800/50 hover:border-purple-500/20 transition-all">
+                                        <Link href="/dashboard/settings" className="flex items-center justify-between bg-[#0E0E0E]/40 rounded-lg p-3 border border-zinc-800/50 hover:border-purple-500/20 transition-all">
                                             <div className="flex items-center gap-2">
                                                 <DiscordIcon size={16} className="text-purple-400" />
                                                 <div>
@@ -770,7 +770,7 @@ export default function CustomizationSettings({
             </div>
 
             {/* Visual Styling & Effects */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-purple-400" />
@@ -798,7 +798,7 @@ export default function CustomizationSettings({
                                 isPremium={!!contextUser?.has_premium}
                             />
 
-                            <div className="bg-black/40 rounded-lg p-3 border border-zinc-800/50 mt-3">
+                            <div className="bg-[#0E0E0E]/40 rounded-lg p-3 border border-zinc-800/50 mt-3">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-white/60">Preview:</span>
                                     {(() => {
@@ -868,7 +868,7 @@ export default function CustomizationSettings({
                                 isPremium={!!contextUser?.has_premium}
                             />
 
-                            <div className="bg-black/40 rounded-lg p-3 border border-zinc-800/50 mt-3">
+                            <div className="bg-[#0E0E0E]/40 rounded-lg p-3 border border-zinc-800/50 mt-3">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-white/60">Preview:</span>
                                     {(() => {
@@ -911,7 +911,7 @@ export default function CustomizationSettings({
                                 isPremium={!!contextUser?.has_premium}
                             />
 
-                            <div className="bg-black/40 rounded-lg p-3.5 flex items-center justify-center border border-zinc-800/50 mt-3 overflow-hidden relative h-20" ref={cursorPreviewRef}>
+                            <div className="bg-[#0E0E0E]/40 rounded-lg p-3.5 flex items-center justify-center border border-zinc-800/50 mt-3 overflow-hidden relative h-20" ref={cursorPreviewRef}>
                                 <div className="absolute inset-0" style={{ pointerEvents: "all" }}></div>
                                 <p className="text-sm text-white/60 pointer-events-none">
                                     {profile.cursor_effects === 'none'
@@ -1028,7 +1028,7 @@ export default function CustomizationSettings({
             </div>
 
             {/* Toggle Effects Card */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Wand2 className="w-4 h-4 text-purple-400" />

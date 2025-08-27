@@ -1,10 +1,12 @@
+import Image from 'next/image';
+
 export default function Loading() {
   return (
-    <div className="min-h-screen relative bg-black flex items-center justify-center">
+    <div className="min-h-screen relative bg-[#0E0E0E] flex items-center justify-center">
       {/* Modern Gradient Background */}
       <div className="fixed inset-0 z-0">
         {/* Base dark background */}
-        <div className="absolute inset-0 bg-black"></div>
+        <div className="absolute inset-0 bg-[#0E0E0E]"></div>
 
         {/* Rich purple gradient elements */}
         <div className="absolute top-0 left-0 right-0 h-[40%] bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-purple-900/10 via-purple-900/5 to-transparent"></div>
@@ -18,10 +20,17 @@ export default function Loading() {
       {/* Loading Content */}
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/* Logo Placeholder */}
-        <div className="w-12 h-12 rounded-xl bg-black border border-zinc-800/50 flex items-center justify-center mb-2 relative overflow-hidden">
+        <div className="w-12 h-12 rounded-xl bg-[#0E0E0E] border border-zinc-800/50 flex items-center justify-center mb-2 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.08),transparent_70%)]"></div>
-          {/* Simple h logo */}
-          <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">h</span>
+          {/* CutzIcon logo */}
+          <Image
+            src="/logo/CutzIcon.png"
+            alt="cutz.lol"
+            fill
+            sizes="48px"
+            className="w-full h-full object-contain"
+            draggable="false"
+          />
         </div>
         
         {/* Loading Text */}

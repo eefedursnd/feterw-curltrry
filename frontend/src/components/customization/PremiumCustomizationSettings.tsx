@@ -20,7 +20,7 @@ export default function PremiumCustomizationSettings({ profile, handleSettingCha
     return (
         <>
             {/* Template Selection */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Layout className="w-4 h-4 text-purple-400" />
@@ -67,8 +67,8 @@ export default function PremiumCustomizationSettings({ profile, handleSettingCha
                                     {/* Template Preview with updated colors */}
                                     <div className={`mt-3 h-24 rounded-lg border p-3
                                         ${profile.template === templateOption.id
-                                            ? 'border-purple-500/20 bg-black/40'
-                                            : 'border-zinc-800/50 bg-black/30'}`}>
+                                            ? 'border-purple-500/20 bg-[#0E0E0E]/40'
+                                            : 'border-zinc-800/50 bg-[#0E0E0E]/30'}`}>
                                         {templateOption.id === 'default' ? (
                                             <div className="h-full flex flex-col items-start gap-2">
                                                 <div className="w-1/3 h-3 bg-purple-500/20 rounded-full"></div>
@@ -143,7 +143,7 @@ export default function PremiumCustomizationSettings({ profile, handleSettingCha
             </div>
 
             {/* Profile Size Settings */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Layers className="w-4 h-4 text-purple-400" />
@@ -205,7 +205,7 @@ export default function PremiumCustomizationSettings({ profile, handleSettingCha
                             </div>
 
                             {/* Width Visualization */}
-                            <div className="h-6 relative border border-zinc-800/50 rounded-lg overflow-hidden bg-black/40">
+                            <div className="h-6 relative border border-zinc-800/50 rounded-lg overflow-hidden bg-[#0E0E0E]/40">
                                 <div
                                     className="absolute inset-y-0 left-0 bg-purple-500/20 rounded-l-lg"
                                     style={{
@@ -223,7 +223,7 @@ export default function PremiumCustomizationSettings({ profile, handleSettingCha
             </div>
 
             {/* Advanced Premium Features */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                     <h2 className="text-white font-semibold flex items-center gap-2">
                         <Crown className="w-4 h-4 text-purple-400" />

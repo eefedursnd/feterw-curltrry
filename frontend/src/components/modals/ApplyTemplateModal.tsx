@@ -87,8 +87,8 @@ export default function ApplyTemplateModal({
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl border border-zinc-800/50 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 w-full max-w-md overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -136,7 +136,7 @@ export default function ApplyTemplateModal({
                                             draggable="false"
                                         />
                                         {template.premium_required && !contextUser?.has_premium && (
-                                            <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-xs py-1 px-2 rounded-full flex items-center gap-1.5">
+                                            <div className="absolute top-3 right-3 bg-[#0E0E0E]/60 backdrop-blur-md text-xs py-1 px-2 rounded-full flex items-center gap-1.5">
                                                 <Star className="w-3.5 h-3.5 text-purple-400" />
                                                 <span className="text-white">Premium Template</span>
                                             </div>

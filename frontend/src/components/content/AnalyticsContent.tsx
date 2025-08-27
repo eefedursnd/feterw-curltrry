@@ -463,7 +463,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
             <DashboardLayout>
                 <div className="max-w-[100rem] mx-auto space-y-8 relative">
                     {/* Hero Section with Header */}
-                    <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                    <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
                         <div className="relative z-10 max-w-3xl">
@@ -477,7 +477,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                     </div>
 
                     {/* Premium Required UI */}
-                    <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                    <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                         <div className="px-5 py-4 border-b border-zinc-800/50">
                             <h2 className="text-white font-semibold flex items-center gap-2">
                                 <PremiumBadge size={16} />
@@ -534,7 +534,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-8 relative">
                 {/* Hero Section with Header */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
                     <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -601,7 +601,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                     <>
                         {/* Stats Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+                            <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                                         <Eye className="w-5 h-5 text-purple-400" />
@@ -615,7 +615,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                                 </div>
                             </div>
 
-                            <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+                            <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                                         <Globe className="w-5 h-5 text-purple-400" />
@@ -629,7 +629,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                                 </div>
                             </div>
 
-                            <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+                            <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                                         <Share2 className="w-5 h-5 text-purple-400" />
@@ -643,7 +643,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                                 </div>
                             </div>
 
-                            <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+                            <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                                         <Monitor className="w-5 h-5 text-purple-400" />
@@ -660,7 +660,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {/* Profile Views Chart */}
-                            <div className="lg:col-span-2 bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="lg:col-span-2 bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Eye className="w-4 h-4 text-purple-400" />
@@ -688,7 +688,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                             </div>
 
                             {/* Top Countries Chart */}
-                            <div className="lg:col-span-1 bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="lg:col-span-1 bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Globe className="w-4 h-4 text-purple-400" />
@@ -721,7 +721,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                             </div>
 
                             {/* Most Clicked Socials Chart */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Share2 className="w-4 h-4 text-purple-400" />
@@ -742,7 +742,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                             </div>
 
                             {/* Device Breakdown Chart */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Monitor className="w-4 h-4 text-purple-400" />
@@ -763,7 +763,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                             </div>
 
                             {/* Top Referrers Chart */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <CalendarDays className="w-4 h-4 text-purple-400" />
@@ -784,54 +784,7 @@ export default function AnalyticsContent({ initialData }: AnalyticsContentProps)
                             </div>
                         </div>
 
-                        {/* Tips for Improving Engagement */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
-                            <div className="px-5 py-4 border-b border-zinc-800/50">
-                                <h2 className="text-white font-semibold flex items-center gap-2">
-                                    <Info className="w-4 h-4 text-purple-400" />
-                                    Tips for Improving Engagement
-                                </h2>
-                            </div>
-                            <div className="p-5">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="bg-zinc-800/30 rounded-lg border border-zinc-700/50 p-4 backdrop-blur-sm">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className="w-8 h-8 bg-purple-800/20 rounded-lg flex items-center justify-center">
-                                                <Eye className="w-4 h-4 text-purple-400" />
-                                            </div>
-                                            <div className="text-sm font-medium text-white">Optimize Profile</div>
-                                        </div>
-                                        <p className="text-white/60 text-xs">
-                                            Add a clear profile picture and compelling bio to increase your profile view rate.
-                                        </p>
-                                    </div>
 
-                                    <div className="bg-zinc-800/30 rounded-lg border border-zinc-700/50 p-4 backdrop-blur-sm">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className="w-8 h-8 bg-purple-800/20 rounded-lg flex items-center justify-center">
-                                                <Share2 className="w-4 h-4 text-purple-400" />
-                                            </div>
-                                            <div className="text-sm font-medium text-white">Add More Links</div>
-                                        </div>
-                                        <p className="text-white/60 text-xs">
-                                            Including diverse social links gives visitors more ways to connect with you.
-                                        </p>
-                                    </div>
-
-                                    <div className="bg-zinc-800/30 rounded-lg border border-zinc-700/50 p-4 backdrop-blur-sm">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className="w-8 h-8 bg-purple-800/20 rounded-lg flex items-center justify-center">
-                                                <Globe className="w-4 h-4 text-purple-400" />
-                                            </div>
-                                            <div className="text-sm font-medium text-white">Share Your Profile</div>
-                                        </div>
-                                        <p className="text-white/60 text-xs">
-                                            Promote your haze.bio link on your other social platforms to drive more traffic.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </>
                 )}
             </div>

@@ -263,7 +263,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
     <DashboardLayout>
       <div className="max-w-[100rem] mx-auto space-y-8 relative">
         {/* Hero Section */}
-        <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+        <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
           <div className="relative z-10 max-w-3xl">
@@ -271,7 +271,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
               Dashboard Overview
             </h1>
             <p className="text-white/70 text-sm md:text-base">
-              Welcome to your haze.bio dashboard. Here you have a quick overview of your profile, analytics, and settings.
+              Welcome to your cutz.lol dashboard. Here you have a quick overview of your profile, analytics, and settings.
             </p>
 
             <div className="flex flex-wrap gap-4 mt-6">
@@ -304,8 +304,36 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         </div>
 
         {/* Resource Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
+                <AtSign className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-white/60 text-xs">Username</p>
+                <p className="text-white font-medium text-lg">
+                  @{contextUser?.username}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
+                <UserIcon className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-white/60 text-xs">UID</p>
+                <p className="text-white font-medium text-lg">
+                  {contextUser?.uid}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 <Eye className="w-5 h-5 text-purple-400" />
@@ -319,21 +347,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
             </div>
           </div>
 
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
-                <BadgeCheck className="w-5 h-5 text-purple-400" />
-              </div>
-              <div>
-                <p className="text-white/60 text-xs">Badge Edit Credits</p>
-                <p className="text-white font-medium text-lg">
-                  {badgeEditCredits}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 {isPremium ? (
@@ -354,7 +368,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         </div>
 
         {/* User Profile Info Card */}
-        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden p-5">
+        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden p-5">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 border-zinc-800/50 shadow-lg">
               <Image
@@ -440,8 +454,8 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Analytics */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Analytics Card */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                    {/* Analytics Card */}
+        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <Eye className="w-4 h-4 text-purple-400" />
@@ -469,27 +483,9 @@ export default function DashboardContent({ view: initialView }: DashboardContent
 
           {/* Right Column - Quick Actions */}
           <div className="space-y-6">
-            {/* Status Card */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
-              <div className="px-5 py-4 border-b border-zinc-800/50">
-                <h2 className="text-white font-semibold flex items-center gap-2">
-                  <Info className="w-4 h-4 text-purple-400" />
-                  Platform Updates
-                </h2>
-              </div>
-              <div className="divide-y divide-zinc-800/50">
-                {/* Update 1 */}
-                <div className="p-4">
-                  <div className="text-sm font-medium text-white mb-1">No update available</div>
-                  <p className="text-xs text-white/60 mb-2">
-                    We cant find any updates at the moment. Please check back later.
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* Quick Actions Card */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                    {/* Quick Actions Card */}
+        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-zinc-800/50">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <Settings className="w-4 h-4 text-purple-400" />
@@ -497,20 +493,20 @@ export default function DashboardContent({ view: initialView }: DashboardContent
                 </h2>
               </div>
 
-              <div className="divide-y divide-zinc-800/50">
+              <div className="divide-y divide-zinc-800/50 h-[300px] overflow-y-auto">
                 <button
                   onClick={() => setShowUsernameModal(true)}
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
+                  className="w-full px-5 py-6 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
                   disabled={Boolean(contextUser?.username_cooldown && contextUser.username_cooldown > 0)}
                 >
-                  <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
-                    <UserIcon className="w-4 h-4 text-purple-400" />
+                  <div className="w-11 h-11 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
+                    <UserIcon className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
+                    <div className="text-base font-medium text-white group-hover:text-white/90 transition-colors">
                       Username
                     </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
+                    <div className="text-sm text-white/50 mt-1 group-hover:text-white/60 transition-colors">
                       {contextUser?.username_cooldown && contextUser.username_cooldown > 0
                         ? `Cooldown: ${formatCooldownTime(contextUser.username_cooldown)}`
                         : `@${contextUser?.username}`}
@@ -520,17 +516,17 @@ export default function DashboardContent({ view: initialView }: DashboardContent
 
                 <button
                   onClick={() => setShowDisplayNameModal(true)}
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
+                  className="w-full px-5 py-6 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
                   disabled={Boolean(contextUser?.display_name_cooldown && contextUser.display_name_cooldown > 0)}
                 >
                   <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
                     <TypeOutline className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
+                    <div className="text-base font-medium text-white group-hover:text-white/90 transition-colors">
                       Display Name
                     </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
+                    <div className="text-sm text-white/50 mt-1 group-hover:text-white/60 transition-colors">
                       {contextUser?.display_name_cooldown && contextUser.display_name_cooldown > 0
                         ? `Cooldown: ${formatCooldownTime(contextUser.display_name_cooldown)}`
                         : contextUser?.display_name || 'Not set'}
@@ -540,17 +536,17 @@ export default function DashboardContent({ view: initialView }: DashboardContent
 
                 <button
                   onClick={() => setShowAliasModal(true)}
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
+                  className="w-full px-5 py-6 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors text-left group"
                   disabled={Boolean(contextUser?.alias_cooldown && contextUser.alias_cooldown > 0)}
                 >
                   <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
                     <AtSign className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
+                    <div className="text-base font-medium text-white group-hover:text-white/90 transition-colors">
                       Alias
                     </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
+                    <div className="text-sm text-white/50 mt-1 group-hover:text-white/60 transition-colors">
                       {contextUser?.alias_cooldown && contextUser.alias_cooldown > 0
                         ? `Cooldown: ${formatCooldownTime(contextUser.alias_cooldown)}`
                         : contextUser?.alias || 'Not set'}
@@ -560,68 +556,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
               </div>
             </div>
 
-            {/* Navigation Links Card */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
-              <div className="px-5 py-4 border-b border-zinc-800/50">
-                <h2 className="text-white font-semibold flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-purple-400" />
-                  More Options
-                </h2>
-              </div>
 
-              <div className="divide-y divide-zinc-800/50">
-                <Link
-                  href="/dashboard/badges"
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
-                    <BadgeCheck className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
-                      Badges
-                    </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
-                      Manage your profile badges
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/templates"
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
-                    <Wand2 className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
-                      Templates
-                    </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
-                      Apply and save profile templates
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/settings"
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-zinc-800/50 transition-colors group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-purple-800/20 flex items-center justify-center flex-shrink-0 transition-colors">
-                    <Settings className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white group-hover:text-white/90 transition-colors">
-                      Settings
-                    </div>
-                    <div className="text-xs text-white/50 mt-0.5 group-hover:text-white/60 transition-colors">
-                      Privacy & notifications
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
 
             {/* Premium Promotion Card (only if not premium) */}
             {!isPremium && (
@@ -693,9 +628,9 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         </div>
 
         {/* Username Modal */}
-        {showUsernameModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+              {showUsernameModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+          <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -720,7 +655,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full px-3 py-2 bg-black border border-zinc-700/50 rounded-lg 
+                    className="w-full px-3 py-2 bg-[#0E0E0E] border border-zinc-700/50 rounded-lg 
                               text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
                 </div>
@@ -749,9 +684,9 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         )}
 
         {/* Display Name Modal */}
-        {showDisplayNameModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+              {showDisplayNameModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+          <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -777,7 +712,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Enter display name"
-                    className="w-full px-3 py-2 bg-black border border-zinc-700/50 rounded-lg 
+                    className="w-full px-3 py-2 bg-[#0E0E0E] border border-zinc-700/50 rounded-lg 
                               text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
                 </div>
@@ -806,9 +741,9 @@ export default function DashboardContent({ view: initialView }: DashboardContent
         )}
 
         {/* Alias Modal */}
-        {showAliasModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
+              {showAliasModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+          <div className="bg-[#0E0E0E] rounded-xl p-6 border border-zinc-800/50 w-full max-w-md">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-purple-800/20 rounded-lg flex items-center justify-center">
@@ -834,7 +769,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
                     value={alias}
                     onChange={(e) => setAlias(e.target.value)}
                     placeholder="Enter alias"
-                    className="w-full px-3 py-2 bg-black border border-zinc-700/50 rounded-lg 
+                    className="w-full px-3 py-2 bg-[#0E0E0E] border border-zinc-700/50 rounded-lg 
                               text-white text-sm focus:outline-none focus:border-purple-500/50"
                   />
                 </div>

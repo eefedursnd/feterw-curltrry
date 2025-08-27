@@ -120,7 +120,7 @@ export default function ApplicationsContent({
     <DashboardLayout>
       <div className="max-w-[100rem] mx-auto space-y-8 relative">
         {/* Hero Section */}
-        <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+        <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
           <div className="relative z-10 max-w-3xl">
@@ -145,7 +145,7 @@ export default function ApplicationsContent({
 
         {/* Status Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 <FileText className="w-5 h-5 text-purple-400" />
@@ -157,7 +157,7 @@ export default function ApplicationsContent({
             </div>
           </div>
 
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 <Clock className="w-5 h-5 text-purple-400" />
@@ -169,7 +169,7 @@ export default function ApplicationsContent({
             </div>
           </div>
 
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-5 h-5 text-purple-400" />
@@ -181,7 +181,7 @@ export default function ApplicationsContent({
             </div>
           </div>
 
-          <div className="bg-black rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
+          <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 overflow-hidden p-5 hover:border-purple-500/20 transition-all duration-300">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-800/20 rounded-lg flex items-center justify-center">
                 <Plus className="w-5 h-5 text-purple-400" />
@@ -195,7 +195,7 @@ export default function ApplicationsContent({
         </div>
 
         {/* Applications List */}
-        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
           <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
             <h2 className="text-white font-semibold flex items-center gap-2">
               <FileText className="w-4 h-4 text-purple-400" />
@@ -372,7 +372,7 @@ export default function ApplicationsContent({
         </div>
 
         {/* Application Tips */}
-        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
           <div className="px-5 py-4 border-b border-zinc-800/50">
             <h2 className="text-white font-semibold flex items-center gap-2">
               <Info className="w-4 h-4 text-purple-400" />

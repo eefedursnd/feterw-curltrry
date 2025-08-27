@@ -37,26 +37,26 @@ const WidgetSettings: React.FC<WidgetSettingsProps> = ({ widgetType, settings, o
 
     switch (field.type) {
       case 'text':
-        return (
+                return (
           <input
             type="text"
             value={currentValue}
             onChange={(e) => handleSettingChange(field.key, e.target.value)}
             placeholder={field.placeholder || `Enter ${field.label}`}
-            className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+            className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg
                     text-white text-sm placeholder-white/30 focus:outline-none
                     focus:border-purple-500/30 transition-colors"
           />
         );
 
-      case 'number':
+            case 'number':
         return (
           <input
             type="number"
             value={currentValue}
             onChange={(e) => handleSettingChange(field.key, Number(e.target.value))}
             placeholder={field.placeholder || `Enter ${field.label}`}
-            className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+            className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg
                     text-white text-sm placeholder-white/30 focus:outline-none
                     focus:border-purple-500/30 transition-colors"
           />
@@ -65,10 +65,10 @@ const WidgetSettings: React.FC<WidgetSettingsProps> = ({ widgetType, settings, o
       case 'dropdown':
         return (
           <div className="relative">
-            <select
+                        <select
               value={currentValue}
               onChange={(e) => handleSettingChange(field.key, e.target.value)}
-              className="w-full px-3 py-2.5 bg-black/40 border border-zinc-800/60 rounded-lg 
+              className="w-full px-3 py-2.5 bg-[#0E0E0E]/40 border border-zinc-800/60 rounded-lg
                       text-white text-sm focus:outline-none appearance-none
                       focus:border-purple-500/30 transition-colors"
             >
@@ -109,7 +109,7 @@ const WidgetSettings: React.FC<WidgetSettingsProps> = ({ widgetType, settings, o
             type="color"
             value={currentValue}
             onChange={(e) => handleSettingChange(field.key, e.target.value)}
-            className="h-10 w-full rounded-lg bg-black/40 border border-zinc-800/60 cursor-pointer"
+            className="h-10 w-full rounded-lg bg-[#0E0E0E]/40 border border-zinc-800/60 cursor-pointer"
           />
         );
 
@@ -469,7 +469,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
     <DashboardLayout>
       <div className="max-w-[100rem] mx-auto space-y-8 relative">
         {/* Hero Section with Header */}
-        <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+        <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -529,7 +529,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               {/* Your Widgets */}
-              <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+              <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                   <h2 className="text-white font-semibold flex items-center gap-2">
                     <BadgeCheck className="w-4 h-4 text-purple-400" />
@@ -550,7 +550,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
               </div>
 
               {/* Widget Information */}
-              <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+              <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                   <h2 className="text-white font-semibold flex items-center gap-2">
                     <Info className="w-4 h-4 text-purple-400" />
@@ -594,7 +594,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
             {/* Right Column - Settings */}
             <div className="space-y-6">
               {/* Widget Position */}
-              <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+              <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                   <h2 className="text-white font-semibold flex items-center gap-2">
                     <Palette className="w-4 h-4 text-purple-400" />
@@ -638,7 +638,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+              <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-zinc-800/50">
                   <h2 className="text-white font-semibold flex items-center gap-2">
                     <Settings className="w-4 h-4 text-purple-400" />
@@ -676,7 +676,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
               </div>
 
               {/* Widget Tips */}
-              <div className="bg-black rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
+              <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
@@ -708,7 +708,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
         {activeTab === 'available' && (
           <div className="space-y-6">
             {/* Available Widgets */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-zinc-800/50">
                 <h2 className="text-white font-semibold flex items-center gap-2">
                   <Award className="w-4 h-4 text-purple-400" />
@@ -773,7 +773,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
             </div>
 
             {/* Help Section */}
-            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
               <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
               <div className="relative flex flex-col md:flex-row gap-6 items-center">
@@ -807,12 +807,12 @@ export default function WidgetContent({ }: WidgetContentProps) {
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             {/* Backdrop with blur */}
             <div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+              className="fixed inset-0 bg-[#0E0E0E]/70 backdrop-blur-sm"
               onClick={handleCloseModal}
             />
 
             {/* Modal content */}
-            <div className="relative bg-black rounded-xl border border-zinc-800/50 w-full max-w-md max-h-[85vh] overflow-y-auto m-4 z-10">
+            <div className="relative bg-[#0E0E0E] rounded-xl border border-zinc-800/50 w-full max-w-md max-h-[85vh] overflow-y-auto m-4 z-10">
               {/* Header */}
               <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">

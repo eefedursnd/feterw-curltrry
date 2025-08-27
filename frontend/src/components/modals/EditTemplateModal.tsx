@@ -183,8 +183,8 @@ export default function EditTemplateModal({
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
-            <div className="bg-black rounded-xl border border-zinc-800/50 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#0E0E0E]/70 backdrop-blur-sm z-50 p-4">
+            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 w-full max-w-lg overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between relative">
                     <div className="flex items-center gap-3">
@@ -232,7 +232,7 @@ export default function EditTemplateModal({
                                             This action cannot be undone. This template will be permanently deleted.
                                         </p>
 
-                                        <div className="p-3 bg-black/50 rounded-lg border border-zinc-800/50 mb-3">
+                                        <div className="p-3 bg-[#0E0E0E]/50 rounded-lg border border-zinc-800/50 mb-3">
                                             <p className="text-xs text-white/80">
                                                 To confirm, please type <span className="font-medium text-white">{template.name}</span> below:
                                             </p>
@@ -243,7 +243,7 @@ export default function EditTemplateModal({
                                             value={deleteConfirmText}
                                             onChange={(e) => setDeleteConfirmText(e.target.value)}
                                             placeholder={`Type ${template.name} to confirm`}
-                                            className="w-full bg-black/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-red-500/30"
+                                            className="w-full bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-red-500/30"
                                         />
                                     </div>
                                 </div>
@@ -313,7 +313,7 @@ export default function EditTemplateModal({
 
                                         <input
                                             type="text"
-                                            className="w-full bg-black/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
+                                            className="w-full bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg py-2.5 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
                                             placeholder="e.g., Neon Glow Theme"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
@@ -341,7 +341,7 @@ export default function EditTemplateModal({
                                         <div className="flex gap-2">
                                             <input
                                                 type="text"
-                                                className="flex-grow bg-black/50 border border-zinc-800/50 rounded-lg py-2 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
+                                                className="flex-grow bg-[#0E0E0E]/50 border border-zinc-800/50 rounded-lg py-2 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/30"
                                                 placeholder="Add a tag"
                                                 value={currentTag}
                                                 onChange={(e) => setCurrentTag(e.target.value)}
@@ -362,7 +362,7 @@ export default function EditTemplateModal({
                                                 {tags.map((tag: string, index: number) => (
                                                     <div
                                                         key={index}
-                                                        className="bg-black/50 text-white/80 border border-zinc-800/50 px-2 py-1 rounded-full flex items-center gap-1.5"
+                                                        className="bg-[#0E0E0E]/50 text-white/80 border border-zinc-800/50 px-2 py-1 rounded-full flex items-center gap-1.5"
                                                     >
                                                         <span className="text-xs">{tag}</span>
                                                         <button
@@ -398,7 +398,7 @@ export default function EditTemplateModal({
                                         <div className="space-y-4">
                                             {/* Shareable Toggle */}
                                             {contextUser?.has_premium && (
-                                                <div className="flex items-center justify-between p-3 bg-black/50 rounded-lg border border-zinc-800/50">
+                                                <div className="flex items-center justify-between p-3 bg-[#0E0E0E]/50 rounded-lg border border-zinc-800/50">
                                                     <div className="flex items-center gap-2">
                                                         <Share2 className="w-4 h-4 text-purple-400" />
                                                         <div>
@@ -413,14 +413,14 @@ export default function EditTemplateModal({
                                                             onChange={() => setIsShareable(!isShareable)}
                                                             className="sr-only peer"
                                                         />
-                                                        <div className="w-11 h-6 bg-black/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white/80 after:border-zinc-800/50 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800/20"></div>
+                                                        <div className="w-11 h-6 bg-[#0E0E0E]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white/80 after:border-zinc-800/50 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800/20"></div>
                                                     </label>
                                                 </div>
                                             )}
 
                                             {/* Shareable Premium Lock */}
                                             {!contextUser?.has_premium && (
-                                                <div className="flex items-center justify-between p-3 bg-black/50 rounded-lg border border-zinc-800/50">
+                                                <div className="flex items-center justify-between p-3 bg-[#0E0E0E]/50 rounded-lg border border-zinc-800/50">
                                                     <div className="flex items-center gap-2">
                                                         <Share2 className="w-4 h-4 text-purple-400" />
                                                         <div>
@@ -436,7 +436,7 @@ export default function EditTemplateModal({
                                             )}
 
                                             {/* Update Design Toggle */}
-                                            <div className="flex items-center justify-between p-3 bg-black/50 rounded-lg border border-zinc-800/50">
+                                            <div className="flex items-center justify-between p-3 bg-[#0E0E0E]/50 rounded-lg border border-zinc-800/50">
                                                 <div className="flex items-center gap-2">
                                                     <RefreshCw className="w-4 h-4 text-purple-400" />
                                                     <div>
@@ -451,7 +451,7 @@ export default function EditTemplateModal({
                                                         onChange={() => setOverwriteDesign(!overwriteDesign)}
                                                         className="sr-only peer"
                                                     />
-                                                    <div className="w-11 h-6 bg-black/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white/80 after:border-zinc-800/50 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800/20"></div>
+                                                    <div className="w-11 h-6 bg-[#0E0E0E]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white/80 after:border-zinc-800/50 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800/20"></div>
                                                 </label>
                                             </div>
                                         </div>
@@ -487,7 +487,7 @@ export default function EditTemplateModal({
 
                 {/* Footer */}
                 {!isSuccess && (
-                    <div className="px-5 py-4 border-t border-zinc-800/50 flex justify-between bg-black">
+                    <div className="px-5 py-4 border-t border-zinc-800/50 flex justify-between bg-[#0E0E0E]">
                         {showDeleteConfirm ? (
                             <>
                                 <button

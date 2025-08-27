@@ -43,17 +43,17 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'featured',
                 title: "Featured",
-                description: "Featured on the haze.bio homepage",
+                description: "Featured on the cutz.lol homepage",
                 icon: <FeaturedBadge size={32} />,
                 ctaText: "Share your page",
-                ctaLink: "https://discord.com/channels/1340106712299995147/1340394489323458661",
+                ctaLink: "https://discord.com/channels/1401929292052566055/1408080948045807729",
                 order: 7,
                 category: 'community'
             },
             {
                 id: 'partner',
                 title: "Partner",
-                description: "Official partner of haze.bio",
+                description: "Official partner of cutz.lol",
                 icon: <PartnerBadge size={32} />,
                 order: 3,
                 category: 'community'
@@ -61,7 +61,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'booster',
                 title: "Booster",
-                description: "Boosted the haze.bio Discord server",
+                description: "Boosted the cutz.lol Discord server",
                 icon: <BoosterBadge size={32} />,
                 ctaText: "Boost Server",
                 ctaLink: "https://discord.gg/cutz",
@@ -78,7 +78,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'early_user',
                 title: "Early User",
-                description: "One of the first 25 users of haze.bio",
+                description: "One of the first 25 users of cutz.lol",
                 icon: <EarlyUserBadge size={32} />,
                 order: 2,
                 category: 'achievement'
@@ -86,7 +86,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'bug_hunter',
                 title: "Bug Hunter",
-                description: "Reported more than 5 bugs to the haze.bio team",
+                description: "Reported more than 5 bugs to the cutz.lol team",
                 icon: <BugHunterBadge size={32} />,
                 ctaText: "Report a Bug",
                 ctaLink: "https://discord.gg/cutz",
@@ -96,7 +96,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'innovator',
                 title: "Innovator",
-                description: "Suggest at least 5 features or improvements for haze.bio",
+                description: "Suggest at least 5 features or improvements for cutz.lol",
                 icon: <InnovatorBadge size={32} />,
                 ctaText: "Make a Suggestion",
                 ctaLink: "https://discord.gg/cutz",
@@ -106,7 +106,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'event_winner',
                 title: "Event Winner",
-                description: "Won a haze.bio event or competition",
+                description: "Won a cutz.lol event or competition",
                 icon: <EventWinnerBadge size={32} />,
                 order: 8,
                 category: 'achievement'
@@ -129,17 +129,17 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
             {
                 id: 'staff',
                 title: "Staff",
-                description: "Official staff member of haze.bio",
+                description: "Official staff member of cutz.lol",
                 icon: <StaffBadge size={32} />,
                 ctaText: "Apply",
-                ctaLink: "https://haze.bio/dashboard/applications",
+                ctaLink: "https://cutz.lol/dashboard/applications",
                 order: 1,
                 category: 'status'
             },
             {
                 id: 'premium',
                 title: "Premium",
-                description: "Purchased premium on haze.bio",
+                description: "Purchased premium on cutz.lol",
                 icon: <PremiumBadge size={32} />,
                 ctaText: "Get Premium",
                 ctaLink: "/pricing",
@@ -324,7 +324,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-8 relative">
                 {/* Hero Section with Header */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                     <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -383,7 +383,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Badge Management with BadgeSort */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <BadgeCheck className="w-4 h-4 text-purple-400" />
@@ -406,7 +406,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                             </div>
 
                             {/* Tips */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Info className="w-4 h-4 text-purple-400" />
@@ -451,7 +451,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                         {/* Right Column - Side Content */}
                         <div className="space-y-6">
                             {/* Badge Settings */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Palette className="w-4 h-4 text-purple-400" />
@@ -500,7 +500,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                                                         transition-transform hover:scale-105 hover:border-purple-500/30 shadow-md"
                                                 style={{ backgroundColor: badgeColor }}
                                             />
-                                            <div className="flex items-center gap-1 bg-black/40 px-3 py-2 rounded-lg border border-zinc-800/50">
+                                            <div className="flex items-center gap-1 bg-[#0E0E0E]/40 px-3 py-2 rounded-lg border border-zinc-800/50">
                                                 <span className="text-xs text-white/60">#</span>
                                                 <span className="text-sm text-white">
                                                     {badgeColor.replace('#', '')}
@@ -514,7 +514,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                                 </div>
                             </div>
 
-                            <div className="bg-black rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
+                            <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
                                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                                 <div className="relative">
                                     <div className="flex items-center gap-3 mb-3">
@@ -551,7 +551,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                     <div className="space-y-6">
                         {/* Badge Categories */}
                         {BADGE_CATEGORIES.map(category => (
-                            <div key={category.title} className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div key={category.title} className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center gap-3">
                                     <div className="w-8 h-8 bg-purple-800/20 rounded-lg flex items-center justify-center">
                                         <category.icon className="w-4 h-4 text-purple-400" />
@@ -572,7 +572,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                                                 className="bg-zinc-800/30 rounded-lg border border-zinc-800/50 hover:border-purple-500/20 transition-all p-4"
                                             >
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <div className="p-2 bg-black/30 rounded-lg">
+                                                    <div className="p-2 bg-[#0E0E0E]/30 rounded-lg">
                                                         {React.cloneElement(badge.icon as React.ReactElement<any, any>, { size: 24 })}
                                                     </div>
                                                     <div className="min-w-0 flex-1">
@@ -612,7 +612,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                         ))}
 
                         {/* Help Section */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
                             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(168,85,247,0.15),transparent_70%)]"></div>
                             
                             <div className="relative flex flex-col md:flex-row gap-6 items-center">
@@ -623,7 +623,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                                 <div className="flex-1 text-center md:text-left">
                                     <h3 className="text-xl font-bold text-white mb-2">Looking for more badges?</h3>
                                     <p className="text-white/70 mb-0 md:mb-0 max-w-2xl">
-                                        Join the haze.bio community and participate in events to unlock exclusive badges that make your profile stand out.
+                                        Join the cutz.lol community and participate in events to unlock exclusive badges that make your profile stand out.
                                     </p>
                                 </div>
                                 

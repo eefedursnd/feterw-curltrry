@@ -177,13 +177,13 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-md z-40 lg:hidden"
+          className="fixed inset-0 bg-[#0E0E0E]/90 backdrop-blur-md z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-xl z-30 px-4 py-3 border-b border-zinc-800/80">
+              <div className="lg:hidden fixed top-0 left-0 right-0 bg-[#0E0E0E]/95 backdrop-blur-xl z-30 px-4 py-3 border-b border-zinc-800/80">
         <div className="flex items-center justify-between">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -208,12 +208,12 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
       </div>
 
       {/* Sidebar - Fixed height design */}
-      <div className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-64 bg-black backdrop-filter backdrop-blur-sm
-        transform transition-all duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 flex flex-col border-r border-zinc-800/50
-      `}>
+                  <div className={`
+              fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#0E0E0E] backdrop-filter backdrop-blur-sm
+              transform transition-all duration-300 ease-in-out
+              ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+              lg:translate-x-0 flex flex-col border-r border-zinc-800/50
+            `}>
         {/* Logo Section */}
         <div className="flex justify-between items-center px-5 py-5 border-b border-zinc-800/50">
           <Link href="/dashboard" className="flex items-center justify-center flex-1 mr-5">
@@ -227,49 +227,7 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
           </button>
         </div>
 
-        {/* User Profile Card */}
-        <div className="px-3 py-3 border-b border-zinc-800/50">
-          <div className="bg-zinc-800/30 rounded-lg p-3 backdrop-blur-sm flex items-center gap-3">
-            <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-zinc-700/50 flex-shrink-0">
-              <Image
-                src={user?.profile?.avatar_url || 'https://cdn.haze.bio/default_avatar.jpeg'}
-                alt=""
-                fill
-                sizes="40px"
-                style={{ objectFit: "cover" }}
-                draggable="false"
-              />
-            </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-medium text-white truncate">
-                  {user?.display_name || user?.username}
-                </span>
-                {user?.subscription?.status === 'active' && (
-                  <button
-                    onClick={() => setShowPremiumModal(true)}
-                    className="cursor-pointer flex-shrink-0"
-                    title="Premium User"
-                  >
-                    <PremiumBadge size={12} />
-                  </button>
-                )}
-              </div>
-              <div className="text-xs text-white/50 truncate">@{user?.username}</div>
-            </div>
-
-            <Link
-              href={`/${user?.username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/5 transition-colors"
-              title="View Profile"
-            >
-              <ExternalLink size={14} />
-            </Link>
-          </div>
-        </div>
 
         {/* Main Navigation with Collapsible Groups */}
         <div className="flex-1 py-3 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent min-h-0">
@@ -421,7 +379,54 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
             </button>
           </div>
 
-          <div className="text-center text-xs text-white/30 pt-3">
+          {/* User Profile Card */}
+          <div className="pt-3">
+            <div className="bg-zinc-800/30 rounded-lg p-3 backdrop-blur-sm flex items-center gap-3">
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-zinc-700/50 flex-shrink-0">
+                <Image
+                  src={user?.profile?.avatar_url || 'https://cdn.haze.bio/default_avatar.jpeg'}
+                  alt=""
+                  fill
+                  sizes="40px"
+                  style={{ objectFit: "cover" }}
+                  draggable="false"
+                />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-medium text-white truncate">
+                    {user?.display_name || user?.username}
+                  </span>
+                  {user?.subscription?.status === 'active' && (
+                    <button
+                      onClick={() => setShowPremiumModal(true)}
+                      className="cursor-pointer flex-shrink-0"
+                      title="Premium User"
+                    >
+                      <PremiumBadge size={12} />
+                    </button>
+                  )}
+                </div>
+                <div className="text-xs text-white/50 truncate">@{user?.username}</div>
+              </div>
+
+              <Link
+                href={`/${user?.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                title="View Profile"
+              >
+                <ExternalLink size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="px-3 py-2 border-t border-zinc-800/50">
+          <div className="text-center text-xs text-white/30">
             <p>© {new Date().getFullYear()} cutz.lol</p>
           </div>
         </div>

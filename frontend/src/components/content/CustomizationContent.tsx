@@ -170,7 +170,7 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-6">
                 {/* Hero Section with Header */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                     <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -252,7 +252,7 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
                     {/* Right Column - Color Picker and Preview */}
                     <div className="space-y-6">
                         {/* Colors Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800/50">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Palette className="w-4 h-4 text-purple-400" />
@@ -285,7 +285,7 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
                                                 <span className="text-sm font-medium text-white">{label}</span>
-                                                <div className="flex items-center gap-1 bg-black/40 px-2 py-1 rounded-md border border-zinc-800/50">
+                                                <div className="flex items-center gap-1 bg-[#0E0E0E]/40 px-2 py-1 rounded-md border border-zinc-800/50">
                                                     <span className="text-xs text-white/60">#</span>
                                                     <span className="text-xs text-white/90">
                                                         {String(profile[`${key}_color` as keyof UserProfile])
@@ -301,7 +301,7 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
                         </div>
 
                         {/* Visibility Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800/50">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Eye className="w-4 h-4 text-purple-400" />
@@ -372,7 +372,7 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
                         </div>
 
                         {/* Preview Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Eye className="w-4 h-4 text-purple-400" />

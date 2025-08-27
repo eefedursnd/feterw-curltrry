@@ -244,7 +244,7 @@ export default function ModerationDashboardContent({ }: ModerationDashboardConte
                     {/* Left Column */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* User Search Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Search className="w-4 h-4 text-red-400" />
@@ -305,7 +305,7 @@ export default function ModerationDashboardContent({ }: ModerationDashboardConte
                                                         >
                                                             <div className="flex items-center justify-between">
                                                                 <div className="flex items-center gap-3">
-                                                                    <div className="w-10 h-10 bg-black/50 rounded-lg overflow-hidden border border-zinc-800/50 flex-shrink-0">
+                                                                    <div className="w-10 h-10 bg-[#0E0E0E]/50 rounded-lg overflow-hidden border border-zinc-800/50 flex-shrink-0">
                                                                         {user.profile?.avatar_url ? (
                                                                             <Image
                                                                                 src={user.profile.avatar_url}
@@ -357,7 +357,7 @@ export default function ModerationDashboardContent({ }: ModerationDashboardConte
                         </div>
 
                         {/* Open Reports Card */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Flag className="w-4 h-4 text-red-400" />
@@ -424,7 +424,7 @@ export default function ModerationDashboardContent({ }: ModerationDashboardConte
                     {/* Right Column */}
                     <div className="space-y-6">
                         {/* Recent Searches */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Clock className="w-4 h-4 text-red-400" />
@@ -459,7 +459,7 @@ export default function ModerationDashboardContent({ }: ModerationDashboardConte
                         </div>
 
                         {/* Quick Tips */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Info className="w-4 h-4 text-red-400" />

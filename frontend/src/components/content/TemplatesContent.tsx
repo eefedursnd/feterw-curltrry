@@ -135,7 +135,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-8 relative">
                 {/* Hero Section with Header */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                     <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
 
@@ -196,7 +196,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                         {/* Left Column - Main Content */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* My Templates */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Palette className="w-4 h-4 text-purple-400" />
@@ -241,7 +241,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                                                             <Tooltip text="Copy Link">
                                                                 <button
                                                                     onClick={() => handleCopyToClipboard(template)}
-                                                                    className="p-1.5 bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 rounded transition-colors"
+                                                                    className="p-1.5 bg-[#0E0E0E]/50 backdrop-blur-sm text-white hover:bg-[#0E0E0E]/70 rounded transition-colors"
                                                                 >
                                                                     <Copy className="w-4 h-4" />
                                                                 </button>
@@ -249,7 +249,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                                                             <Tooltip text="Preview">
                                                                 <button
                                                                     onClick={() => window.open(`/${contextUser?.username}?previewTemplateId=${template.id}`, '_blank')}
-                                                                    className="p-1.5 bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 rounded transition-colors"
+                                                                    className="p-1.5 bg-[#0E0E0E]/50 backdrop-blur-sm text-white hover:bg-[#0E0E0E]/70 rounded transition-colors"
                                                                 >
                                                                     <Eye className="w-4 h-4" />
                                                                 </button>
@@ -362,7 +362,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                             </div>
 
                             {/* Template Tips */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Info className="w-4 h-4 text-purple-400" />
@@ -406,7 +406,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                         {/* Right Column - Side Content */}
                         <div className="space-y-6">
                             {/* Template Options */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Palette className="w-4 h-4 text-purple-400" />
@@ -439,7 +439,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                             </div>
 
                             {/* Quick Actions */}
-                            <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800/50">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Settings className="w-4 h-4 text-purple-400" />
@@ -478,7 +478,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
 
                             {/* Template Stats Card */}
                             {templates && templates.length > 0 && (
-                                <div className="bg-black rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
+                                <div className="bg-[#0E0E0E] rounded-lg border border-zinc-800/50 relative overflow-hidden p-5">
                                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
                                     <div className="relative">
                                         <h3 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
@@ -507,7 +507,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                 ) : (
                     <div className="space-y-6">
                         {/* Discovery View */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800/50 flex items-center justify-between">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <Search className="w-4 h-4 text-purple-400" />
@@ -535,7 +535,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                         </div>
 
                         {/* Help Section */}
-                        <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden p-6 relative">
                             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
                             <div className="relative flex flex-col md:flex-row gap-6 items-center">

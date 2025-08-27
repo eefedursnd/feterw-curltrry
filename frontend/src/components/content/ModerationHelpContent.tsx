@@ -345,7 +345,7 @@ export default function ModerationHelpContent() {
                                 setExpandedCategory(category.id);
                                 setSearchTerm('');
                             }}
-                            className="bg-black rounded-xl border border-zinc-800 p-4 hover:border-red-500/20 transition-all duration-300 text-left"
+                            className="bg-[#0E0E0E] rounded-xl border border-zinc-800 p-4 hover:border-red-500/20 transition-all duration-300 text-left"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
@@ -365,7 +365,7 @@ export default function ModerationHelpContent() {
                     {/* Left Column - FAQ Categories */}
                     <div className="lg:col-span-2 space-y-5">
                         {searchTerm ? (
-                            <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                            <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                                 <div className="px-5 py-4 border-b border-zinc-800">
                                     <h2 className="text-white font-semibold flex items-center gap-2">
                                         <Search className="w-4 h-4 text-red-400" />
@@ -411,7 +411,7 @@ export default function ModerationHelpContent() {
                         ) : (
                             <>
                                 {categories.map((category) => (
-                                    <div key={category.id} className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                                    <div key={category.id} className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                                         <button
                                             onClick={() => toggleCategory(category.id)}
                                             className="w-full px-5 py-4 border-b border-zinc-800 flex items-center justify-between"
@@ -458,7 +458,7 @@ export default function ModerationHelpContent() {
                     {/* Right Column - Quick Guides & Resources */}
                     <div className="space-y-6">
                         {/* Common Tasks */}
-                        <div className="bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800 overflow-hidden">
                             <div className="px-5 py-4 border-b border-zinc-800">
                                 <h2 className="text-white font-semibold flex items-center gap-2">
                                     <ClipboardCheck className="w-4 h-4 text-red-400" />

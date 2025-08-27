@@ -161,7 +161,7 @@ export default function ModerationApplyContent({ initialApplications }: Moderati
         <DashboardLayout>
             <div className="max-w-[100rem] mx-auto space-y-8 relative">
                 {/* Header Section */}
-                <div className="bg-black rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
+                <div className="bg-[#0E0E0E] rounded-xl p-8 border border-zinc-800/50 overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.15),transparent_70%)]"></div>
 
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -177,7 +177,7 @@ export default function ModerationApplyContent({ initialApplications }: Moderati
                 </div>
 
                 {/* Search */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                     <div className="px-5 py-4 border-b border-zinc-800/50">
                         <h2 className="text-white font-semibold flex items-center gap-2">
                             <Search className="w-4 h-4 text-purple-400" />
@@ -217,7 +217,7 @@ export default function ModerationApplyContent({ initialApplications }: Moderati
                 </div>
 
                 {/* Applications Table */}
-                <div className="bg-black rounded-xl border border-zinc-800/50 overflow-hidden">
+                <div className="bg-[#0E0E0E] rounded-xl border border-zinc-800/50 overflow-hidden">
                     <div className="px-5 py-4 border-b border-zinc-800/50">
                         <h2 className="text-white font-semibold flex items-center gap-2">
                             <FileText className="w-4 h-4 text-purple-400" />
