@@ -136,7 +136,7 @@ func (des *DataExportService) processDataExport(exportID uint) {
 		"completed_at": completedAt,
 	})
 
-	des.sendExportEmail(export.UserID, export.FilePassword, export.ExpiresAt)
+	des.sendExportEmail(export.UserID, export.FilePassword, export.ExpiresAt, fileURL)
 }
 
 /* Collect all data for a user */
@@ -384,7 +384,7 @@ func (des *DataExportService) uploadExportFile(pdfBuffer *bytes.Buffer, fileName
 }
 
 /* Send export email to user */
-func (des *DataExportService) sendExportEmail(userID uint, password string, expiresAt time.Time) error {
+func (des *DataExportService) sendExportEmail(userID uint, password string, expiresAt time.Time, fileURL string) error {
 	user, err := des.UserService.GetUserByUID(userID)
 	if err != nil {
 		log.Printf("Error loading user for export email: %v", err)
@@ -401,7 +401,7 @@ func (des *DataExportService) sendExportEmail(userID uint, password string, expi
 		Subject: "Your cutz.lol Data Export is Ready",
 		Body:    "data_export",
 		Data: map[string]string{
-			"DownloadURL": downloadURL,
+			"DownloadURL": fileURL,
 		},
 	}
 

@@ -44,7 +44,7 @@ func NewBot(redisClient *redis.Client) (*Bot, error) {
 	imageService := services.NewImageService()
 	altAccountService := services.NewAltAccountService(db.DB, redisClient, userService.EventService)
 	eventService := services.NewEventService(db.DB, redisClient, session)
-	experimentalService := services.NewExperimentalService(db.DB, redisClient)
+
 
 	serviceManager := &ServiceManager{
 		User:         userService,
@@ -57,7 +57,7 @@ func NewBot(redisClient *redis.Client) (*Bot, error) {
 		Image:        imageService,
 		AltAccount:   altAccountService,
 		Event:        eventService,
-		Experimental: experimentalService,
+
 	}
 
 	bot := &Bot{

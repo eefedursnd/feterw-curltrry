@@ -278,13 +278,13 @@ func (s *EmailService) CreateRegistrationRequest(email string, username string, 
 		return "", err
 	}
 
-	verifyLink := fmt.Sprintf("%s/verify?token=%s", config.Origin, token)
+
 	content := &models.EmailContent{
 		To:      email,
 		Subject: "Verify Your Email for cutz.lol",
-		Body:    "register_email_verify",
+		Body:    "verify_email",
 		Data: map[string]string{
-			"VerifyLink": verifyLink,
+			"Code": token,
 		},
 	}
 

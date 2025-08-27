@@ -1,7 +1,6 @@
 package discord
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"math"
@@ -14,7 +13,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/hazebio/haze.bio_backend/config"
 	"github.com/hazebio/haze.bio_backend/models"
-	"github.com/hazebio/haze.bio_backend/services"
 	"github.com/hazebio/haze.bio_backend/utils"
 )
 
@@ -114,16 +112,7 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 		c.handleStaffInfo(s, m, args)
 	case "triggerevent":
 		c.handleTriggerEvent(s, m, args)
-	case "experiments":
-		c.handleExperiments(s, m, args)
-	case "createexperiment":
-		c.handleCreateExperiment(s, m, args)
-	case "deleteexperiment":
-		c.handleDeleteExperiment(s, m, args)
-	case "experimentstatus":
-		c.handleExperimentStatus(s, m, args)
-	case "checkuserexperiments":
-		c.handleCheckUserExperiments(s, m, args)
+
 	case "timediff":
 		c.handleTimeDiff(s, m, args)
 	case "createproductcode":
@@ -546,14 +535,7 @@ func (c *Commands) handleAdminHelp(s *discordgo.Session, m *discordgo.MessageCre
 					"``deletestatus [id]``\n" +
 					"``createproductcode [type]``",
 			},
-			{
-				Name: "Experimental Features",
-				Value: "``experiments``\n" +
-					"``createexperiment [params]``\n" +
-					"``deleteexperiment [feature_key]``\n" +
-					"``experimentstatus``\n" +
-					"``checkuserexperiments [username]``",
-			},
+
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "cutz.lol admin system",
@@ -1474,400 +1456,15 @@ func (c *Commands) handleGenerate(s *discordgo.Session, m *discordgo.MessageCrea
 	generateCooldowns[m.Author.ID] = time.Now()
 }
 
-func (c *Commands) handleExperiments(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
-		c.sendUnauthorizedEmbed(s, m, "You are not authorized to manage experiments")
-		return
-	}
 
-	embed := &discordgo.MessageEmbed{
-		Title:       "Experimental Features Management",
-		Description: "Commands for managing experimental features",
-		Color:       0x9B59B6, // Purple
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name: "Available Commands",
-				Value: "• `?createexperiment` - Create a new experiment\n" +
-					"• `?deleteexperiment` - Delete an experiment\n" +
-					"• `?adduserstoexperiment` - Add additional users to an experiment\n" +
-					"• `?experimentstatus` - View status of all experiments\n" +
-					"• `?checkuserexperiments` - Check which experiments a user is enrolled in\n" +
-					"• `?checkuserexperiments --all` - Show all users in a specific experiment",
-			},
-			{
-				Name: "Creating an Experiment",
-				Value: "Format: `?createexperiment \"Name\" feature_key \"Description\" start_date end_date user_count`\n" +
-					"Example: `?createexperiment \"Custom Domains\" custom_domains \"Use custom domains on profiles\" 2025-05-01 2025-06-01 50`",
-			},
-			{
-				Name: "Checking Experiment Users",
-				Value: "• Check one user: `?checkuserexperiments username`\n" +
-					"• Check all users in experiment: `?checkuserexperiments --all feature_key`",
-			},
-		},
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "cutz.lol experimental features",
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-	s.ChannelMessageSendEmbed(m.ChannelID, embed)
-}
 
-func (c *Commands) handleCreateExperiment(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
-		c.sendUnauthorizedEmbed(s, m, "You are not authorized to create experiments")
-		return
-	}
 
-	if len(args) < 7 {
-		c.sendInvalidUsageEmbed(s, m, "Please provide all required parameters",
-			"`?createexperiment \"Name\" feature_key \"Description\" start_date end_date user_count`",
-			"`?createexperiment \"Custom Domains\" custom_domains \"Use custom domains\" 2025-05-01 2025-06-01 50`")
-		return
-	}
 
-	cmdContent := strings.Join(args[1:], " ")
-	re := regexp.MustCompile(`"([^"]+)"`)
-	matches := re.FindAllStringSubmatch(cmdContent, 2)
 
-	if len(matches) < 2 {
-		c.sendInvalidUsageEmbed(s, m, "Name and description must be in quotes",
-			"`?createexperiment \"Name\" feature_key \"Description\" start_date end_date user_count`",
-			"`?createexperiment \"Custom Domains\" custom_domains \"Use custom domains\" 2025-05-01 2025-06-01 50`")
-		return
-	}
 
-	name := matches[0][1]
-	description := matches[1][1]
 
-	nameEnd := strings.Index(cmdContent, "\"") + len(name) + 2 // +2 for the quotes
-	descStart := strings.Index(cmdContent[nameEnd:], "\"") + nameEnd
-	descEnd := strings.Index(cmdContent[descStart+1:], "\"") + descStart + 1
 
-	featureKey := strings.TrimSpace(cmdContent[nameEnd:descStart])
 
-	paramsStr := strings.TrimSpace(cmdContent[descEnd+1:])
-	params := strings.Fields(paramsStr)
-
-	if len(params) < 3 {
-		c.sendInvalidUsageEmbed(s, m, "Missing parameters after description",
-			"`?createexperiment \"Name\" feature_key \"Description\" start_date end_date user_count`",
-			"`?createexperiment \"Custom Domains\" custom_domains \"Use custom domains\" 2025-05-01 2025-06-01 50`")
-		return
-	}
-
-	startDateStr := params[0]
-	endDateStr := params[1]
-	userCountStr := params[2]
-
-	startDate, err := time.Parse("2006-01-02", startDateStr)
-	if err != nil {
-		c.sendInvalidInputEmbed(s, m, "Invalid start date format. Use YYYY-MM-DD")
-		return
-	}
-
-	endDate, err := time.Parse("2006-01-02", endDateStr)
-	if err != nil {
-		c.sendInvalidInputEmbed(s, m, "Invalid end date format. Use YYYY-MM-DD")
-		return
-	}
-
-	userCount, err := strconv.Atoi(userCountStr)
-	if err != nil || userCount < 1 {
-		c.sendInvalidInputEmbed(s, m, "Invalid user count. Must be a positive number")
-		return
-	}
-
-	err = c.services.Experimental.CreateExperiment(name, featureKey, description, startDate, endDate, userCount)
-	if err != nil {
-		c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to create experiment: %v", err))
-		return
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       "Experiment Created",
-		Description: "New experimental feature has been created successfully",
-		Color:       0x00ff00,
-		Fields: []*discordgo.MessageEmbedField{
-			{Name: "Name", Value: name, Inline: true},
-			{Name: "Feature Key", Value: featureKey, Inline: true},
-			{Name: "Description", Value: description},
-			{Name: "Start Date", Value: startDate.Format("2006-01-02"), Inline: true},
-			{Name: "End Date", Value: endDate.Format("2006-01-02"), Inline: true},
-			{Name: "Initial User Count", Value: fmt.Sprintf("%d", userCount), Inline: true},
-		},
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "cutz.lol experimental system",
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-	s.ChannelMessageSendEmbed(m.ChannelID, embed)
-}
-
-func (c *Commands) handleDeleteExperiment(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
-		c.sendUnauthorizedEmbed(s, m, "You are not authorized to delete experiments")
-		return
-	}
-
-	if len(args) < 2 {
-		c.sendInvalidUsageEmbed(s, m, "Please provide a feature key to delete",
-			"`?deleteexperiment <feature_key>`",
-			"`?deleteexperiment custom_domains`")
-		return
-	}
-
-	featureKey := args[1]
-
-	err = c.services.Experimental.DeleteExperiment(featureKey)
-	if err != nil {
-		c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to delete experiment: %v", err))
-		return
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       "Experiment Deleted",
-		Description: fmt.Sprintf("The experiment '%s' has been deleted successfully", featureKey),
-		Color:       0x00ff00,
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "cutz.lol experimental system",
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-	s.ChannelMessageSendEmbed(m.ChannelID, embed)
-}
-
-func (c *Commands) handleExperimentStatus(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
-		c.sendUnauthorizedEmbed(s, m, "You are not authorized to view experiment status")
-		return
-	}
-
-	experimentsData, err := c.services.Experimental.Client.HGetAll("experiments:active").Result()
-	if err != nil {
-		c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to get experiments: %v", err))
-		return
-	}
-
-	if len(experimentsData) == 0 {
-		c.sendErrorEmbed(s, m, "No experiments found")
-		return
-	}
-
-	fields := []*discordgo.MessageEmbedField{}
-	now := time.Now()
-
-	for featureKey, expData := range experimentsData {
-		var experiment models.Experiment
-		if err := json.Unmarshal([]byte(expData), &experiment); err != nil {
-			log.Printf("Warning: Failed to unmarshal experiment data for %s: %v", featureKey, err)
-			continue
-		}
-
-		userKey := fmt.Sprintf("experiment:users:%s", featureKey)
-		userCount, err := c.services.Experimental.Client.SCard(userKey).Result()
-		if err != nil {
-			userCount = 0
-		}
-
-		var status string
-		var emoji string
-
-		if now.Before(experiment.StartDate) {
-			status = "Not Started"
-			emoji = "⏳"
-		} else if now.After(experiment.EndDate) {
-			status = "Completed"
-			emoji = "✅"
-		} else {
-			totalDuration := experiment.EndDate.Sub(experiment.StartDate)
-			elapsed := now.Sub(experiment.StartDate)
-			progress := (elapsed.Hours() / totalDuration.Hours()) * 100
-			status = fmt.Sprintf("In Progress (%.1f%%)", progress)
-			emoji = "🔄"
-		}
-
-		fields = append(fields, &discordgo.MessageEmbedField{
-			Name: fmt.Sprintf("%s %s (%s)", emoji, experiment.Name, featureKey),
-			Value: fmt.Sprintf("**Description**: %s\n**Status**: %s\n**Timeline**: %s to %s\n**Users**: %d\n**Initial Target**: %d",
-				experiment.Description,
-				status,
-				experiment.StartDate.Format("2006-01-02"),
-				experiment.EndDate.Format("2006-01-02"),
-				userCount,
-				experiment.InitialUserCount),
-			Inline: false,
-		})
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       "Experimental Features Status",
-		Description: fmt.Sprintf("Showing status for %d experimental features", len(fields)),
-		Color:       0x9B59B6, // Purple
-		Fields:      fields,
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "cutz.lol experimental system",
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-	s.ChannelMessageSendEmbed(m.ChannelID, embed)
-}
-
-func (c *Commands) handleCheckUserExperiments(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
-		c.sendUnauthorizedEmbed(s, m, "You are not authorized to check user experiments")
-		return
-	}
-
-	if len(args) >= 2 && args[1] == "--all" {
-		if len(args) < 3 {
-			c.sendInvalidUsageEmbed(s, m, "Please provide a feature key when using --all",
-				"`?checkuserexperiments --all <feature_key>`",
-				"`?checkuserexperiments --all custom_domains`")
-			return
-		}
-
-		featureKey := args[2]
-
-		exists, err := c.services.Experimental.ExperimentExists(featureKey)
-		if err != nil {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Error checking experiment: %v", err))
-			return
-		}
-
-		if !exists {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Experiment '%s' not found", featureKey))
-			return
-		}
-
-		userKey := fmt.Sprintf("%s%s", services.ExperimentUserPrefix, featureKey)
-		userIDs, err := c.services.Experimental.Client.SMembers(userKey).Result()
-		if err != nil {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to get users for experiment: %v", err))
-			return
-		}
-
-		if len(userIDs) == 0 {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("No users are enrolled in experiment '%s'", featureKey))
-			return
-		}
-
-		var uintUserIDs []uint
-		for _, userIDStr := range userIDs {
-			var userID uint
-			if _, err := fmt.Sscanf(userIDStr, "%d", &userID); err == nil {
-				uintUserIDs = append(uintUserIDs, userID)
-			}
-		}
-
-		var users []models.User
-		limit := 25
-		if len(uintUserIDs) < limit {
-			limit = len(uintUserIDs)
-		}
-
-		if err := c.services.User.DB.Where("uid IN ?", uintUserIDs[:limit]).Find(&users).Error; err != nil {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to get user details: %v", err))
-			return
-		}
-
-		var userListBuilder strings.Builder
-		for i, user := range users {
-			userListBuilder.WriteString(fmt.Sprintf("%d. **%s** (UID: %d)", i+1, user.Username, user.UID))
-
-			if user.StaffLevel == 4 {
-				userListBuilder.WriteString(" 👑")
-			}
-			userListBuilder.WriteString("\n")
-		}
-
-		if len(uintUserIDs) > limit {
-			userListBuilder.WriteString(fmt.Sprintf("\n...and %d more users", len(uintUserIDs)-limit))
-		}
-
-		var experimentData string
-		experimentData, err = c.services.Experimental.Client.HGet(services.ExperimentListKey, featureKey).Result()
-		if err != nil {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to get experiment details: %v", err))
-			return
-		}
-
-		var experiment models.Experiment
-		if err := json.Unmarshal([]byte(experimentData), &experiment); err != nil {
-			c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to parse experiment data: %v", err))
-			return
-		}
-
-		embed := &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("Users in Experiment: %s", experiment.Name),
-			Description: fmt.Sprintf("Feature Key: `%s`\nShowing %d of %d users",
-				featureKey, limit, len(uintUserIDs)),
-			Color: 0x9B59B6, // Purple
-			Fields: []*discordgo.MessageEmbedField{
-				{
-					Name:   "Users",
-					Value:  userListBuilder.String(),
-					Inline: false,
-				},
-			},
-			Footer: &discordgo.MessageEmbedFooter{
-				Text: "cutz.lol experimental system",
-			},
-			Timestamp: time.Now().Format(time.RFC3339),
-		}
-		s.ChannelMessageSendEmbed(m.ChannelID, embed)
-		return
-	}
-
-	if len(args) < 2 {
-		c.sendInvalidUsageEmbed(s, m, "Please provide a username or use --all flag",
-			"`?checkuserexperiments <username>` or `?checkuserexperiments --all <feature_key>`",
-			"`?checkuserexperiments example` or `?checkuserexperiments --all custom_domains`")
-		return
-	}
-
-	username := args[1]
-
-	user, err := c.services.User.GetUserByUsername(username)
-	if err != nil {
-		c.sendErrorEmbed(s, m, fmt.Sprintf("User not found: %s", username))
-		return
-	}
-
-	features, err := c.services.Experimental.GetUserExperimentalFeatures(user.UID)
-	if err != nil {
-		c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to get user's experimental features: %v", err))
-		return
-	}
-
-	featuresText := "None"
-	if len(features) > 0 {
-		featuresText = "• " + strings.Join(features, "\n• ")
-	}
-
-	embed := &discordgo.MessageEmbed{
-		Title:       "User Experimental Features",
-		Description: fmt.Sprintf("Showing experimental features for **%s** (UID: %d)", user.Username, user.UID),
-		Color:       0x9B59B6, // Purple
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "Active Features",
-				Value:  featuresText,
-				Inline: false,
-			},
-		},
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: "cutz.lol experimental system",
-		},
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-	s.ChannelMessageSendEmbed(m.ChannelID, embed)
-}
 
 func (c *Commands) handleTimeDiff(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	if len(args) < 2 {

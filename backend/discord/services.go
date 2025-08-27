@@ -15,5 +15,5 @@ type ServiceManager struct {
 	Image        *services.ImageService
 	AltAccount   *services.AltAccountService
 	Event        *services.EventService
-	Experimental *services.ExperimentalService
+
 }

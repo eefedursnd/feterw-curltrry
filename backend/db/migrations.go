@@ -28,8 +28,7 @@ func StartMigration(db *gorm.DB) error {
 		&models.Template{},
 		&models.Application{},
 		&models.Response{},
-		&models.Domain{},
-		&models.DomainAssignment{},
+		
 		&models.Event{},
 		&models.DataExport{},
 	)

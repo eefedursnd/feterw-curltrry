@@ -70,8 +70,7 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	imageHandler := handlers.NewImageHandler(imageService, userService, profileService, templateService)
 	applyService := services.NewApplyService(db, redisClient, emailService, userService)
 	applyHandler := handlers.NewApplyHandler(applyService, userService)
-	domainService := services.NewDomainService(db, userService)
-	domainHandler := handlers.NewDomainHandler(domainService, userService)
+
 	dataExportService := services.NewDataExportService(db, redisClient)
 	dataExportHandler := handlers.NewDataExportHandler(dataExportService)
 
@@ -81,7 +80,7 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	prettyJsonStats, _ := json.MarshalIndent(stats, "", "  ")
 	log.Println("Shutdown stats", string(prettyJsonStats))
 
-	services.NewExperimentalService(db, redisClient)
+
 
 	/* Public routes (do not require authentication) */
 	apiRoutes := router.PathPrefix("/api").Subrouter()
@@ -114,7 +113,7 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	//apiRoutes.HandleFunc("/images/template/{templateID}", imageHandler.GenerateTemplateCard).Methods("GET")
 	apiRoutes.HandleFunc("/applications/positions", applyHandler.GetActivePositions).Methods("GET")
 	apiRoutes.HandleFunc("/applications/positions/{id}", applyHandler.GetPositionByID).Methods("GET")
-	apiRoutes.HandleFunc("/domains/{domain_name}/{username}", domainHandler.HasUserSelectedDomain).Methods("GET")
+
 	apiRoutes.HandleFunc("/data-export/{exportID}/download", dataExportHandler.DownloadExport).Methods("POST")
 
 	apiRoutes.HandleFunc("/shutdown-stats", func(w http.ResponseWriter, r *http.Request) {
@@ -219,11 +218,7 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	restrictedRoutes.HandleFunc("/templates/{templateID}", templateHandler.DeleteTemplate).Methods("DELETE")
 	restrictedRoutes.HandleFunc("/templates/{templateID}/apply", templateHandler.ApplyTemplate).Methods("POST")
 
-	/* Domain Routes */
-	restrictedRoutes.HandleFunc("/domains/available", domainHandler.GetAvailableDomains).Methods("GET")
-	restrictedRoutes.HandleFunc("/domains/user", domainHandler.GetUserDomains).Methods("GET")
-	restrictedRoutes.HandleFunc("/domains/assign", domainHandler.AssignDomain).Methods("POST")
-	restrictedRoutes.HandleFunc("/domains/{domain_id}", domainHandler.RemoveDomain).Methods("DELETE")
+
 
 	/* Analytics Routes */
 	privateRoutes.HandleFunc("/analytics", analyticsHandler.GetAnalytics).Methods("GET")
@@ -266,10 +261,6 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	adminRoutes.HandleFunc("/moderation/applications/detail/{id}", applyHandler.GetApplicationDetail).Methods("GET")
 	adminRoutes.HandleFunc("/moderation/applications/review/{id}", applyHandler.ReviewApplication).Methods("POST")
 
-	adminRoutes.HandleFunc("/domains", domainHandler.GetAllDomains).Methods("GET")
-	adminRoutes.HandleFunc("/domains", domainHandler.AddDomain).Methods("POST")
-	adminRoutes.HandleFunc("/domains/{id}", domainHandler.UpdateDomain).Methods("PUT")
-	adminRoutes.HandleFunc("/domains/{id}", domainHandler.DeleteDomain).Methods("DELETE")
-	adminRoutes.HandleFunc("/domains/{id}/renew", domainHandler.RenewDomain).Methods("POST")
+
 
 }

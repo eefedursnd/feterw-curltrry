@@ -39,7 +39,7 @@ type User struct {
 
 	/* Virtual fields */
 	HasPremium           bool     `json:"has_premium" gorm:"-"`
-	ExperimentalFeatures []string `json:"experimental_features,omitempty" gorm:"-"`
+
 
 	UsernameCooldown    int `json:"username_cooldown,omitempty" gorm:"-"`
 	AliasCooldown       int `json:"alias_cooldown,omitempty" gorm:"-"`

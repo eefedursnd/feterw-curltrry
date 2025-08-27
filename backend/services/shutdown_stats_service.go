@@ -38,7 +38,7 @@ type ShutdownStats struct {
 	TotalDataExports  int64 `json:"total_data_exports"`
 	TotalPunishments  int64 `json:"total_punishments"`
 	TotalReports      int64 `json:"total_reports"`
-	TotalDomains      int64 `json:"total_domains"`
+
 	TotalEvents       int64 `json:"total_events"`
 
 	// Premium & Subscriptions
@@ -263,10 +263,7 @@ func (sss *ShutdownStatsService) getPlatformStats(stats *ShutdownStats) error {
 		return err
 	}
 
-	// Domains
-	if err := sss.DB.Model(&models.Domain{}).Count(&stats.TotalDomains).Error; err != nil {
-		return err
-	}
+
 
 	// Events
 	if err := sss.DB.Model(&models.Event{}).Count(&stats.TotalEvents).Error; err != nil {

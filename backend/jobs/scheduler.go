@@ -15,7 +15,6 @@ type Scheduler struct {
 	UserService         *services.UserService
 	ProfileService      *services.ProfileService
 	BadgeService        *services.BadgeService
-	ExperimentalService *services.ExperimentalService
 	PunishService       *services.PunishService
 }
 
@@ -27,7 +26,7 @@ func NewScheduler(db *gorm.DB, client *redis.Client) *Scheduler {
 		Client:      client,
 		UserService: userService,
 	}
-	experimentalService := services.NewExperimentalService(db, client)
+
 	punishService := services.NewPunishService(db, client)
 
 	return &Scheduler{
@@ -36,20 +35,13 @@ func NewScheduler(db *gorm.DB, client *redis.Client) *Scheduler {
 		UserService:         userService,
 		ProfileService:      profileService,
 		BadgeService:        badgeService,
-		ExperimentalService: experimentalService,
+
 		PunishService:       punishService,
 	}
 }
 
 func (s *Scheduler) Start() {
-	go s.scheduleJob(30*time.Minute, func() {
-		job := &ExperimentProcessJob{
-			DB:                  s.DB,
-			Client:              s.Client,
-			ExperimentalService: s.ExperimentalService,
-		}
-		job.Run()
-	})
+
 
 	go s.scheduleJob(15*time.Minute, func() {
 		job := &PunishmentExpireJob{
@@ -82,12 +74,7 @@ func (s *Scheduler) scheduleJob(interval time.Duration, jobFunc func()) {
 }
 
 func (s *Scheduler) RunOnce() {
-	job1 := &ExperimentProcessJob{
-		DB:                  s.DB,
-		Client:              s.Client,
-		ExperimentalService: s.ExperimentalService,
-	}
-	job1.Run()
+
 
 	job2 := &PunishmentExpireJob{
 		DB:            s.DB,

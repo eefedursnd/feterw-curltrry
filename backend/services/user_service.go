@@ -24,7 +24,7 @@ type UserService struct {
 	EmailService        *EmailService
 	AltAccountService   *AltAccountService
 	BotSession          *discordgo.Session
-	ExperimentalService *ExperimentalService
+
 	EventService        *EventService
 }
 
@@ -45,7 +45,7 @@ func NewUserService(db *gorm.DB, client *redis.Client, botSession *discordgo.Ses
 		EmailService:        &EmailService{DB: db, Client: client},
 		AltAccountService:   &AltAccountService{DB: db, Client: client},
 		BotSession:          botSession,
-		ExperimentalService: &ExperimentalService{DB: db, Client: client},
+
 	}
 }
 
@@ -392,18 +392,6 @@ func (us *UserService) GetUserByUID(uid uint) (*models.User, error) {
 		user.DisplayNameCooldown = us.GetRemainingCooldown(timestamp)
 	}
 
-	if us.ExperimentalService != nil {
-		features, err := us.ExperimentalService.GetUserExperimentalFeatures(uid)
-		if err != nil {
-			log.Printf("Error getting experimental features: %v", err)
-			user.ExperimentalFeatures = []string{}
-		} else {
-			user.ExperimentalFeatures = features
-		}
-	} else {
-		user.ExperimentalFeatures = []string{}
-	}
-
 	return user, nil
 }
 
@@ -453,18 +441,6 @@ func (us *UserService) GetUserByUIDNoCache(uid uint) (*models.User, error) {
 
 	if displayNameCooldown, timestamp, err := us.CheckCooldown(uid, DisplayNameCooldownKey); err == nil && displayNameCooldown {
 		user.DisplayNameCooldown = us.GetRemainingCooldown(timestamp)
-	}
-
-	if us.ExperimentalService != nil {
-		features, err := us.ExperimentalService.GetUserExperimentalFeatures(uid)
-		if err != nil {
-			log.Printf("Error getting experimental features: %v", err)
-			user.ExperimentalFeatures = []string{}
-		} else {
-			user.ExperimentalFeatures = features
-		}
-	} else {
-		user.ExperimentalFeatures = []string{}
 	}
 
 	return user, nil
@@ -655,7 +631,7 @@ func (us *UserService) UpdateUserFields(uid uint, fields map[string]interface{})
 	delete(fields, "badge_edit_credits")
 	delete(fields, "subscription")
 	delete(fields, "staff_level")
-	delete(fields, "experimental_features")
+
 	delete(fields, "avatar_url")
 	delete(fields, "banner_url")
 	delete(fields, "email_verified")
