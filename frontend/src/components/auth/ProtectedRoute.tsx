@@ -26,6 +26,17 @@ export default function ProtectedRoute({ children, requireAuth = true }: Protect
     }
   }, [user, requireAuth, router]);
 
+  // Add a small delay to allow UserContext to initialize
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isChecking && !user) {
+        setIsChecking(false);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [user, isChecking]);
+
   // Show loading spinner while checking authentication
   if (isChecking) {
     return (
