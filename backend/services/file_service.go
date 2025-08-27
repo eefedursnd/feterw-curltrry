@@ -94,7 +94,7 @@ func (fs *FileService) UploadFile(fileType, fileName string, userID uint, fileBy
 			resp.StatusCode, string(body))
 	}
 
-	fileURL := fmt.Sprintf("%s/%s", "https://cdn.haze.bio", fileKey)
+	fileURL := fmt.Sprintf("%s/%s", config.R2PublicURL, fileKey)
 	log.Printf("File uploaded successfully. URL: %s", fileURL)
 
 	profile := &models.UserProfile{}
@@ -184,7 +184,7 @@ func (fs *FileService) UploadCustomBadgeMedia(badgeID uint, fileName string, fil
 		return "", fmt.Errorf("failed to upload file: %s", body)
 	}
 
-	fileURL := fmt.Sprintf("%s/%s", "https://cdn.haze.bio", fileKey)
+	fileURL := fmt.Sprintf("%s/%s", config.R2PublicURL, fileKey)
 
 	return fileURL, nil
 }
@@ -232,7 +232,7 @@ func (fs *FileService) UploadCustomSocialMedia(fileName string, fileBytes []byte
 		return "", fmt.Errorf("failed to upload file: %s", body)
 	}
 
-	fileURL := fmt.Sprintf("%s/%s", "https://cdn.haze.bio", fileKey)
+	fileURL := fmt.Sprintf("%s/%s", config.R2PublicURL, fileKey)
 
 	return fileURL, nil
 }
@@ -279,7 +279,7 @@ func (fs *FileService) UploadDataExport(fileName string, fileBytes []byte, passw
 		return "", fmt.Errorf("failed to upload file: %s", body)
 	}
 
-	fileURL := fmt.Sprintf("%s/%s", "https://cdn.haze.bio", fileKey)
+	fileURL := fmt.Sprintf("%s/%s", config.R2PublicURL, fileKey)
 	return fileURL, nil
 }
 

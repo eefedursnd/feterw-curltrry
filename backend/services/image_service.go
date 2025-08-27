@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/golang/freetype/truetype"
+	"github.com/hazebio/haze.bio_backend/config"
 	"github.com/hazebio/haze.bio_backend/models"
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
@@ -27,7 +28,7 @@ type ImageService struct {
 
 func NewImageService() *ImageService {
 	return &ImageService{
-		BaseURL: "https://cdn.haze.bio",
+		BaseURL: config.R2PublicURL,
 	}
 }
 

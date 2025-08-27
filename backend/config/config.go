@@ -39,8 +39,9 @@ var (
 	SMTPTLSEnabled bool
 
 	// File upload service configuration (backend communicates with file-upload service)
-	R2URL    = os.Getenv("R2_URL")        // File upload service URL from env
-	R2APIKey = os.Getenv("R2_API_KEY")    // File upload service API key
+	R2URL        = os.Getenv("R2_URL")        // File upload service URL from env
+	R2APIKey     = os.Getenv("R2_API_KEY")    // File upload service API key
+	R2PublicURL  = os.Getenv("R2_PUBLIC_URL") // Public CDN URL for file access
 
 	HenrikApiKey string
 )
@@ -91,6 +92,7 @@ func LoadConfig() error {
 
 	R2URL = os.Getenv("R2_URL")
 	R2APIKey = os.Getenv("R2_API_KEY")
+	R2PublicURL = os.Getenv("R2_PUBLIC_URL")
 
 	HenrikApiKey = os.Getenv("HENRIK_API_KEY")
 

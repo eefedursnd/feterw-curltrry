@@ -46,7 +46,7 @@ export default function ClientEffectsContainer({
                 <div className="fixed bottom-3 left-3 z-10">
                     <Tooltip text="Create your own profile" position="right">
                         <Link
-                            href="https://haze.bio"
+                            href="https://cutz.lol"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-black/30 hover:bg-black/50 backdrop-blur-sm p-1.5 px-2.5 rounded-full 
@@ -55,7 +55,7 @@ export default function ClientEffectsContainer({
                         >
                             <Sparkles className="w-3 h-3 text-white group-hover:text-purple-300" />
                             <span className="text-xs font-medium text-white group-hover:text-white/90">
-                                haze.bio
+                                cutz.lol
                             </span>
                         </Link>
                     </Tooltip>
