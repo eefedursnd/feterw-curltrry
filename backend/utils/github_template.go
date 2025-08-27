@@ -1,4 +1,4 @@
-ogpackage utils
+package utils
 
 import (
 	"fmt"

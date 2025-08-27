@@ -14,7 +14,6 @@ import (
 	"github.com/hazebio/haze.bio_backend/models"
 	"github.com/hazebio/haze.bio_backend/utils"
 	"github.com/jordan-wright/email"
-	"github.com/russross/blackfriday/v2"
 	"gorm.io/gorm"
 )
 

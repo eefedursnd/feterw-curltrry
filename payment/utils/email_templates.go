@@ -53,7 +53,7 @@ func (ets *EmailTemplateService) getVerifyEmailTemplate() string {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4c1d95;
             padding: 30px;
             text-align: center;
         }
@@ -70,11 +70,11 @@ func (ets *EmailTemplateService) getVerifyEmailTemplate() string {
             font-size: 16px;
             line-height: 1.6;
             margin-bottom: 30px;
-            color: #e0e0e0;
+            color: #ffffff;
         }
         .button {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #4c1d95;
             color: #ffffff;
             text-decoration: none;
             padding: 15px 30px;
@@ -89,7 +89,7 @@ func (ets *EmailTemplateService) getVerifyEmailTemplate() string {
         }
         .fallback-text {
             font-size: 14px;
-            color: #b0b0b0;
+            color: #ffffff;
             margin: 20px 0 10px 0;
         }
         .fallback-url {
@@ -99,12 +99,12 @@ func (ets *EmailTemplateService) getVerifyEmailTemplate() string {
             word-break: break-all;
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            color: #667eea;
+            color: #ffffff;
             border: 1px solid #3a3a3a;
         }
         .expiration-notice {
             font-size: 14px;
-            color: #b0b0b0;
+            color: #ffffff;
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #3a3a3a;
@@ -318,19 +318,19 @@ func (ets *EmailTemplateService) getPasswordResetTemplate() string {
                 You requested a password reset for your cutz.lol account. Click the button below to reset your password.
             </p>
             
-            <div style="text-align: center;">
-                <a href="https://cutz.lol/reset-password?token=%Code%" class="button">
-                    Reset Password
-                </a>
-            </div>
-            
-            <p class="fallback-text">
-                If the button above doesn't work, copy and paste this URL into your browser:
-            </p>
-            
-            <div class="fallback-url">
-                https://cutz.lol/reset-password?token=%Code%
-            </div>
+                         <div style="text-align: center;">
+                 <a href="%ResetLink%" class="button">
+                     Reset Password
+                 </a>
+             </div>
+             
+             <p class="fallback-text">
+                 If the button above doesn't work, copy and paste this URL into your browser:
+             </p>
+             
+             <div class="fallback-url">
+                 %ResetLink%
+             </div>
             
             <p class="expiration-notice">
                 This reset link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.

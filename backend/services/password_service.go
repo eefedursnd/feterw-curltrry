@@ -58,7 +58,7 @@ func (ps *PasswordService) InitiateReset(email string) error {
 
 	content := &models.EmailContent{
 		To:      *user.Email,
-		Subject: "Reset Your haze.bio Password",
+		Subject: "Reset Your cutz.lol Password",
 		Body:    "password_reset",
 		Data: map[string]string{
 			"ResetLink": resetLink,

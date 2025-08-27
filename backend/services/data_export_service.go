@@ -398,12 +398,10 @@ func (des *DataExportService) sendExportEmail(userID uint, password string, expi
 
 	content := &models.EmailContent{
 		To:      *user.Email,
-		Subject: "Your haze.bio Data Export is Ready",
-		Body:    "data_export_ready",
+		Subject: "Your cutz.lol Data Export is Ready",
+		Body:    "data_export",
 		Data: map[string]string{
-			"Username":  user.DisplayName,
-			"Password":  password,
-			"ExpiresAt": expiresAt.Format("January 2, 2006 15:04:05"),
+			"DownloadURL": downloadURL,
 		},
 	}
 
