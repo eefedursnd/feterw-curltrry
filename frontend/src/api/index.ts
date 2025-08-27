@@ -18,7 +18,7 @@ import TemplateAPI from './template.api';
 import AnalyticsAPI from './analytics.api';
 import ReportAPI from './report.api';
 import ApplyAPI from './apply.api';
-import DomainAPI from './domain.api';
+
 import DataAPI from './data.api';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.cutz.lol/api';
@@ -65,7 +65,7 @@ export const templateAPI = new TemplateAPI(API_BASE);
 export const analyticsAPI = new AnalyticsAPI(API_BASE);
 export const reportAPI = new ReportAPI(API_BASE);
 export const applyAPI = new ApplyAPI(API_BASE);
-export const domainAPI = new DomainAPI(API_BASE);
+
 export const dataAPI = new DataAPI(API_BASE);
 
 export * from './user.api';
@@ -88,5 +88,5 @@ export * from './template.api';
 export * from './analytics.api';
 export * from './report.api';
 export * from './apply.api';
-export * from './domain.api';
+
 export * from './data.api';

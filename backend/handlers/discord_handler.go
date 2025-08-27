@@ -44,7 +44,7 @@ func (dh *DiscordHandler) OAuth2Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (dh *DiscordHandler) OAuth2Link(w http.ResponseWriter, r *http.Request) {
-	dh.OAuth2Callback(w, r, false)
+	dh.OAuth2Callback(w, r, false) // This will handle linking, not login
 }
 
 /* Callback for Discord OAuth2 */
@@ -55,6 +55,28 @@ func (dh *DiscordHandler) OAuth2Callback(w http.ResponseWriter, r *http.Request,
 	if code == "" {
 		utils.RespondError(w, http.StatusBadRequest, "Code is required")
 		return
+	}
+
+	// For linking (not login), we need to get UID from session cookie if not in context
+	if !login && uid == 0 {
+		sessionToken := r.Cookies()
+		for _, cookie := range sessionToken {
+			if cookie.Name == "sessionToken" {
+				// Parse session token to get UID
+				claims, err := utils.ValidateToken(cookie.Value, config.SecretKey)
+				if err == nil {
+					uid = claims.UserID
+				}
+				break
+			}
+		}
+		
+		if uid == 0 {
+			// Redirect to login if no valid session
+			loginURL := fmt.Sprintf("%s/login?redirect=%s", config.Origin, url.QueryEscape(r.URL.String()))
+			http.Redirect(w, r, loginURL, http.StatusSeeOther)
+			return
+		}
 	}
 
 	discordID, err := dh.DiscordService.HandleOAuth2Callback(uid, code, login)

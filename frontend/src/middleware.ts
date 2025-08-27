@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { domainAPI } from "./api";
+
 
 const allowedOrigins = [
   "https://cutz.lol",
@@ -124,42 +124,15 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next({ headers });
     }
 
-    try {
-      console.log(`[Middleware] Checking domain selection for ${subdomain}.${domain}`);
-      const domainCheckStartTime = Date.now();
-      const result = await domainAPI.checkUserDomainSelection(subdomain, domain);
-      const domainCheckDuration = Date.now() - domainCheckStartTime;
-      console.log(`[Middleware] Domain check completed in ${domainCheckDuration}ms, result:`, result);
-      
-      if (result?.has_selected) {
-        console.log(`[Middleware] Valid domain selection found for ${subdomain}.${domain}`);
-        const url = request.nextUrl.clone();
-        const newPath = `/${subdomain}${path === "/" ? "" : path}`;
-        url.pathname = newPath;
-        console.log(`[Middleware] Rewriting URL to path: ${newPath}`);
-        return NextResponse.rewrite(url, { headers });
-      }
+    // Domain system removed - redirect to main site
+    console.log(`[Middleware] Domain system removed, redirecting to main site`);
+    const redirectURL = new URL("https://cutz.lol");
+    redirectURL.pathname = request.nextUrl.pathname;
+    redirectURL.search = request.nextUrl.search;
+    redirectURL.port = '';
+    console.log(`[Middleware] Redirecting to: ${redirectURL.toString()}`);
 
-      console.log(`[Middleware] No valid domain selection for ${subdomain}.${domain}, redirecting to main site`);
-      const redirectURL = new URL("https://haze.bio");
-      redirectURL.pathname = request.nextUrl.pathname;
-      redirectURL.search = request.nextUrl.search;
-      redirectURL.port = '';
-      console.log(`[Middleware] Redirecting to: ${redirectURL.toString()}`);
-
-      return NextResponse.redirect(redirectURL, { status: 301, headers });
-    } catch (error) {
-      console.error(`[Middleware] Error checking domain selection for ${subdomain}.${domain}:`, error);
-      console.log(`[Middleware] Error details:`, JSON.stringify(error, Object.getOwnPropertyNames(error)));
-
-      const redirectURL = new URL("https://cutz.lol");
-      redirectURL.pathname = request.nextUrl.pathname;
-      redirectURL.search = request.nextUrl.search;
-      redirectURL.port = '';
-      console.log(`[Middleware] Error recovery: redirecting to: ${redirectURL.toString()}`);
-
-      return NextResponse.redirect(redirectURL, { status: 301, headers });
-    }
+    return NextResponse.redirect(redirectURL, { status: 301, headers });
   }
 
   console.log(`[Middleware] No subdomain handling needed, proceeding with normal request`);
