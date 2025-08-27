@@ -148,7 +148,7 @@ export default function ApplyTemplateModal({
                                     <div className="flex items-center gap-2 mt-2">
                                         <div className="w-5 h-5 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
                                             <Image
-                                                src={template.creator_avatar || "https://cdn.haze.bio/default_avatar.jpeg"}
+                                                src={template.creator_avatar || "https://cdn.cutz.lol/default_avatar.jpeg"}
                                                 alt={template.creator_username || "Template creator"}
                                                 width={20}
                                                 height={20}

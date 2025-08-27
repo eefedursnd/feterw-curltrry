@@ -380,7 +380,7 @@ const CreateRestrictionModal: React.FC<CreateRestrictionModalProps> = ({
                                                             <div className="flex items-center gap-3">
                                                                 <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
                                                                     <Image
-                                                                        src={user.profile?.avatar_url || "https://cdn.haze.bio/default_avatar.jpeg"}
+                                                                        src={user.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
                                                                         alt={user.username}
                                                                         width={40}
                                                                         height={40}
@@ -436,7 +436,7 @@ const CreateRestrictionModal: React.FC<CreateRestrictionModalProps> = ({
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
                                                         <Image
-                                                            src={selectedUser.profile?.avatar_url || "https://cdn.haze.bio/default_avatar.jpeg"}
+                                                            src={selectedUser.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
                                                             alt={selectedUser.username}
                                                             width={32}
                                                             height={32}
@@ -711,7 +711,7 @@ const CreateRestrictionModal: React.FC<CreateRestrictionModalProps> = ({
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
                                                         <Image
-                                                            src={selectedUser.profile?.avatar_url || "https://cdn.haze.bio/default_avatar.jpeg"}
+                                                            src={selectedUser.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
                                                             alt={selectedUser.username}
                                                             width={32}
                                                             height={32}

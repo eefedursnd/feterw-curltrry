@@ -21,7 +21,7 @@ interface TemplateDiscoveryProps {
 type SortOption = 'popular' | 'newest' | 'oldest';
 type FilterOption = 'all' | 'premium' | 'standard';
 
-const DEFAULT_AVATAR_URL = "https://cdn.haze.bio/default_avatar.jpeg";
+const DEFAULT_AVATAR_URL = "https://cdn.cutz.lol/default_avatar.jpeg";
 
 export default function TemplateDiscovery({
     templates,

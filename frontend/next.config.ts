@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.haze.bio',
+        hostname: 'cdn.cutz.lol',
       },
       {
         protocol: 'https',

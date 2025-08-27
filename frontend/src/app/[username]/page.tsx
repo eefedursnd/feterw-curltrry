@@ -19,11 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
 
   if (!user || !user.profile) return {};
 
-  const title = `${user.display_name || user.username}`;
+  const title = user.display_name || user.username;
   const description = user.profile?.description || 'All your links, in one place';
 
   let imageUrl;
-  imageUrl = `https://cutz.lol/api/images/user/${user.uid}`;
+  imageUrl = `https://api.cutz.lol/api/images/user/${user.uid}`;
 
   return {
     title,

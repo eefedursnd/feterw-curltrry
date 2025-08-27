@@ -236,7 +236,7 @@ export default function UserDetailsContent({ username, initialData }: UserDetail
                             <div className="flex-shrink-0">
                                 <div className="w-24 h-24 rounded-2xl overflow-hidden bg-zinc-800/40 border-2 border-zinc-800/50 shadow-lg">
                                     <Image
-                                        src={userData.profile?.avatar_url || "https://cdn.haze.bio/default_avatar.jpeg"}
+                                        src={userData.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
                                         alt={userData.username}
                                         width={96}
                                         height={96}

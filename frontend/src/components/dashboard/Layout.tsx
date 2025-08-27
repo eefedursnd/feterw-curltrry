@@ -196,7 +196,7 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
             </div>
           <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-zinc-700/80">
             <Image
-              src={user?.profile?.avatar_url || 'https://cdn.haze.bio/default_avatar.jpeg'}
+              src={user?.profile?.avatar_url || 'https://cdn.cutz.lol/default_avatar.jpeg'}
               alt=""
               fill
               sizes="32px"
@@ -384,7 +384,7 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
             <div className="bg-zinc-800/30 rounded-lg p-3 backdrop-blur-sm flex items-center gap-3">
               <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-zinc-700/50 flex-shrink-0">
                 <Image
-                  src={user?.profile?.avatar_url || 'https://cdn.haze.bio/default_avatar.jpeg'}
+                  src={user?.profile?.avatar_url || 'https://cdn.cutz.lol/default_avatar.jpeg'}
                   alt=""
                   fill
                   sizes="40px"
