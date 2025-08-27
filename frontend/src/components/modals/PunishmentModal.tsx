@@ -219,7 +219,7 @@ export default function PunishmentModal({ punishments, onClose }: PunishmentModa
                   If you believe this restriction was applied in error, you can submit an appeal through our Discord support channel.
                 </p>
                 <Link
-                  href="https://discord.gg/hazebio"
+                  href="https://discord.gg/cutz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors text-xs font-medium"

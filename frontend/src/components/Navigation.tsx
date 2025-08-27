@@ -29,11 +29,11 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
   }, [pathname]);
 
   // Base classes for nav links with smoother transitions
-  const navLinkBaseClasses = "text-[15px] font-medium text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1.5 px-3 py-2 rounded-md";
+  const navLinkBaseClasses = "text-[16px] font-medium text-zinc-400 hover:text-white transition-all duration-300 flex items-center gap-1.5 px-3 py-2 rounded-md";
   const navLinkHoverClasses = "hover:bg-purple-600/10 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]";
 
   return (
-    <div className={`w-full sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'py-1' : 'py-3'}`}>
+    <div className={`w-full sticky top-0 z-[100] transition-all duration-500 ${scrolled ? 'py-1' : 'py-3'}`}>
       {/* Smoother background/blur/shadow effect on scroll */}
       <div className={`max-w-7xl mx-auto rounded-xl transition-all duration-500 border ${scrolled
         ? 'bg-black/80 backdrop-blur-xl border-purple-500/30 shadow-xl shadow-purple-900/15'
@@ -47,16 +47,20 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
             </Link>
           </div>
 
-          {/* Smoother hover effects for desktop nav links */}
-          <div className="hidden md:flex md:items-center md:space-x-3">
+          {/* Improved button styles with smoother transitions */}
+          <div className="hidden md:flex md:items-center md:space-x-2">
+            <a 
+              href="https://discord.gg/cutz" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`${navLinkBaseClasses} ${navLinkHoverClasses}`}
+            >
+              Discord
+            </a>
             <Link href="/pricing" className={`${navLinkBaseClasses} ${navLinkHoverClasses}`}>
-              <Sparkles className="w-4 h-4 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" />
               Pricing
             </Link>
-          </div>
-
-          {/* Improved button styles with smoother transitions */}
-          <div className="hidden md:flex md:items-center md:space-x-3">
+            
             {isLoggedIn ? (
               <Link
                 href="/dashboard"
@@ -69,11 +73,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
               </Link>
             ) : (
               <>
-                <Link
-                  href="/login"
-                  className="px-4 py-2 bg-zinc-900/50 border border-zinc-700/60 hover:border-purple-500/50 hover:bg-purple-900/20
-                          text-zinc-300 hover:text-white rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-md hover:shadow-purple-900/15"
-                >
+                <Link href="/login" className={`${navLinkBaseClasses} ${navLinkHoverClasses}`}>
                   Login
                 </Link>
                 <Link
@@ -114,7 +114,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
         <div className={`md:hidden transition-all duration-500 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="px-2 pt-2 pb-4 space-y-1 border-t border-purple-500/20 bg-black/80 backdrop-blur-lg rounded-b-xl">
             <a
-              href="https://discord.gg/hazebio"
+              href="https://discord.gg/cutz"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-3 text-zinc-300 hover:text-white hover:bg-purple-600/10 rounded-lg transition-all duration-300 border border-transparent hover:border-purple-500/20"

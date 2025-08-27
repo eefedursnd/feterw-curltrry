@@ -205,7 +205,7 @@ export default function VerifyRegistration() {
                                             ? "Already have an account? "
                                             : "Need help? "}
                                         <Link
-                                            href={tokenValid ? "/login" : "https://discord.gg/hazebio"}
+                                            href={tokenValid ? "/login" : "https://discord.gg/cutz"}
                                             className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
                                             target={tokenValid ? "_self" : "_blank"}
                                             rel={tokenValid ? "" : "noopener noreferrer"}

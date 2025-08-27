@@ -127,7 +127,7 @@ export default function Error({
                     </Link>
                     
                     <Link
-                      href="https://discord.gg/hazebio"
+                      href="https://discord.gg/cutz"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-3 bg-black/40 hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-lg 

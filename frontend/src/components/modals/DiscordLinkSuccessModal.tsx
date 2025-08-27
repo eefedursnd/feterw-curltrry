@@ -148,7 +148,7 @@ export default function DiscordLinkSuccessModal({ isOpen, onClose }: DiscordLink
         {/* Footer */}
         <div className="px-5 py-4 border-t border-zinc-800/50 flex justify-between items-center">
           <Link
-            href="https://discord.gg/hazebio"
+            href="https://discord.gg/cutz"
             target="_blank"
             rel="noopener noreferrer"
             className="text-purple-400 hover:text-purple-300 text-sm flex items-center gap-1.5"

@@ -330,7 +330,7 @@ export default function ApplicationsContent({
 
                         {application.status === 'approved' && (
                           <a
-                            href="https://discord.gg/hazebio"
+                            href="https://discord.gg/cutz"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}

@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { ExternalLink, Mail, Twitter, Github } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import Logo from './Logo';
 import React from 'react';
-import { DiscordIcon, GithubIcon, XIcon } from 'haze.bio/socials/Socials';
+import { DiscordIcon } from 'haze.bio/socials/Socials';
 
 interface FooterLink {
     name: string;
@@ -37,7 +37,6 @@ export default function Footer() {
             title: 'Community',
             links: [
                 { name: 'Discord', href: 'https://discord.gg/cutz', external: true },
-                { name: 'GitHub', href: 'https://github.com/haze-bio', external: true },
             ],
         },
         {
@@ -51,7 +50,6 @@ export default function Footer() {
 
     const socialIcons: SocialIcon[] = [
         { name: 'Discord', href: 'https://discord.gg/cutz', icon: <DiscordIcon className="w-5 h-5" /> },
-        { name: 'GitHub', href: 'https://github.com/haze-bio', icon: <GithubIcon className="w-5 h-5" /> },
     ];
 
     return (

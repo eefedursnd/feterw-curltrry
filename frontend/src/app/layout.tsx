@@ -53,19 +53,32 @@ export const metadata = {
     default: 'cutz.lol',
     template: '%s | cutz.lol'
   },
-  description: 'All your links, in one place',
+  description: 'cutz.lol - All your links, in one place',
   openGraph: {
     title: 'cutz.lol',
-    description: 'All your links, in one place',
+    description: 'cutz.lol - All your links, in one place',
     url: 'https://cutz.lol',
     siteName: 'cutz.lol',
-    images: [''],
+    images: [
+      {
+        url: 'https://cutz.lol/logo/CutzBanner.png',
+        width: 1200,
+        height: 630,
+        alt: 'cutz.lol - All your links, in one place',
+      },
+    ],
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'cutz.lol',
-    description: 'All your links, in one place',
-    images: [''],
+    description: 'cutz.lol - All your links, in one place',
+    images: ['https://cutz.lol/logo/CutzBanner.png'],
+  },
+  other: {
+    'theme-color': '#a855f7', // Discord için mor renk
+    'msapplication-TileColor': '#a855f7',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
   },
 };
 

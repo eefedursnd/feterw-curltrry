@@ -179,7 +179,7 @@ export default function Maintenance({ status }: MaintenanceProps) {
                 </p>
                 <div className="flex justify-end">
                   <a
-                    href="https://discord.gg/hazebio"
+                    href="https://discord.gg/cutz"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 

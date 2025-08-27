@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { cookies } from 'next/headers';
 import {
   ArrowRight,
@@ -47,7 +46,7 @@ export default async function Home() {
   const siteStats = await getSiteStats();
 
   return (
-    <div className="min-h-screen relative flex flex-col overflow-hidden bg-black">
+    <div className="min-h-screen relative flex flex-col bg-black">
       <Navigation isLoggedIn={isLoggedIn} />
 
       <div className="fixed inset-0 z-0 pointer-events-none opacity-70">
@@ -79,130 +78,24 @@ export default async function Home() {
 
       <div className="relative z-10 flex-grow flex flex-col">
 
-        <div className="pt-32 space-y-24 md:space-y-32 mb-24">
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 relative text-center">
-            <div className="relative z-10 mb-8">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-5 max-w-4xl mx-auto animate-fade-in-up leading-tight">
+        <div className="pt-48 pb-24 space-y-24 md:space-y-32">
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 relative text-center">
+            <div className="relative z-10">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight mb-6 max-w-5xl mx-auto animate-fade-in-up leading-tight">
                 All your links, <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600">in one place</span>.
               </h1>
 
-              <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fade-in-up animation-delay-200">
+              <p className="text-zinc-400 text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto mb-10 animate-fade-in-up animation-delay-200">
                 Create your profile in minutes. Share your social media, content and more with a single link.
               </p>
 
-              <UsernameForm />
+              <div className="max-w-2xl mx-auto">
+                <UsernameForm />
+              </div>
 
-              <p className="text-zinc-600 text-sm animate-fade-in-up animation-delay-400">
+              <p className="text-zinc-600 text-sm animate-fade-in-up animation-delay-400 mt-6">
                 Claim your username before someone else does
               </p>
-            </div>
-
-            <div className="relative h-[600px] md:h-[700px] lg:h-[800px] mx-auto max-w-7xl animate-fade-in animation-delay-500">
-              <div className="absolute inset-0">
-                {/* Two-column layout */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-0 h-full">
-                  {/* Left side: 3 Mobile Mockups */}
-                  <div className="md:col-span-4 flex items-center justify-center relative">
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      {/* Mobile Mockup 1 - Bottom left - unchanged */}
-                      <div className="absolute bottom-[5%] left-[10%] w-[140px] sm:w-[160px] aspect-[9/16] transform perspective-[1000px] rotate-y-[15deg] rotate-x-[-5deg] rotate-z-[-5deg] hover:scale-105 transition-all duration-500 animate-float animation-delay-100">
-                        <div className="absolute inset-0 rounded-2xl border-[5px] border-zinc-800 bg-zinc-950 shadow-xl shadow-purple-900/20">
-                          <div className="absolute inset-0 rounded-xl overflow-hidden">
-                            <Image
-                              src="/mockups/1.png"
-                              alt="cutz.lol profile example"
-                              width={400}
-                              height={800}
-                              className="w-full h-full object-cover"
-                              priority
-                              draggable="false"
-                            />
-                          </div>
-                        </div>
-                        <div className="absolute -inset-3 bg-purple-600/15 blur-xl rounded-full opacity-70 animate-pulse-slow"></div>
-                      </div>
-
-                      {/* Mobile Mockup 2 - Center, slightly raised - unchanged */}
-                      <div className="absolute top-[35%] left-[30%] w-[160px] sm:w-[180px] aspect-[9/16] transform perspective-[1000px] rotate-y-[5deg] rotate-x-[8deg] hover:scale-105 transition-all duration-500 animate-float animation-delay-400 z-10">
-                        <div className="absolute inset-0 rounded-2xl border-[5px] border-zinc-800 bg-zinc-950 shadow-2xl shadow-purple-900/30">
-                          <div className="absolute inset-0 rounded-xl overflow-hidden">
-                            <Image
-                              src="/mockups/2.png"
-                              alt="cutz.lol profile example"
-                              width={400}
-                              height={800}
-                              className="w-full h-full object-cover"
-                              priority
-                              draggable="false"
-                            />
-                          </div>
-                        </div>
-                        <div className="absolute -inset-4 bg-purple-600/20 blur-xl rounded-full opacity-80 animate-pulse-slow animation-delay-1000"></div>
-                      </div>
-
-                      {/* Mobile Mockup 3 - Top right - unchanged */}
-                      <div className="absolute top-[10%] right-[10%] w-[140px] sm:w-[160px] aspect-[9/16] transform perspective-[1000px] rotate-y-[-8deg] rotate-x-[12deg] rotate-z-[5deg] hover:scale-105 transition-all duration-500 animate-float animation-delay-700">
-                        <div className="absolute inset-0 rounded-2xl border-[5px] border-zinc-800 bg-zinc-950 shadow-xl shadow-purple-900/20">
-                          <div className="absolute inset-0 rounded-xl overflow-hidden">
-                            <Image
-                              src="/mockups/3.png"
-                              alt="cutz.lol profile example"
-                              width={400}
-                              height={800}
-                              className="w-full h-full object-cover"
-                              priority
-                              draggable="false"
-                            />
-                          </div>
-                        </div>
-                        <div className="absolute -inset-3 bg-purple-600/15 blur-xl rounded-full opacity-70 animate-pulse-slow animation-delay-500"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right side: MUCH LARGER Dashboard Mockup */}
-                  <div className="md:col-span-8 flex items-center justify-center relative">
-                    {/* Dramatically expanded mockup container - repositioned and with static positioning */}
-                    <div className="absolute right-[-20%] top-[60%] transform -translate-y-1/2 w-[120%] aspect-[16/9] perspective-[2500px] rotate-y-[-10deg] rotate-x-[5deg] rotate-z-[2deg] hover:rotate-y-[-7deg] hover:rotate-x-[3deg] transition-all duration-700">
-                      {/* Enhanced glow effects */}
-                      <div className="absolute -inset-10 bg-purple-600/10 blur-3xl rounded-3xl opacity-70"></div>
-                      <div className="absolute -inset-5 bg-purple-800/5 blur-xl rounded-2xl opacity-60"></div>
-
-                      {/* Laptop frame */}
-                      <div className="absolute inset-0 rounded-xl border-[8px] border-zinc-800/90 bg-zinc-900 shadow-[0_0_100px_rgba(168,85,247,0.2)] shadow-purple-900/20 overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-black to-zinc-900">
-                          {/* Dashboard screenshot - optimized for 1920x1080 */}
-                          <div className="absolute inset-[1px] rounded-md overflow-hidden">
-                            <Image
-                              src="/mockups/dashboard.png"
-                              alt="cutz.lol dashboard"
-                              width={1920}
-                              height={1080}
-                              className="w-full h-full object-cover object-center"
-                              priority
-                              draggable="false"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Enhanced laptop bottom part with larger dimensions */}
-                        <div className="absolute -bottom-[30px] left-0 right-0 h-[28px] bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-b-lg transform perspective-[1000px] rotate-x-[80deg]"></div>
-
-                        {/* Add laptop keyboard part illusion */}
-                        <div className="absolute -bottom-[60px] left-[5%] right-[5%] h-[30px] bg-zinc-900 rounded-b-xl transform perspective-[1000px] rotate-x-[75deg] opacity-40"></div>
-                      </div>
-
-                      {/* Enhanced reflection effects */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-purple-500/5 to-white/10 rounded-xl"></div>
-                      <div className="absolute top-0 left-0 right-0 h-[40%] bg-gradient-to-b from-white/5 to-transparent rounded-t-xl"></div>
-
-                      {/* Screen corner reflections */}
-                      <div className="absolute top-[5%] right-[5%] w-[100px] h-[100px] bg-white/5 rounded-full blur-xl"></div>
-                      <div className="absolute bottom-[10%] left-[7%] w-[70px] h-[70px] bg-white/5 rounded-full blur-xl"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -281,7 +174,7 @@ export default async function Home() {
                   <span className="px-3 py-1 bg-purple-700 text-purple-100 text-xs font-medium rounded-full">PREMIUM</span>
                   <h3 className="text-2xl font-bold text-white mt-4">Premium Plan</h3>
                   <div className="flex items-baseline mt-3 mb-2">
-                    <span className="text-3xl font-bold text-white">$5.99</span>
+                    <span className="text-3xl font-bold text-white">$4.99</span>
                     <span className="text-zinc-400 ml-1">/one-time</span>
                   </div>
                   <p className="text-zinc-400 text-sm">Everything you need to stand out</p>

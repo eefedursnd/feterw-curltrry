@@ -15,7 +15,7 @@ export default function UsernameForm() {
   return (
     <div className="max-w-md mx-auto bg-zinc-900/50 backdrop-blur-md rounded-lg border border-zinc-800/80 p-1.5 flex animate-fade-in-up animation-delay-300 mb-5 shadow-sm shadow-purple-900/10">
       <div className="flex items-center px-3 text-zinc-400 font-medium">
-        haze.bio/
+        cutz.lol/
       </div>
       <input
         type="text"

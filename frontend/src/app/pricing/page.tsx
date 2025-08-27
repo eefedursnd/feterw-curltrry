@@ -146,7 +146,7 @@ export default function PricingPage() {
                                     <span className="px-3 py-1 bg-purple-700 text-purple-100 text-xs font-medium rounded-full">PREMIUM</span>
                                     <h3 className="text-2xl font-bold text-white mt-4">Premium Plan</h3>
                                     <div className="flex items-baseline mt-3 mb-2">
-                                        <span className="text-3xl font-bold text-white">$5.99</span>
+                                        <span className="text-3xl font-bold text-white">$4.99</span>
                                         <span className="text-zinc-400 ml-1">/one-time</span>
                                     </div>
                                     <p className="text-zinc-400 text-sm">Everything you need to stand out</p>
@@ -305,7 +305,7 @@ export default function PricingPage() {
                                     Ready to Upgrade Your Profile?
                                 </h2>
                                 <p className="text-zinc-400 max-w-lg mx-auto text-base mb-6">
-                                    Join now and unlock all premium features for a one-time payment of just $5.99.
+                                    Join now and unlock all premium features for a one-time payment of just $4.99.
                                 </p>
 
                                 <div className="max-w-md mx-auto">

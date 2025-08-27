@@ -64,7 +64,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
                 description: "Boosted the haze.bio Discord server",
                 icon: <BoosterBadge size={32} />,
                 ctaText: "Boost Server",
-                ctaLink: "https://discord.gg/hazebio",
+                ctaLink: "https://discord.gg/cutz",
                 order: 8,
                 category: 'community'
             }
@@ -89,7 +89,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
                 description: "Reported more than 5 bugs to the haze.bio team",
                 icon: <BugHunterBadge size={32} />,
                 ctaText: "Report a Bug",
-                ctaLink: "https://discord.gg/hazebio",
+                ctaLink: "https://discord.gg/cutz",
                 order: 4,
                 category: 'achievement'
             },
@@ -99,7 +99,7 @@ const BADGE_CATEGORIES: BadgeCategory[] = [
                 description: "Suggest at least 5 features or improvements for haze.bio",
                 icon: <InnovatorBadge size={32} />,
                 ctaText: "Make a Suggestion",
-                ctaLink: "https://discord.gg/hazebio",
+                ctaLink: "https://discord.gg/cutz",
                 order: 6,
                 category: 'achievement'
             },
@@ -628,7 +628,7 @@ export default function BadgesContent({ }: BadgesContentProps) {
                                 </div>
                                 
                                 <a
-                                    href="https://discord.gg/hazebio"
+                                    href="https://discord.gg/cutz"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-all text-sm font-medium flex items-center gap-2 flex-shrink-0"

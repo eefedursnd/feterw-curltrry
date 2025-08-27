@@ -107,7 +107,7 @@ export default function Login() {
       </div>
 
       <div className="relative z-10 flex-grow flex flex-col">
-        <div className="max-w-md mx-auto px-4 sm:px-6 py-8 flex-1 flex items-center justify-center w-full">
+        <div className="max-w-md mx-auto px-4 sm:px-6 py-16 flex-1 flex items-center justify-center w-full">
           <div className="w-full space-y-6">
             <div className="relative overflow-hidden bg-black rounded-xl border border-zinc-800/50 shadow-xl shadow-purple-900/10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl -translate-x-1/4 -translate-y-1/4"></div>
@@ -410,7 +410,9 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <Footer />
+        <div className="mt-auto">
+          <Footer />
+        </div>
       </div>
     </div>
   );

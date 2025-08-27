@@ -789,7 +789,7 @@ export default function WidgetContent({ }: WidgetContentProps) {
                 </div>
 
                 <a
-                  href="https://discord.gg/hazebio"
+                  href="https://discord.gg/cutz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-all text-sm font-medium flex items-center gap-2 flex-shrink-0"

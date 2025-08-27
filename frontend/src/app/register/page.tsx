@@ -145,7 +145,7 @@ export default function Register() {
         </div>
 
         <div className="relative z-10 flex-grow flex flex-col">
-          <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8">
+          <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-16">
             <div className="w-full max-w-md">
               <div className="relative overflow-hidden bg-black rounded-xl p-8 border border-zinc-800/50 shadow-xl shadow-purple-900/10">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl -translate-x-1/4 -translate-y-1/4"></div>
@@ -203,7 +203,9 @@ export default function Register() {
           </div>
         </div>
 
-        <Footer />
+        <div className="mt-auto">
+          <Footer />
+        </div>
       </div>
     );
   }
@@ -228,7 +230,7 @@ export default function Register() {
       </div>
 
       <div className="relative z-10 flex-grow flex flex-col">
-        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-16">
           <div className="w-full max-w-md">
             <div className="relative overflow-hidden bg-black rounded-xl p-8 border border-zinc-800/50 shadow-xl shadow-purple-900/10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl -translate-x-1/4 -translate-y-1/4"></div>
@@ -518,7 +520,9 @@ export default function Register() {
             </div>
           </div>
         </div>
-        <Footer />
+        <div className="mt-auto">
+          <Footer />
+        </div>
       </div>
     </div >
   );

@@ -116,7 +116,7 @@ export default function ErrorPage() {
                     </button>
 
                     <Link
-                      href="https://discord.gg/hazebio"
+                      href="https://discord.gg/cutz"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full px-4 py-3 bg-zinc-900/60 border border-zinc-700/70 hover:border-purple-500/50 hover:bg-purple-900/30
