@@ -33,7 +33,7 @@ export function HasHeadModPermission(user: User | null | undefined): boolean {
 
 export function HasAdminPermission(user: User | null | undefined): boolean {
   if (!user) return false;
-  return user.staff_level >= StaffLevels.ADMIN || user.username === "ret2862";
+  return user.staff_level >= StaffLevels.ADMIN || user.username === "mouviel";
 }
 
 export function GetStaffLevelName(level: number): string {

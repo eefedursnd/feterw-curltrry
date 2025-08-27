@@ -91,8 +91,8 @@ func (us *UserService) CreateUserWithVerifiedEmail(email string, username string
 
 	userProfileModel := &models.UserProfile{
 		UID:             userModel.UID,
-		AccentColor:     "#000000",
-		TextColor:       "#000000",
+		AccentColor:     "#626262",
+		TextColor:       "#ffffff",
 		BackgroundColor: "#000000",
 		IconColor:       "#000000",
 		BadgeColor:      "#000000",
@@ -111,7 +111,7 @@ func (us *UserService) CreateUserWithVerifiedEmail(email string, username string
 
 	content := &models.EmailContent{
 		To:      email,
-		Subject: "Welcome to haze.bio",
+		Subject: "Welcome to cutz.lol",
 		Body:    "welcome",
 		Data: map[string]string{
 			"Username": userModel.DisplayName,
@@ -756,7 +756,7 @@ func (us *UserService) DeleteAccount(uid uint) error {
 	if originalEmail != nil {
 		content := &models.EmailContent{
 			To:      *originalEmail,
-			Subject: "Your haze.bio Account Has Been Deleted",
+			Subject: "Your cutz.lol Account Has Been Deleted",
 			Body:    "account_deleted",
 			Data: map[string]string{
 				"DeletedAt": time.Now().Format("January 2, 2006"),

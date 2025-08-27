@@ -92,7 +92,7 @@ export default async function RootLayout({
   const maintenanceStatus = await getMaintenanceStatus();
   const headerList = headers();
   const pathname = (await headerList).get("x-current-path") || "/";
-  const isAuthed = await hasCookie('ret2862_is_the_king_and_is_bypassed_for_maintenance_cool', 'true');
+  const isAuthed = await hasCookie('mouviel_is_the_king_and_is_bypassed_for_maintenance_cool', 'true');
   const user = await getUser();
 
   return (

@@ -53,14 +53,14 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 	activeStatus, _ := c.services.Status.GetActiveStatus()
 	isUnderMaintenance := activeStatus != nil
 
-	isAdmin := m.Author.Username == "ret2862"
+	isAdmin := m.Author.Username == "mouviel"
 	if isUnderMaintenance && !isAdmin && cmd != "status" {
 		embed := &discordgo.MessageEmbed{
 			Title:       "System Maintenance",
 			Description: "Only `?status` is available during maintenance.",
 			Color:       0xEAB308,
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "haze.bio maintenance system",
+				Text: "cutz.lol maintenance system",
 			},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
@@ -137,7 +137,7 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func (c *Commands) handleCreateProductCode(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to create product codes")
 		return
 	}
@@ -195,7 +195,7 @@ func (c *Commands) handleCreateProductCode(s *discordgo.Session, m *discordgo.Me
 			{Name: "Created By", Value: adminUser.Username, Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio redeem system",
+			Text: "cutz.lol redeem system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -231,7 +231,7 @@ func (c *Commands) handleTriggerEvent(s *discordgo.Session, m *discordgo.Message
 		return
 	}
 
-	if adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862" {
+	if adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to trigger events")
 		return
 	}
@@ -287,7 +287,7 @@ func (c *Commands) handleTriggerEvent(s *discordgo.Session, m *discordgo.Message
 				{Name: "Existing User", Value: fmt.Sprintf("%s (UID: %d)", existingUser.Username, existingUser.UID), Inline: true},
 			},
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "haze.bio event system",
+				Text: "cutz.lol event system",
 			},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
@@ -302,7 +302,7 @@ func (c *Commands) handleTriggerEvent(s *discordgo.Session, m *discordgo.Message
 
 func (c *Commands) handleHelp(s *discordgo.Session, m *discordgo.MessageCreate) {
 	embed := &discordgo.MessageEmbed{
-		Title:       "haze.bio commands",
+		Title:       "cutz.lol commands",
 		Description: fmt.Sprintf("prefix: ``%s``", config.DiscordPrefix),
 		Color:       0x000000,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
@@ -315,7 +315,7 @@ func (c *Commands) handleHelp(s *discordgo.Session, m *discordgo.MessageCreate) 
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio",
+			Text: "cutz.lol",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -329,7 +329,7 @@ func (c *Commands) handleSetStaffLevel(s *discordgo.Session, m *discordgo.Messag
 		return
 	}
 
-	if adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862" {
+	if adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to set staff levels")
 		return
 	}
@@ -356,7 +356,7 @@ func (c *Commands) handleSetStaffLevel(s *discordgo.Session, m *discordgo.Messag
 		return
 	}
 
-	if uint(level) > adminUser.StaffLevel && m.Author.Username != "ret2862" {
+	if uint(level) > adminUser.StaffLevel && m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You cannot promote a user to a level higher than your own")
 		return
 	}
@@ -381,7 +381,7 @@ func (c *Commands) handleSetStaffLevel(s *discordgo.Session, m *discordgo.Messag
 			{Name: "Updated By", Value: adminUser.Username, Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio staff management",
+			Text: "cutz.lol staff management",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -392,7 +392,7 @@ func (c *Commands) handleSetStaffLevel(s *discordgo.Session, m *discordgo.Messag
 		if err == nil {
 			notificationEmbed := &discordgo.MessageEmbed{
 				Title: "Your Staff Level Has Been Updated",
-				Description: fmt.Sprintf("Your staff level on haze.bio has been updated to %s (Level %d)",
+				Description: fmt.Sprintf("Your staff level on cutz.lol has been updated to %s (Level %d)",
 					staffLevelNames[uint(level)], level),
 				Color: 0x00ff00,
 				Fields: []*discordgo.MessageEmbedField{
@@ -400,7 +400,7 @@ func (c *Commands) handleSetStaffLevel(s *discordgo.Session, m *discordgo.Messag
 					{Name: "Updated At", Value: time.Now().Format(time.RFC3339), Inline: true},
 				},
 				Footer: &discordgo.MessageEmbedFooter{
-					Text: "haze.bio staff management",
+					Text: "cutz.lol staff management",
 				},
 			}
 			s.ChannelMessageSendEmbed(dmChannel.ID, notificationEmbed)
@@ -420,7 +420,7 @@ func (c *Commands) handleStaffInfo(s *discordgo.Session, m *discordgo.MessageCre
 	if len(args) < 2 {
 		targetUser = requestingUser
 	} else {
-		if requestingUser.StaffLevel < StaffLevelModerator && m.Author.Username != "ret2862" {
+		if requestingUser.StaffLevel < StaffLevelModerator && m.Author.Username != "mouviel" {
 			c.sendUnauthorizedEmbed(s, m, "You need to be a Moderator or higher to check other users' staff information")
 			return
 		}
@@ -452,7 +452,7 @@ func (c *Commands) handleStaffInfo(s *discordgo.Session, m *discordgo.MessageCre
 			{Name: "Account Created", Value: fmt.Sprintf("<t:%d:F>", targetUser.CreatedAt.Unix()), Inline: false},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio staff system",
+			Text: "cutz.lol staff system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -516,13 +516,13 @@ func (c *Commands) handleAdminHelp(s *discordgo.Session, m *discordgo.MessageCre
 		return
 	}
 
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to view admin commands")
 		return
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "haze.bio admin commands",
+		Title:       "cutz.lol admin commands",
 		Description: "Admin commands require special permissions",
 		Color:       0x000000,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
@@ -556,7 +556,7 @@ func (c *Commands) handleAdminHelp(s *discordgo.Session, m *discordgo.MessageCre
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio admin system",
+			Text: "cutz.lol admin system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -570,7 +570,7 @@ func (c *Commands) handleAddBadge(s *discordgo.Session, m *discordgo.MessageCrea
 		return
 	}
 
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to add badges")
 		return
 	}
@@ -609,7 +609,7 @@ func (c *Commands) handleRemoveBadge(s *discordgo.Session, m *discordgo.MessageC
 		return
 	}
 
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to remove badges")
 		return
 	}
@@ -637,7 +637,7 @@ func (c *Commands) handleRemoveBadge(s *discordgo.Session, m *discordgo.MessageC
 			{Name: "Badge", Value: badgeName, Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio badge system",
+			Text: "cutz.lol badge system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -651,7 +651,7 @@ func (c *Commands) handleCreateBadge(s *discordgo.Session, m *discordgo.MessageC
 		return
 	}
 
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to create badges")
 		return
 	}
@@ -700,7 +700,7 @@ func (c *Commands) handleCreateBadge(s *discordgo.Session, m *discordgo.MessageC
 			{Name: "URL", Value: badge.MediaURL},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio badge system",
+			Text: "cutz.lol badge system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -830,9 +830,9 @@ func (c *Commands) handleCheck(s *discordgo.Session, m *discordgo.MessageCreate,
 					Inline: false,
 				},
 			},
-			Footer: &discordgo.MessageEmbedFooter{
-				Text: "haze.bio discord integration system",
-			},
+					Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol discord integration system",
+		},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
 
@@ -894,7 +894,7 @@ func (c *Commands) handleCheck(s *discordgo.Session, m *discordgo.MessageCreate,
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio user system",
+			Text: "cutz.lol user system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -944,9 +944,9 @@ func (c *Commands) handleCheck(s *discordgo.Session, m *discordgo.MessageCreate,
 			Description: fmt.Sprintf("Punishment details for user %s", user.Username),
 			Color:       punishmentEmbedColor,
 			Fields:      punishmentEmbedFields,
-			Footer: &discordgo.MessageEmbedFooter{
-				Text: "haze.bio punishment system",
-			},
+					Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol punishment system",
+		},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
 		s.ChannelMessageSendEmbed(m.ChannelID, punishmentEmbed)
@@ -975,7 +975,7 @@ func (c *Commands) handleLeaderboard(s *discordgo.Session, m *discordgo.MessageC
 			rankEmoji = fmt.Sprintf("%d.", rank)
 		}
 
-		description.WriteString(fmt.Sprintf("%s [/%s](https://haze.bio/%s) - `%d Views`\n", rankEmoji, topUser.Username, topUser.Username, topUser.Views))
+		description.WriteString(fmt.Sprintf("%s [/%s](https://cutz.lol/%s) - `%d Views`\n", rankEmoji, topUser.Username, topUser.Username, topUser.Views))
 	}
 
 	embed := &discordgo.MessageEmbed{
@@ -1051,7 +1051,7 @@ func (c *Commands) handleUIDProfile(s *discordgo.Session, m *discordgo.MessageCr
 func (c *Commands) handleMe(s *discordgo.Session, m *discordgo.MessageCreate) {
 	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
 	if err != nil {
-		c.sendErrorEmbed(s, m, "Your Discord account is not linked to a haze.bio profile.")
+		c.sendErrorEmbed(s, m, "Your Discord account is not linked to a cutz.lol profile.")
 		return
 	}
 
@@ -1106,7 +1106,7 @@ func (c *Commands) createProfileEmbed(user *models.User, profile *models.UserPro
 		badgeString = "no badges"
 	}
 
-	profileURL := fmt.Sprintf("https://haze.bio/%s", user.Username)
+	profileURL := fmt.Sprintf("https://cutz.lol/%s", user.Username)
 
 	return &discordgo.MessageEmbed{
 		URL:         profileURL,
@@ -1144,7 +1144,7 @@ func (c *Commands) createProfileEmbed(user *models.User, profile *models.UserPro
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: fmt.Sprintf("haze.bio | %d Views", profile.Views),
+			Text: fmt.Sprintf("cutz.lol | %d Views", profile.Views),
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1158,8 +1158,8 @@ func (c *Commands) handleStats(s *discordgo.Session, m *discordgo.MessageCreate)
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title:       "haze.bio Statistics",
-		Description: "Current statistics for haze.bio",
+		Title:       "cutz.lol Statistics",
+		Description: "Current statistics for cutz.lol",
 		Color:       0x000000,
 		Fields: []*discordgo.MessageEmbedField{
 			{
@@ -1179,7 +1179,7 @@ func (c *Commands) handleStats(s *discordgo.Session, m *discordgo.MessageCreate)
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio statistics",
+			Text: "cutz.lol statistics",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1218,7 +1218,7 @@ func (c *Commands) handleStatus(s *discordgo.Session, m *discordgo.MessageCreate
 		Color:  embedColor,
 		Fields: []*discordgo.MessageEmbedField{},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio status system",
+			Text: "cutz.lol status system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1299,7 +1299,7 @@ func (c *Commands) handleStatus(s *discordgo.Session, m *discordgo.MessageCreate
 }
 
 func (c *Commands) handleCreateStatus(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to create status updates")
 		return
 	}
@@ -1343,7 +1343,7 @@ func (c *Commands) handleCreateStatus(s *discordgo.Session, m *discordgo.Message
 			{Name: "End Date", Value: endDate, Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio status system",
+			Text: "cutz.lol status system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1351,7 +1351,7 @@ func (c *Commands) handleCreateStatus(s *discordgo.Session, m *discordgo.Message
 }
 
 func (c *Commands) handleDeleteStatus(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	if m.Author.Username != "ret2862" {
+	if m.Author.Username != "mouviel" {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to delete status updates")
 		return
 	}
@@ -1381,7 +1381,7 @@ func (c *Commands) handleDeleteStatus(s *discordgo.Session, m *discordgo.Message
 		Description: fmt.Sprintf("Status with ID %d has been deleted", statusID),
 		Color:       0x000000,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio status system",
+			Text: "cutz.lol status system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1476,7 +1476,7 @@ func (c *Commands) handleGenerate(s *discordgo.Session, m *discordgo.MessageCrea
 
 func (c *Commands) handleExperiments(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to manage experiments")
 		return
 	}
@@ -1507,7 +1507,7 @@ func (c *Commands) handleExperiments(s *discordgo.Session, m *discordgo.MessageC
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio experimental features",
+			Text: "cutz.lol experimental features",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1516,7 +1516,7 @@ func (c *Commands) handleExperiments(s *discordgo.Session, m *discordgo.MessageC
 
 func (c *Commands) handleCreateExperiment(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to create experiments")
 		return
 	}
@@ -1599,7 +1599,7 @@ func (c *Commands) handleCreateExperiment(s *discordgo.Session, m *discordgo.Mes
 			{Name: "Initial User Count", Value: fmt.Sprintf("%d", userCount), Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio experimental system",
+			Text: "cutz.lol experimental system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1608,7 +1608,7 @@ func (c *Commands) handleCreateExperiment(s *discordgo.Session, m *discordgo.Mes
 
 func (c *Commands) handleDeleteExperiment(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to delete experiments")
 		return
 	}
@@ -1633,7 +1633,7 @@ func (c *Commands) handleDeleteExperiment(s *discordgo.Session, m *discordgo.Mes
 		Description: fmt.Sprintf("The experiment '%s' has been deleted successfully", featureKey),
 		Color:       0x00ff00,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio experimental system",
+			Text: "cutz.lol experimental system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1642,7 +1642,7 @@ func (c *Commands) handleDeleteExperiment(s *discordgo.Session, m *discordgo.Mes
 
 func (c *Commands) handleExperimentStatus(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to view experiment status")
 		return
 	}
@@ -1710,7 +1710,7 @@ func (c *Commands) handleExperimentStatus(s *discordgo.Session, m *discordgo.Mes
 		Color:       0x9B59B6, // Purple
 		Fields:      fields,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio experimental system",
+			Text: "cutz.lol experimental system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1719,7 +1719,7 @@ func (c *Commands) handleExperimentStatus(s *discordgo.Session, m *discordgo.Mes
 
 func (c *Commands) handleCheckUserExperiments(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "ret2862") {
+	if err != nil || (adminUser.StaffLevel < StaffLevelAdmin && m.Author.Username != "mouviel") {
 		c.sendUnauthorizedEmbed(s, m, "You are not authorized to check user experiments")
 		return
 	}
@@ -1816,7 +1816,7 @@ func (c *Commands) handleCheckUserExperiments(s *discordgo.Session, m *discordgo
 				},
 			},
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "haze.bio experimental system",
+				Text: "cutz.lol experimental system",
 			},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
@@ -1862,7 +1862,7 @@ func (c *Commands) handleCheckUserExperiments(s *discordgo.Session, m *discordgo
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio experimental system",
+			Text: "cutz.lol experimental system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
@@ -1952,7 +1952,7 @@ func (c *Commands) handleTimeDiff(s *discordgo.Session, m *discordgo.MessageCrea
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio",
+			Text: "cutz.lol",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}

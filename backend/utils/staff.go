@@ -23,7 +23,7 @@ func HasHeadModPermission(user *models.User) bool {
 }
 
 func HasAdminPermission(user *models.User) bool {
-	return user.StaffLevel >= StaffLevelAdmin || user.Username == "ret2862"
+	return user.StaffLevel >= StaffLevelAdmin || user.Username == "mouviel"
 }
 
 func HasStaffBadge(user *models.User) bool {

@@ -108,14 +108,14 @@ func (b *Bot) handleUserRegistration(event *models.Event) error {
 
 	ordinal := getOrdinalSuffix(data.UID)
 
-	profileURL := fmt.Sprintf("https://haze.bio/%s", data.Username)
+	profileURL := fmt.Sprintf("https://cutz.lol%s", data.Username)
 	embed := &discordgo.MessageEmbed{
 		URL:         profileURL,
 		Title:       "New user registered!",
 		Description: fmt.Sprintf("**%s** just registered and is our **%d%s** user! 🎉", data.Username, data.UID, ordinal),
 		Color:       0x000000,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio",
+			Text: "cutz.lol",
 		},
 	}
 
@@ -253,7 +253,7 @@ func (b *Bot) processAltAccountAlert(altData models.AltAccountData, timestamp ti
 		title = "🔎 " + title
 	}
 
-	profileURL := fmt.Sprintf("https://haze.bio/%s", altData.Username)
+	profileURL := fmt.Sprintf("https://cutz.lol/%s", altData.Username)
 	embed := &discordgo.MessageEmbed{
 		URL:         profileURL,
 		Title:       title,
@@ -261,7 +261,7 @@ func (b *Bot) processAltAccountAlert(altData models.AltAccountData, timestamp ti
 		Color:       0xFFA500,
 		Fields:      fields,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "haze.bio security",
+			Text: "cutz.lol security",
 		},
 		Timestamp: timestamp.Format(time.RFC3339),
 	}
