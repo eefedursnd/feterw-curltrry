@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
-import { userAPI } from 'haze.bio/api';
-import { emailAPI } from 'haze.bio/api';
+import UserAPI from '../../api/user.api'; 
+import EmailAPI from '../../api/email.api';
 import { ArrowLeft, Check, Lock, User, Mail, Loader2, UserPlus, MailCheck, X, ArrowRight, Shield, Eye, EyeOff, Info } from 'lucide-react';
 import Footer from 'haze.bio/components/ui/Footer';
 import { useUser } from 'haze.bio/context/UserContext';
@@ -17,11 +17,16 @@ export default function Register() {
   const searchParams = useSearchParams();
   const claimedUsername = searchParams.get('claim') || '';
   
+  // Create API instances
+  const userAPI = new UserAPI(process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.cutz.lol/api');
+  const emailAPI = new EmailAPI(process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.cutz.lol/api');
+  
   const [currentStep, setCurrentStep] = useState(0);
   const [username, setUsername] = useState(claimedUsername);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({
     length: false,
@@ -69,7 +74,8 @@ export default function Register() {
 
   const isValid = Object.values(passwordStrength).every(Boolean) &&
     username.length >= 3 &&
-    isEmailValid(email);
+    isEmailValid(email) &&
+    inviteCode.trim().length >= 3;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +86,7 @@ export default function Register() {
 
     try {
       setIsLoading(true);
-      await userAPI.register(email, username, password);
+      await userAPI.register(email, username, password, inviteCode);
 
       setRegistrationEmail(email);
       setRegistrationSubmitted(true);
@@ -115,7 +121,7 @@ export default function Register() {
   const canProceedToNext = () => {
     switch (currentStep) {
       case 0:
-        return username.length >= 3 && isEmailValid(email);
+        return username.length >= 3 && isEmailValid(email) && inviteCode.trim().length >= 3;
       case 1:
         return passwordStrength.length &&
           passwordStrength.uppercase &&
@@ -307,6 +313,31 @@ export default function Register() {
                           We'll send a verification link to this email.
                         </p>
                       )}
+                    </div>
+
+                    <div>
+                      <label htmlFor="inviteCode" className="block text-xs font-medium text-zinc-400 mb-1.5">
+                        Invite Code
+                      </label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <Shield className="h-4 w-4 text-zinc-500" />
+                        </div>
+                        <input
+                          id="inviteCode"
+                          type="text"
+                          required
+                          autoComplete="off"
+                          autoCapitalize="none"
+                          placeholder="Enter your invite code"
+                          className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900/50 border border-zinc-700/50 rounded-lg text-white text-sm placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                          value={inviteCode}
+                          onChange={(e) => setInviteCode(e.target.value)}
+                        />
+                      </div>
+                      <p className="text-xs text-zinc-500 mt-2">
+                        Invite code is required to register during beta.
+                      </p>
                     </div>
                   </>
                 )}

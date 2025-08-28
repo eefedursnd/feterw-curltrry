@@ -51,8 +51,8 @@ class UserAPI {
     }
   }
 
-  async register(email: string, username: string, password: string): Promise<void> {
-    const payload: any = { email, username, password };
+  async register(email: string, username: string, password: string, inviteCode: string): Promise<void> {
+    const payload: any = { email, username, password, invite_code: inviteCode };
 
     const response = await fetch(`${this.baseURL}/register`, {
       method: 'POST',
