@@ -64,7 +64,7 @@ export default function NotFound() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
-                    href="/apply"
+                    href="https://discord.gg/cutz"
                     className="flex items-center justify-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 transition-colors"
                   >
                     Apply for cutz.lol
