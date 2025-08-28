@@ -372,7 +372,7 @@ export default function DashboardContent({ view: initialView }: DashboardContent
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 border-zinc-800/50 shadow-lg">
               <Image
-                src={contextUser?.profile?.avatar_url || 'https://cdn.cutz.lol/default_avatar.jpeg'}
+                src={contextUser?.profile?.avatar_url || 'https://cdn.cutz.lol/default-avatar.png'}
                 alt=""
                 fill
                 sizes="80px"

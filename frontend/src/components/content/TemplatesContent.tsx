@@ -55,8 +55,8 @@ const TEMPLATE_LIMITS = {
 export default function TemplatesContent({ initialTemplates, initialShareableTemplates = [] }: TemplatesContentProps) {
     const { user: contextUser, updateUser } = useUser();
 
-    const [templates, setTemplates] = useState<Template[]>(initialTemplates || []);
-    const [shareableTemplates, setShareableTemplates] = useState<Template[]>(initialShareableTemplates || []);
+    const [templates, setTemplates] = useState<Template[]>(Array.isArray(initialTemplates) ? initialTemplates : []);
+    const [shareableTemplates, setShareableTemplates] = useState<Template[]>(Array.isArray(initialShareableTemplates) ? initialShareableTemplates : []);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -117,6 +117,8 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
     };
 
     const handleTemplateUpdated = (updatedTemplate: Template) => {
+        if (!templates || !Array.isArray(templates)) return;
+        
         const updatedTemplates = templates.map(t =>
             t.id === updatedTemplate.id ? updatedTemplate : t
         );
@@ -212,7 +214,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                                         <div className="flex justify-center items-center py-12">
                                             <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
                                         </div>
-                                    ) : templates && templates.length > 0 ? (
+                                    ) : templates && Array.isArray(templates) && templates.length > 0 ? (
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {templates.map(template => (
                                                 <div
@@ -302,7 +304,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                                                         </div>
 
                                                         {/* Tags */}
-                                                        {template.tags && template.tags.length > 0 && (
+                                                        {template.tags && Array.isArray(template.tags) && template.tags.length > 0 && (
                                                             <div className="flex flex-wrap gap-1.5 mb-3">
                                                                 {template.tags.map((tag, index) => (
                                                                     <span
@@ -569,9 +571,9 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 onCreated={(newTemplate: Template) => {
-                    setTemplates([newTemplate, ...templates]);
+                    setTemplates([newTemplate, ...(templates || [])]);
                     if (newTemplate.shareable) {
-                        setShareableTemplates([newTemplate, ...shareableTemplates]);
+                        setShareableTemplates([newTemplate, ...(shareableTemplates || [])]);
                     }
                     setIsCreateModalOpen(false);
                 }}
@@ -584,7 +586,7 @@ export default function TemplatesContent({ initialTemplates, initialShareableTem
                     onClose={() => setIsApplyModalOpen(false)}
                     template={selectedTemplate}
                     onApplied={() => {
-                        if (activeTab === 'my-templates') {
+                        if (activeTab === 'my-templates' && templates && Array.isArray(templates)) {
                             setTemplates(templates.map(t =>
                                 t.id === selectedTemplate.id
                                     ? { ...t, uses: t.uses + 1 }

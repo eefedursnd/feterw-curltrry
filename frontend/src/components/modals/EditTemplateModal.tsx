@@ -277,7 +277,7 @@ export default function EditTemplateModal({
                                     <div className="flex items-center gap-2 mt-2">
                                         <div className="w-5 h-5 rounded-full overflow-hidden bg-zinc-700 flex-shrink-0">
                                             <Image
-                                                src={contextUser?.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
+                                                src={contextUser?.profile?.avatar_url || "https://cdn.cutz.lol/default-avatar.png"}
                                                 alt={contextUser?.username || "You"}
                                                 width={20}
                                                 height={20}

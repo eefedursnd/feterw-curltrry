@@ -52,6 +52,8 @@ func (dh *DiscordHandler) OAuth2Callback(w http.ResponseWriter, r *http.Request,
 	uid := middlewares.GetUserIDFromContext(r.Context())
 	code := r.URL.Query().Get("code")
 
+	log.Printf("Discord OAuth2 Callback - Login: %v, UID from context: %d", login, uid)
+
 	if code == "" {
 		utils.RespondError(w, http.StatusBadRequest, "Code is required")
 		return
@@ -59,25 +61,33 @@ func (dh *DiscordHandler) OAuth2Callback(w http.ResponseWriter, r *http.Request,
 
 	// For linking (not login), we need to get UID from session cookie if not in context
 	if !login && uid == 0 {
+		log.Printf("No UID in context, checking session cookies...")
 		sessionToken := r.Cookies()
 		for _, cookie := range sessionToken {
 			if cookie.Name == "sessionToken" {
+				log.Printf("Found sessionToken cookie")
 				// Parse session token to get UID
 				claims, err := utils.ValidateToken(cookie.Value, config.SecretKey)
 				if err == nil {
 					uid = claims.UserID
+					log.Printf("Successfully parsed session token, UID: %d", uid)
+				} else {
+					log.Printf("Failed to parse session token: %v", err)
 				}
 				break
 			}
 		}
 		
 		if uid == 0 {
+			log.Printf("No valid session found, redirecting to login")
 			// Redirect to login if no valid session
 			loginURL := fmt.Sprintf("%s/login?redirect=%s", config.Origin, url.QueryEscape(r.URL.String()))
 			http.Redirect(w, r, loginURL, http.StatusSeeOther)
 			return
 		}
 	}
+
+	log.Printf("Final UID for Discord callback: %d", uid)
 
 	discordID, err := dh.DiscordService.HandleOAuth2Callback(uid, code, login)
 	if err != nil {

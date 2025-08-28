@@ -185,7 +185,7 @@ export default function ModerationReportsContent() {
                                         <div className="flex flex-col items-center">
                                             <div className="w-20 h-20 rounded-full overflow-hidden bg-zinc-900 mb-3 border border-zinc-800/50">
                                                 <Image
-                                                    src={reportedUser.profile?.avatar_url || "https://cdn.cutz.lol/default_avatar.jpeg"}
+                                                    src={reportedUser.profile?.avatar_url || "https://cdn.cutz.lol/default-avatar.png"}
                                                     alt={reportedUser.username}
                                                     width={80}
                                                     height={80}

@@ -21,7 +21,7 @@ interface TemplateDiscoveryProps {
 type SortOption = 'popular' | 'newest' | 'oldest';
 type FilterOption = 'all' | 'premium' | 'standard';
 
-const DEFAULT_AVATAR_URL = "https://cdn.cutz.lol/default_avatar.jpeg";
+const DEFAULT_AVATAR_URL = "https://cdn.cutz.lol/default-avatar.png";
 
 export default function TemplateDiscovery({
     templates,
@@ -34,7 +34,7 @@ export default function TemplateDiscovery({
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('popular');
     const [filterBy, setFilterBy] = useState<FilterOption>('all');
-    const [filteredTemplates, setFilteredTemplates] = useState<Template[]>(templates);
+    const [filteredTemplates, setFilteredTemplates] = useState<Template[]>(Array.isArray(templates) ? templates : []);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [availableTags, setAvailableTags] = useState<string[]>([]);
     const [showFilters, setShowFilters] = useState(false);
@@ -43,7 +43,7 @@ export default function TemplateDiscovery({
     const router = useRouter();
 
     useEffect(() => {
-        if (templates.length > 0) {
+        if (templates && Array.isArray(templates) && templates.length > 0) {
             const allTags = templates
                 .flatMap(template => template.tags || [])
                 .filter((tag, index, self) => tag && self.indexOf(tag) === index);
@@ -52,6 +52,11 @@ export default function TemplateDiscovery({
     }, [templates]);
 
     useEffect(() => {
+        if (!templates || !Array.isArray(templates)) {
+            setFilteredTemplates([]);
+            return;
+        }
+        
         let results = [...templates];
 
         if (discoverId) {
@@ -250,7 +255,7 @@ export default function TemplateDiscovery({
                                     Tags {selectedTags.length > 0 && `(${selectedTags.length} selected)`}
                                 </label>
                                 <div className="flex flex-wrap gap-2">
-                                    {availableTags.slice(0, 10).map(tag => (
+                                    {availableTags && Array.isArray(availableTags) && availableTags.slice(0, 10).map(tag => (
                                         <button
                                             key={tag}
                                             onClick={() => toggleTag(tag)}
@@ -289,7 +294,7 @@ export default function TemplateDiscovery({
                 </div>
             ) : filteredTemplates.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-                    {filteredTemplates.map(template => (
+                                                {filteredTemplates && Array.isArray(filteredTemplates) && filteredTemplates.map(template => (
                         <div
                             key={template.id}
                             className="bg-zinc-800/30 border border-zinc-800/50 rounded-xl hover:border-purple-500/20 hover:bg-zinc-800/40 transition-all duration-300 flex flex-col group"
@@ -374,7 +379,7 @@ export default function TemplateDiscovery({
                                         </Tooltip>
                                     )}
 
-                                    {template.tags && template.tags.length > 0 && template.tags.slice(0, 3).map((tag, index) => (
+                                                                                            {template.tags && Array.isArray(template.tags) && template.tags.length > 0 && template.tags.slice(0, 3).map((tag, index) => (
                                         <span
                                             key={index}
                                             className="bg-zinc-800/70 text-white/60 rounded-full px-2 py-0.5 text-xs"
