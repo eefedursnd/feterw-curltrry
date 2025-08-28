@@ -89,9 +89,6 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	apiRoutes.HandleFunc("/mfa/verify", mfaHandler.VerifyMFA).Methods("POST")
 	apiRoutes.HandleFunc("/discord/oauth2", discordHandler.GetOAuth2URL).Methods("GET")
 	apiRoutes.HandleFunc("/discord/oauth2/login", discordHandler.OAuth2Login).Methods("GET")
-	apiRoutes.HandleFunc("/discord/oauth2/callback", func(w http.ResponseWriter, r *http.Request) {
-		discordHandler.OAuth2Callback(w, r, true)
-	}).Methods("GET")
 	apiRoutes.HandleFunc("/discord/presence/{uid}", discordHandler.GetDiscordPresence).Methods("GET")
 	apiRoutes.HandleFunc("/discord/server/{invite}", discordHandler.GetDiscordServer).Methods("GET")
 	apiRoutes.HandleFunc("/widget/github/{username}", widgetHandler.GetGitHubRepos).Methods("GET")
@@ -181,9 +178,6 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 
 	/* Discord Routes */
 	restrictedRoutes.HandleFunc("/discord/oauth2/link", discordHandler.OAuth2Link).Methods("GET")
-	restrictedRoutes.HandleFunc("/discord/oauth2/link/callback", func(w http.ResponseWriter, r *http.Request) {
-		discordHandler.OAuth2Callback(w, r, false)
-	}).Methods("GET")
 	restrictedRoutes.HandleFunc("/discord/oauth2/unlink", discordHandler.UnlinkDiscordAccount).Methods("DELETE")
 
 	/* Widget Routes */

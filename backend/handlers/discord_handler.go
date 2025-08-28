@@ -94,7 +94,7 @@ func (dh *DiscordHandler) OAuth2Callback(w http.ResponseWriter, r *http.Request,
 		log.Println("Error handling OAuth2 callback:", err)
 
 		if strings.Contains(err.Error(), "already linked to another") {
-			errorURL := fmt.Sprintf("%s/error?message=%s", config.Origin, "This Discord account is already linked to another haze.bio account.")
+			errorURL := fmt.Sprintf("%s/error?message=%s", config.Origin, "This Discord account is already linked to another cutz.lol account.")
 			http.Redirect(w, r, errorURL, http.StatusSeeOther)
 			return
 		}
