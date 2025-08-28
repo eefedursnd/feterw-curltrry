@@ -275,7 +275,7 @@ export default function Register() {
                         />
                       </div>
                       <p className="text-xs text-zinc-500 mt-2">
-                        Must be at least 1 character long.
+                        Must be at least 3 characters long.
                       </p>
                     </div>
 

@@ -95,10 +95,10 @@ export default function DashboardLayout({ children, activeTab }: LayoutProps) {
       title: "Profile",
       icon: User,
       items: [
-        { path: '/dashboard/badges', label: 'Badges', icon: Award },
+        { path: '/dashboard/customization', label: 'Customize', icon: Palette },
         { path: '/dashboard/socials', label: 'Socials', icon: Share2 },
+        { path: '/dashboard/badges', label: 'Badges', icon: Award },
         { path: '/dashboard/widgets', label: 'Widgets', icon: Info },
-        { path: '/dashboard/customization', label: 'Customization', icon: Palette },
         { path: '/dashboard/templates', label: 'Templates', icon: Wand2 },
       ]
     },

@@ -545,7 +545,7 @@ func (us *UserService) UpdateUserFields(uid uint, fields map[string]interface{})
 		}
 
 		err = utils.Validate(username, "username", utils.ValidationOptions{
-			MinLength:         1,
+			MinLength:         3,
 			MaxLength:         20,
 			AllowSpaces:       false,
 			AllowNonPlainText: false,
@@ -578,7 +578,7 @@ func (us *UserService) UpdateUserFields(uid uint, fields map[string]interface{})
 			}
 
 			err = utils.Validate(alias, "alias", utils.ValidationOptions{
-				MinLength:         1,
+				MinLength:         3,
 				MaxLength:         20,
 				AllowSpaces:       false,
 				AllowNonPlainText: false,
@@ -608,7 +608,7 @@ func (us *UserService) UpdateUserFields(uid uint, fields map[string]interface{})
 		}
 
 		err = utils.Validate(displayName, "displayname", utils.ValidationOptions{
-			MinLength:         1,
+			MinLength:         3,
 			MaxLength:         30,
 			AllowSpaces:       true,
 			AllowNonPlainText: true,

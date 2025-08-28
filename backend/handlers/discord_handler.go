@@ -112,7 +112,7 @@ func (dh *DiscordHandler) OAuth2Callback(w http.ResponseWriter, r *http.Request,
 	user, err := dh.DiscordService.GetUserByDiscordID(discordID)
 	if err != nil {
 		log.Println("Error getting user by Discord ID:", err)
-		errorURL := fmt.Sprintf("%s/error?message=%s", config.Origin, url.QueryEscape("You have not linked your Discord account with your haze.bio account."))
+		errorURL := fmt.Sprintf("%s/error?message=%s", config.Origin, url.QueryEscape("You have not linked your Discord account with your cutz.lol account."))
 		http.Redirect(w, r, errorURL, http.StatusSeeOther)
 		return
 	}

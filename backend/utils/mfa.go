@@ -4,7 +4,7 @@ import "github.com/pquerna/otp/totp"
 
 func GenerateMFA(username string) (string, string, error) {
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "haze.bio",
+		Issuer:      "cutz.lol",
 		AccountName: username,
 	})
 	if err != nil {

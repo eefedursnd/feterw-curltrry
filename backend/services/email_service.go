@@ -231,7 +231,7 @@ func (s *EmailService) CreateRegistrationRequest(email string, username string, 
 	}
 
 	if err := utils.Validate(username, "username", utils.ValidationOptions{
-		MinLength:         1,
+		MinLength:         3,
 		MaxLength:         20,
 		AllowSpaces:       false,
 		AllowNonPlainText: false,

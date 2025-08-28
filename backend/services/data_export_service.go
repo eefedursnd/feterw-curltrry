@@ -183,7 +183,7 @@ func (des *DataExportService) generatePDF(user *models.User) (*bytes.Buffer, err
 	pdf.AddPage()
 
 	pdf.SetFont("Helvetica", "B", 16)
-	pdf.Cell(190, 10, "haze.bio Data Export")
+	pdf.Cell(190, 10, "cutz.lol Data Export")
 
 	pdf.Ln(10)
 	pdf.SetFont("Helvetica", "", 10)

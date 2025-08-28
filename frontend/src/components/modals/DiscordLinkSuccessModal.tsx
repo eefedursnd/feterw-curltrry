@@ -52,7 +52,7 @@ export default function DiscordLinkSuccessModal({ isOpen, onClose }: DiscordLink
             <div>
               <h3 className="text-base font-semibold text-white mb-1">Successfully Connected</h3>
               <p className="text-sm text-white/60">
-                Your Discord account is now linked to haze.bio. This unlocks special features and integration.
+                Your Discord account is now linked to cutz.lol. This unlocks special features and integration.
               </p>
             </div>
           </div>
