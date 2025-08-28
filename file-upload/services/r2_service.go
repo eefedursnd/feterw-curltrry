@@ -55,7 +55,6 @@ func NewR2Service() (*R2Service, error) {
 			"",
 		)),
 		awsConfig.WithEndpointResolverWithOptions(customResolver),
-		awsConfig.WithClientLogMode(aws.LogRequestWithBody|aws.LogResponseWithBody),
 	)
 
 	if err != nil {

@@ -104,7 +104,11 @@ func (b *Bot) handleUserRegistration(event *models.Event) error {
 		return fmt.Errorf("error unmarshaling registration data: %w", err)
 	}
 
-	channelID := "1401929667165945889"
+	// Use environment variable for channel ID, fallback to hardcoded if not set
+	channelID := os.Getenv("DISCORD_REGISTRATION_CHANNEL_ID")
+	if channelID == "" {
+		channelID = "1401929667165945889" // Fallback channel ID
+	}
 
 	ordinal := getOrdinalSuffix(data.UID)
 

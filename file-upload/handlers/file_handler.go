@@ -227,8 +227,6 @@ func (fh *FileHandler) handleGetFile(w http.ResponseWriter, r *http.Request, key
 		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
 	}
 
-	log.Printf("GET %s, Content-Type: %s, Content-Length: %d", key, contentType, *obj.ContentLength)
-
 	io.Copy(w, obj.Body)
 	defer obj.Body.Close()
 }
@@ -322,8 +320,6 @@ func (fh *FileHandler) handleRangeRequest(w http.ResponseWriter, r *http.Request
 	if metadata.ExpiresAt != nil {
 		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
 	}
-
-	log.Printf("Range request for %s: %s, Content-Type: %s, Content-Length: %d", key, rangeHeader, contentType, contentLength)
 
 	w.WriteHeader(http.StatusPartialContent)
 
