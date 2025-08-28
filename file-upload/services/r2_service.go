@@ -74,44 +74,14 @@ func NewR2Service() (*R2Service, error) {
 }
 
 func (s *R2Service) UploadFile(key string, body io.Reader) error {
-	var contentLength int64
-	var bodyToUse io.Reader = body
-
-	if seeker, ok := body.(io.Seeker); ok {
-		currentPos, err := seeker.Seek(0, io.SeekCurrent)
-		if err != nil {
-			return fmt.Errorf("failed to get current position: %w", err)
-		}
-
-		size, err := seeker.Seek(0, io.SeekEnd)
-		if err != nil {
-			return fmt.Errorf("failed to seek to end: %w", err)
-		}
-
-		_, err = seeker.Seek(currentPos, io.SeekStart)
-		if err != nil {
-			return fmt.Errorf("failed to reset position: %w", err)
-		}
-
-		contentLength = size
-	} else {
-		bodyBytes, err := io.ReadAll(body)
-		if err != nil {
-			return fmt.Errorf("failed to read body: %w", err)
-		}
-		bodyToUse = bytes.NewReader(bodyBytes)
-		contentLength = int64(len(bodyBytes))
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second) // 5 minutes timeout
 	defer cancel()
 	
 	_, err := s.s3Client.PutObject(ctx, &s3.PutObjectInput{
-		Bucket:        aws.String(config.R2BucketName),
-		Key:           aws.String(key),
-		Body:          bodyToUse,
-		ContentLength: aws.Int64(contentLength),
-		ContentType:   aws.String(utils.GetContentType(key)),
+		Bucket:      aws.String(config.R2BucketName),
+		Key:         aws.String(key),
+		Body:        body,
+		ContentType: aws.String(utils.GetContentType(key)),
 	})
 	return err
 }
@@ -149,35 +119,6 @@ func (s *R2Service) UploadPasswordProtectedFile(key string, body io.Reader, pass
 }
 
 func (s *R2Service) uploadFileWithMetadata(key string, body io.Reader, metadataJSON string) error {
-	var contentLength int64
-	var bodyToUse io.Reader = body
-
-	if seeker, ok := body.(io.Seeker); ok {
-		currentPos, err := seeker.Seek(0, io.SeekCurrent)
-		if err != nil {
-			return fmt.Errorf("failed to get current position: %w", err)
-		}
-
-		size, err := seeker.Seek(0, io.SeekEnd)
-		if err != nil {
-			return fmt.Errorf("failed to seek to end: %w", err)
-		}
-
-		_, err = seeker.Seek(currentPos, io.SeekStart)
-		if err != nil {
-			return fmt.Errorf("failed to reset position: %w", err)
-		}
-
-		contentLength = size
-	} else {
-		bodyBytes, err := io.ReadAll(body)
-		if err != nil {
-			return fmt.Errorf("failed to read body: %w", err)
-		}
-		bodyToUse = bytes.NewReader(bodyBytes)
-		contentLength = int64(len(bodyBytes))
-	}
-
 	metadata := map[string]string{
 		"file-metadata": metadataJSON,
 	}
@@ -186,12 +127,11 @@ func (s *R2Service) uploadFileWithMetadata(key string, body io.Reader, metadataJ
 	defer cancel()
 	
 	_, err := s.s3Client.PutObject(ctx, &s3.PutObjectInput{
-		Bucket:        aws.String(config.R2BucketName),
-		Key:           aws.String(key),
-		Body:          bodyToUse,
-		ContentLength: aws.Int64(contentLength),
-		ContentType:   aws.String(utils.GetContentType(key)),
-		Metadata:      metadata,
+		Bucket:      aws.String(config.R2BucketName),
+		Key:         aws.String(key),
+		Body:        body,
+		ContentType: aws.String(utils.GetContentType(key)),
+		Metadata:    metadata,
 	})
 	return err
 }
