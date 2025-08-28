@@ -41,9 +41,9 @@ func (ds *DiscordService) CreateOAuth2URL(login bool) string {
 
 	var redirectURI string
 	if login {
-		redirectURI = config.DiscordRedirectURI + "/login"
+		redirectURI = config.DiscordRedirectURI + "/callback"
 	} else {
-		redirectURI = config.DiscordRedirectURI + "/link"
+		redirectURI = config.DiscordRedirectURI + "/link/callback"
 	}
 
 	params.Add("redirect_uri", redirectURI)
