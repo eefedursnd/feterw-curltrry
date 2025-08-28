@@ -117,6 +117,12 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 		c.handleTimeDiff(s, m, args)
 	case "createproductcode":
 		c.handleCreateProductCode(s, m, args)
+	case "invite":
+		c.handleInvite(s, m, args)
+	case "invites":
+		c.handleInvites(s, m, args)
+	case "deleteinvite":
+		c.handleDeleteInvite(s, m, args)
 	default:
 		if cmd != "" {
 			s.ChannelMessageSend(m.ChannelID, "Invalid command. Type `?help` for a list of commands.")
@@ -1659,5 +1665,165 @@ func (c *Commands) sendInvalidInputEmbed(s *discordgo.Session, m *discordgo.Mess
 		Color:       0xff0000,
 		Timestamp:   time.Now().Format(time.RFC3339),
 	}
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}
+
+func (c *Commands) handleInvite(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	// Check if user is admin
+	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil || user.StaffLevel < StaffLevelAdmin {
+		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to create invite codes.")
+		return
+	}
+
+	if len(args) < 2 {
+		c.sendInvalidUsageEmbed(s, m, "Please specify the number of uses for the invite code.", 
+			"?invite <uses> [expires_in_hours]", "?invite 5 24")
+		return
+	}
+
+	maxUses, err := strconv.Atoi(args[1])
+	if err != nil || maxUses < 1 {
+		c.sendInvalidInputEmbed(s, m, "Please provide a valid number of uses (minimum 1).")
+		return
+	}
+
+	expiresInHours := 0
+	if len(args) > 2 {
+		expiresInHours, err = strconv.Atoi(args[2])
+		if err != nil || expiresInHours < 0 {
+			c.sendInvalidInputEmbed(s, m, "Please provide a valid expiration time in hours (0 for no expiration).")
+			return
+		}
+	}
+
+	inviteCode, err := c.services.Invite.CreateInviteCode(user.UID, maxUses, expiresInHours)
+	if err != nil {
+		c.sendErrorEmbed(s, m, "Failed to create invite code: "+err.Error())
+		return
+	}
+
+	var expirationText string
+	if inviteCode.ExpiresAt != nil {
+		expirationText = fmt.Sprintf("Expires: <t:%d:R>", inviteCode.ExpiresAt.Unix())
+	} else {
+		expirationText = "Never expires"
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "Invite Code Created",
+		Description: fmt.Sprintf("**Code:** `%s`\n**Max Uses:** %d\n**%s**", 
+			inviteCode.Code, inviteCode.MaxUses, expirationText),
+		Color:       0x00ff00,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol invite system",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}
+
+func (c *Commands) handleInvites(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	// Check if user is admin
+	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil || user.StaffLevel < StaffLevelAdmin {
+		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to view invite codes.")
+		return
+	}
+
+	codes, err := c.services.Invite.GetInviteCodesByCreator(user.UID)
+	if err != nil {
+		c.sendErrorEmbed(s, m, "Failed to fetch invite codes: "+err.Error())
+		return
+	}
+
+	if len(codes) == 0 {
+		embed := &discordgo.MessageEmbed{
+			Title:       "No Invite Codes",
+			Description: "You haven't created any invite codes yet.",
+			Color:       0x808080,
+			Footer: &discordgo.MessageEmbedFooter{
+				Text: "cutz.lol invite system",
+			},
+			Timestamp: time.Now().Format(time.RFC3339),
+		}
+		s.ChannelMessageSendEmbed(m.ChannelID, embed)
+		return
+	}
+
+	var fields []*discordgo.MessageEmbedField
+	for _, code := range codes {
+		status := "✅ Valid"
+		if !code.IsValid() {
+			status = "❌ Expired/Used"
+		}
+
+		var expirationText string
+		if code.ExpiresAt != nil {
+			expirationText = fmt.Sprintf("<t:%d:R>", code.ExpiresAt.Unix())
+		} else {
+			expirationText = "Never"
+		}
+
+		fields = append(fields, &discordgo.MessageEmbedField{
+			Name:   fmt.Sprintf("`%s` - %s", code.Code, status),
+			Value:  fmt.Sprintf("Uses: %d/%d | Expires: %s", code.CurrentUses, code.MaxUses, expirationText),
+			Inline: true,
+		})
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "Your Invite Codes",
+		Description: fmt.Sprintf("You have created **%d** invite code(s)", len(codes)),
+		Fields:      fields,
+		Color:       0x00ff00,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol invite system",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}
+
+func (c *Commands) handleDeleteInvite(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	// Check if user is admin
+	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil || user.StaffLevel < StaffLevelAdmin {
+		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to delete invite codes.")
+		return
+	}
+
+	if len(args) < 2 {
+		c.sendInvalidUsageEmbed(s, m, "Please specify the invite code to delete.", 
+			"?deleteinvite <code>", "?deleteinvite ABC12345")
+		return
+	}
+
+	code := args[1]
+	
+	// Find the invite code by code string
+	var inviteCode models.InviteCode
+	if err := c.services.Invite.DB.Where("code = ? AND created_by = ?", code, user.UID).First(&inviteCode).Error; err != nil {
+		c.sendErrorEmbed(s, m, "Invite code not found or you don't have permission to delete it.")
+		return
+	}
+
+	if err := c.services.Invite.DeleteInviteCode(inviteCode.ID, user.UID); err != nil {
+		c.sendErrorEmbed(s, m, "Failed to delete invite code: "+err.Error())
+		return
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "Invite Code Deleted",
+		Description: fmt.Sprintf("Successfully deleted invite code `%s`", code),
+		Color:       0x00ff00,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol invite system",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
 	s.ChannelMessageSendEmbed(m.ChannelID, embed)
 }

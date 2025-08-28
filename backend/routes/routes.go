@@ -27,10 +27,12 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	emailService.UserService = userService
 
 	altAccountService := services.NewAltAccountService(db, redisClient, eventService)
+	inviteService := services.NewInviteService(db, redisClient)
 
 	userService.EmailService = emailService
 	userService.AltAccountService = altAccountService
 	emailService.AltAccountService = altAccountService
+	emailService.InviteService = inviteService
 
 	emailHandler := handlers.NewEmailHandler(emailService)
 	userHandler := handlers.NewUserHandler(userService, emailService)

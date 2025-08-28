@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"strings"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -23,6 +24,7 @@ type EmailService struct {
 	UserService       *UserService
 	EventService      *EventService
 	AltAccountService *AltAccountService
+	InviteService     *InviteService
 }
 
 const (
@@ -43,12 +45,13 @@ const (
 )
 
 type PendingRegistration struct {
-	Email     string `json:"email"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	Token     string `json:"token"`
-	CreatedAt int64  `json:"created_at"`
-	ExpiresAt int64  `json:"expires_at"`
+	Email      string `json:"email"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	InviteCode string `json:"invite_code"`
+	Token      string `json:"token"`
+	CreatedAt  int64  `json:"created_at"`
+	ExpiresAt  int64  `json:"expires_at"`
 }
 
 func NewEmailService(db *gorm.DB, client *redis.Client, eventService *EventService) *EmailService {
@@ -58,18 +61,15 @@ func NewEmailService(db *gorm.DB, client *redis.Client, eventService *EventServi
 		EventService: eventService,
 	}
 
-	userService := &UserService{
-		DB:     db,
-		Client: client,
-	}
+	userService := NewUserService(db, client, nil)
 
-	altAccountService := &AltAccountService{
-		DB:     db,
-		Client: client,
-	}
+	altAccountService := NewAltAccountService(db, client, eventService)
+
+	inviteService := NewInviteService(db, client)
 
 	service.UserService = userService
 	service.AltAccountService = altAccountService
+	service.InviteService = inviteService
 
 	return service
 }
@@ -221,7 +221,7 @@ func (s *EmailService) VerifyEmailCode(userID uint, code string) error {
 	return s.Client.Del(key).Err()
 }
 
-func (s *EmailService) CreateRegistrationRequest(email string, username string, password string, ipAddress string) (string, error) {
+func (s *EmailService) CreateRegistrationRequest(email string, username string, password string, inviteCode string, ipAddress string) (string, error) {
 	if err := s.CheckRegistrationRateLimit(ipAddress); err != nil {
 		return "", err
 	}
@@ -251,6 +251,22 @@ func (s *EmailService) CreateRegistrationRequest(email string, username string, 
 		return "", errors.New("email already exists")
 	}
 
+	// Validate invite code
+	if inviteCode == "" {
+		return "", errors.New("invite code is required")
+	}
+
+	// Trim whitespace and validate length
+	inviteCode = strings.TrimSpace(inviteCode)
+	if len(inviteCode) < 3 {
+		return "", errors.New("invalid invite code format")
+	}
+
+	_, err := s.InviteService.ValidateInviteCode(inviteCode)
+	if err != nil {
+		return "", err
+	}
+
 	hashedPassword, err := utils.HashPassword(password)
 	if err != nil {
 		return "", errors.New("error hashing password")
@@ -260,12 +276,13 @@ func (s *EmailService) CreateRegistrationRequest(email string, username string, 
 
 	now := time.Now()
 	pendingReg := PendingRegistration{
-		Email:     email,
-		Username:  username,
-		Password:  hashedPassword,
-		Token:     token,
-		CreatedAt: now.Unix(),
-		ExpiresAt: now.Add(registrationTTL).Unix(),
+		Email:      email,
+		Username:   username,
+		Password:   hashedPassword,
+		InviteCode: inviteCode,
+		Token:      token,
+		CreatedAt:  now.Unix(),
+		ExpiresAt:  now.Add(registrationTTL).Unix(),
 	}
 
 	key := fmt.Sprintf("%s%s", registrationPrefix, token)
@@ -338,6 +355,12 @@ func (s *EmailService) CompleteRegistrationWithIP(token string, ipAddress string
 	user, err := s.UserService.CreateUserWithVerifiedEmail(reg.Email, reg.Username, reg.Password)
 	if err != nil {
 		return nil, err
+	}
+
+	// Use the invite code
+	if err := s.InviteService.UseInviteCode(reg.InviteCode, user.UID); err != nil {
+		log.Printf("Error using invite code: %v", err)
+		// Don't fail registration if invite code usage fails
 	}
 
 	key := fmt.Sprintf("%s%s", registrationPrefix, token)

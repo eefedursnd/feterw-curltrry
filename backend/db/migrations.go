@@ -10,6 +10,12 @@ import (
 )
 
 func StartMigration(db *gorm.DB) error {
+	// First, handle invite_codes table migration
+	if err := migrateInviteCodesTable(db); err != nil {
+		log.Printf("Error migrating invite_codes table: %v", err)
+		return err
+	}
+
 	err := db.AutoMigrate(
 		&models.User{},
 		&models.UserProfile{},
@@ -31,6 +37,7 @@ func StartMigration(db *gorm.DB) error {
 		
 		&models.Event{},
 		&models.DataExport{},
+		&models.InviteCode{},
 	)
 	if err != nil {
 		log.Println("Error migrating models:", err)
@@ -39,6 +46,64 @@ func StartMigration(db *gorm.DB) error {
 
 	log.Println("Migration completed")
 	return nil
+}
+
+// migrateInviteCodesTable handles the invite_codes table migration
+func migrateInviteCodesTable(db *gorm.DB) error {
+	// Check if invite_codes table exists
+	var tableExists bool
+	err := db.Raw("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'invite_codes')").Scan(&tableExists).Error
+	if err != nil {
+		return err
+	}
+
+	if !tableExists {
+		// Table doesn't exist, create it
+		log.Println("Creating invite_codes table...")
+		return db.AutoMigrate(&models.InviteCode{})
+	}
+
+	// Table exists, check if created_by column exists
+	var columnExists bool
+	err = db.Raw("SELECT EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'invite_codes' AND column_name = 'created_by')").Scan(&columnExists).Error
+	if err != nil {
+		return err
+	}
+
+	if !columnExists {
+		log.Println("invite_codes table exists but created_by column is missing, dropping and recreating table...")
+		
+		// Drop the existing table and recreate it
+		err = db.Exec("DROP TABLE IF EXISTS invite_codes").Error
+		if err != nil {
+			return err
+		}
+		
+		log.Println("Recreating invite_codes table with correct structure...")
+		return db.AutoMigrate(&models.InviteCode{})
+	}
+
+	// Column exists, check if it has NULL values
+	var nullCount int64
+	err = db.Raw("SELECT COUNT(*) FROM invite_codes WHERE created_by IS NULL").Scan(&nullCount).Error
+	if err != nil {
+		return err
+	}
+
+	if nullCount > 0 {
+		log.Printf("Found %d invite codes with NULL created_by values, cleaning up...", nullCount)
+		
+		// Delete all invite codes with NULL created_by (they're invalid anyway)
+		err = db.Exec("DELETE FROM invite_codes WHERE created_by IS NULL").Error
+		if err != nil {
+			return err
+		}
+		
+		log.Printf("Deleted %d invalid invite codes", nullCount)
+	}
+
+	// Now migrate the table structure
+	return db.AutoMigrate(&models.InviteCode{})
 }
 
 func RestrictUsersWithoutEmail(db *gorm.DB) error {

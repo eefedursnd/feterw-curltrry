@@ -26,9 +26,10 @@ func NewUserHandler(userService *services.UserService, emailService *services.Em
 }
 
 type RegisterRequest struct {
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Email      string `json:"email"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	InviteCode string `json:"invite_code"`
 }
 type LoginRequest struct {
 	Username string `json:"username"`
@@ -54,7 +55,7 @@ func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ipAddress := utils.ExtractIP(r)
-	token, err := uh.EmailService.CreateRegistrationRequest(user.Email, user.Username, user.Password, ipAddress)
+	token, err := uh.EmailService.CreateRegistrationRequest(user.Email, user.Username, user.Password, user.InviteCode, ipAddress)
 	if err != nil {
 		if err.Error() == "username already exists" {
 			utils.RespondError(w, http.StatusConflict, "Username already exists")
@@ -66,7 +67,10 @@ func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 			err.Error() == "username cannot contain spaces" ||
 			err.Error() == "username must be plain text" ||
 			err.Error() == "username is a reserved word" ||
-			err.Error() == "username contains a reserved word" {
+			err.Error() == "username contains a reserved word" ||
+			err.Error() == "invite code is required" ||
+			err.Error() == "invalid invite code" ||
+			err.Error() == "invite code is expired or has reached maximum uses" {
 			utils.RespondError(w, http.StatusBadRequest, err.Error())
 			return
 		} else if err.Error() == "registration rate limit exceeded, please try again later" ||
