@@ -1,6 +1,7 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -9,7 +10,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -43,10 +43,7 @@ func NewR2Service() (*R2Service, error) {
 		}, nil
 	})
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second) // 30 seconds for config loading
-	defer cancel()
-	
-	cfg, err = awsConfig.LoadDefaultConfig(ctx,
+	cfg, err = awsConfig.LoadDefaultConfig(context.TODO(),
 		awsConfig.WithRegion(config.R2Region),
 		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
 			config.R2AccessKeyId,
@@ -60,27 +57,47 @@ func NewR2Service() (*R2Service, error) {
 		return nil, fmt.Errorf("unable to load SDK config: %w", err)
 	}
 
-	// Create custom HTTP client with extended timeout
-	httpClient := &http.Client{
-		Timeout: 300 * time.Second, // 5 minutes timeout
-	}
-
 	return &R2Service{
-		s3Client: s3.NewFromConfig(cfg, func(o *s3.Options) {
-			o.HTTPClient = httpClient
-		}),
+		s3Client: s3.NewFromConfig(cfg),
 	}, nil
 }
 
 func (s *R2Service) UploadFile(key string, body io.Reader) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second) // 5 minutes timeout
-	defer cancel()
-	
-	_, err := s.s3Client.PutObject(ctx, &s3.PutObjectInput{
-		Bucket:      aws.String(config.R2BucketName),
-		Key:         aws.String(key),
-		Body:        body,
-		ContentType: aws.String(utils.GetContentType(key)),
+	var contentLength int64
+	var bodyToUse io.Reader = body
+
+	if seeker, ok := body.(io.Seeker); ok {
+		currentPos, err := seeker.Seek(0, io.SeekCurrent)
+		if err != nil {
+			return fmt.Errorf("failed to get current position: %w", err)
+		}
+
+		size, err := seeker.Seek(0, io.SeekEnd)
+		if err != nil {
+			return fmt.Errorf("failed to seek to end: %w", err)
+		}
+
+		_, err = seeker.Seek(currentPos, io.SeekStart)
+		if err != nil {
+			return fmt.Errorf("failed to reset position: %w", err)
+		}
+
+		contentLength = size
+	} else {
+		bodyBytes, err := io.ReadAll(body)
+		if err != nil {
+			return fmt.Errorf("failed to read body: %w", err)
+		}
+		bodyToUse = bytes.NewReader(bodyBytes)
+		contentLength = int64(len(bodyBytes))
+	}
+
+	_, err := s.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket:        aws.String(config.R2BucketName),
+		Key:           aws.String(key),
+		Body:          bodyToUse,
+		ContentLength: aws.Int64(contentLength),
+		ContentType:   aws.String(utils.GetContentType(key)),
 	})
 	return err
 }
@@ -118,28 +135,52 @@ func (s *R2Service) UploadPasswordProtectedFile(key string, body io.Reader, pass
 }
 
 func (s *R2Service) uploadFileWithMetadata(key string, body io.Reader, metadataJSON string) error {
+	var contentLength int64
+	var bodyToUse io.Reader = body
+
+	if seeker, ok := body.(io.Seeker); ok {
+		currentPos, err := seeker.Seek(0, io.SeekCurrent)
+		if err != nil {
+			return fmt.Errorf("failed to get current position: %w", err)
+		}
+
+		size, err := seeker.Seek(0, io.SeekEnd)
+		if err != nil {
+			return fmt.Errorf("failed to seek to end: %w", err)
+		}
+
+		_, err = seeker.Seek(currentPos, io.SeekStart)
+		if err != nil {
+			return fmt.Errorf("failed to reset position: %w", err)
+		}
+
+		contentLength = size
+	} else {
+		bodyBytes, err := io.ReadAll(body)
+		if err != nil {
+			return fmt.Errorf("failed to read body: %w", err)
+		}
+		bodyToUse = bytes.NewReader(bodyBytes)
+		contentLength = int64(len(bodyBytes))
+	}
+
 	metadata := map[string]string{
 		"file-metadata": metadataJSON,
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second) // 5 minutes timeout
-	defer cancel()
-	
-	_, err := s.s3Client.PutObject(ctx, &s3.PutObjectInput{
-		Bucket:      aws.String(config.R2BucketName),
-		Key:         aws.String(key),
-		Body:        body,
-		ContentType: aws.String(utils.GetContentType(key)),
-		Metadata:    metadata,
+	_, err := s.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket:        aws.String(config.R2BucketName),
+		Key:           aws.String(key),
+		Body:          bodyToUse,
+		ContentLength: aws.Int64(contentLength),
+		ContentType:   aws.String(utils.GetContentType(key)),
+		Metadata:      metadata,
 	})
 	return err
 }
 
 func (s *R2Service) GetFile(key string) (*s3.GetObjectOutput, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second) // 1 minute timeout
-	defer cancel()
-	
-	result, err := s.s3Client.GetObject(ctx, &s3.GetObjectInput{
+	result, err := s.s3Client.GetObject(context.TODO(), &s3.GetObjectInput{
 		Bucket: aws.String(config.R2BucketName),
 		Key:    aws.String(key),
 	})
@@ -147,23 +188,17 @@ func (s *R2Service) GetFile(key string) (*s3.GetObjectOutput, error) {
 }
 
 func (s *R2Service) GetFileInfo(key string) (*s3.HeadObjectOutput, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second) // 30 seconds timeout
-	defer cancel()
-	
 	input := &s3.HeadObjectInput{
 		Bucket: aws.String(config.R2BucketName),
 		Key:    aws.String(key),
 	}
 
-	return s.s3Client.HeadObject(ctx, input)
+	return s.s3Client.HeadObject(context.TODO(), input)
 }
 
 func (s *R2Service) GetFileRange(key string, start, end int64) (*s3.GetObjectOutput, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second) // 1 minute timeout
-	defer cancel()
-	
 	rangeString := fmt.Sprintf("bytes=%d-%d", start, end)
-	result, err := s.s3Client.GetObject(ctx, &s3.GetObjectInput{
+	result, err := s.s3Client.GetObject(context.TODO(), &s3.GetObjectInput{
 		Bucket: aws.String(config.R2BucketName),
 		Key:    aws.String(key),
 		Range:  aws.String(rangeString),
@@ -172,10 +207,7 @@ func (s *R2Service) GetFileRange(key string, start, end int64) (*s3.GetObjectOut
 }
 
 func (s *R2Service) DeleteFile(key string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second) // 30 seconds timeout
-	defer cancel()
-	
-	_, err := s.s3Client.DeleteObject(ctx, &s3.DeleteObjectInput{
+	_, err := s.s3Client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
 		Bucket: aws.String(config.R2BucketName),
 		Key:    aws.String(key),
 	})
@@ -183,10 +215,7 @@ func (s *R2Service) DeleteFile(key string) error {
 }
 
 func (s *R2Service) FileExists(key string) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second) // 30 seconds timeout
-	defer cancel()
-	
-	_, err := s.s3Client.HeadObject(ctx, &s3.HeadObjectInput{
+	_, err := s.s3Client.HeadObject(context.TODO(), &s3.HeadObjectInput{
 		Bucket: aws.String(config.R2BucketName),
 		Key:    aws.String(key),
 	})
@@ -232,9 +261,7 @@ func (s *R2Service) FixContentTypes() error {
 	})
 
 	for paginator.HasMorePages() {
-		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second) // 1 minute timeout
-		page, err := paginator.NextPage(ctx)
-		cancel()
+		page, err := paginator.NextPage(context.TODO())
 		if err != nil {
 			return err
 		}
@@ -243,15 +270,13 @@ func (s *R2Service) FixContentTypes() error {
 			key := *obj.Key
 			contentType := utils.GetContentType(key)
 
-			ctx2, cancel2 := context.WithTimeout(context.Background(), 30*time.Second) // 30 seconds timeout
-			_, err := s.s3Client.CopyObject(ctx2, &s3.CopyObjectInput{
+			_, err := s.s3Client.CopyObject(context.TODO(), &s3.CopyObjectInput{
 				Bucket:            aws.String(config.R2BucketName),
 				CopySource:        aws.String(config.R2BucketName + "/" + key),
 				Key:               aws.String(key),
 				ContentType:       aws.String(contentType),
 				MetadataDirective: types.MetadataDirectiveReplace,
 			})
-			cancel2()
 			if err != nil {
 				log.Printf("Error updating Content-Type for %s: %v", key, err)
 			} else {
@@ -286,9 +311,7 @@ func (s *R2Service) CleanupExpiredFiles() error {
 	})
 
 	for paginator.HasMorePages() {
-		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second) // 1 minute timeout
-		page, err := paginator.NextPage(ctx)
-		cancel()
+		page, err := paginator.NextPage(context.TODO())
 		if err != nil {
 			return err
 		}

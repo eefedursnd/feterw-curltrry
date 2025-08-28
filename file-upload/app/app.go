@@ -32,8 +32,8 @@ func StartServer() error {
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", config.HttpPort),
 		Handler:      middlewares.CORSMiddleware(r),
-		ReadTimeout:  300 * time.Second, // 5 minutes for large file uploads
-		WriteTimeout: 300 * time.Second, // 5 minutes for large file uploads
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 120 * time.Second,
 	}
 
 	return server.ListenAndServe()

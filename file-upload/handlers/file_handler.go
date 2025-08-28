@@ -94,12 +94,7 @@ func (fh *FileHandler) HandleFileOperations(w http.ResponseWriter, r *http.Reque
 func (fh *FileHandler) handlePutFile(w http.ResponseWriter, r *http.Request, key string) {
 	err := fh.R2Service.UploadFile(key, r.Body)
 	if err != nil {
-		log.Printf("Error uploading file %s: %v", key, err)
-		if strings.Contains(err.Error(), "timeout") || strings.Contains(err.Error(), "context deadline exceeded") {
-			utils.RespondError(w, http.StatusRequestTimeout, "Upload timeout - file is too large or connection is slow")
-		} else {
-			utils.RespondError(w, http.StatusInternalServerError, "Failed to upload file: "+err.Error())
-		}
+		utils.RespondError(w, http.StatusInternalServerError, "Failed to upload file: "+err.Error())
 		return
 	}
 
@@ -116,12 +111,7 @@ func (fh *FileHandler) handlePutTemporaryFile(w http.ResponseWriter, r *http.Req
 
 	err = fh.R2Service.UploadTemporaryFile(key, r.Body, time.Duration(expirationHours)*time.Hour)
 	if err != nil {
-		log.Printf("Error uploading temporary file %s: %v", key, err)
-		if strings.Contains(err.Error(), "timeout") || strings.Contains(err.Error(), "context deadline exceeded") {
-			utils.RespondError(w, http.StatusRequestTimeout, "Upload timeout - file is too large or connection is slow")
-		} else {
-			utils.RespondError(w, http.StatusInternalServerError, "Failed to upload temporary file: "+err.Error())
-		}
+		utils.RespondError(w, http.StatusInternalServerError, "Failed to upload temporary file: "+err.Error())
 		return
 	}
 
@@ -142,12 +132,7 @@ func (fh *FileHandler) handlePutProtectedFile(w http.ResponseWriter, r *http.Req
 
 	err := fh.R2Service.UploadPasswordProtectedFile(key, r.Body, password)
 	if err != nil {
-		log.Printf("Error uploading protected file %s: %v", key, err)
-		if strings.Contains(err.Error(), "timeout") || strings.Contains(err.Error(), "context deadline exceeded") {
-			utils.RespondError(w, http.StatusRequestTimeout, "Upload timeout - file is too large or connection is slow")
-		} else {
-			utils.RespondError(w, http.StatusInternalServerError, "Failed to upload protected file: "+err.Error())
-		}
+		utils.RespondError(w, http.StatusInternalServerError, "Failed to upload protected file: "+err.Error())
 		return
 	}
 
@@ -226,6 +211,8 @@ func (fh *FileHandler) handleGetFile(w http.ResponseWriter, r *http.Request, key
 	if metadata.ExpiresAt != nil {
 		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
 	}
+
+	log.Printf("GET %s, Content-Type: %s, Content-Length: %d", key, contentType, *obj.ContentLength)
 
 	io.Copy(w, obj.Body)
 	defer obj.Body.Close()
@@ -320,6 +307,8 @@ func (fh *FileHandler) handleRangeRequest(w http.ResponseWriter, r *http.Request
 	if metadata.ExpiresAt != nil {
 		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
 	}
+
+	log.Printf("Range request for %s: %s, Content-Type: %s, Content-Length: %d", key, rangeHeader, contentType, contentLength)
 
 	w.WriteHeader(http.StatusPartialContent)
 

@@ -47,16 +47,15 @@ export const useFileUpload = (
                     return;
                 }
 
-                // More realistic progress simulation for large files
                 const progressInterval = setInterval(() => {
                     setUploadProgress(prev => {
-                        if (prev >= 85) {
+                        if (prev >= 90) {
                             clearInterval(progressInterval);
-                            return 85;
+                            return 90;
                         }
-                        return prev + 5;
+                        return prev + 10;
                     });
-                }, 1000);
+                }, 500);
 
                 const fileURL = await fileAPI.uploadFile(fileType || 'avatar_url', file, badgeId);
                 clearInterval(progressInterval);
@@ -70,11 +69,7 @@ export const useFileUpload = (
 
             } catch (error) {
                 console.error('Error uploading file:', error);
-                if (error instanceof Error && error.message.includes('timeout')) {
-                    toast.error('Upload timeout - file is too large or connection is slow. Please try a smaller file or check your internet connection.');
-                } else {
-                    toast.error('Failed to upload file');
-                }
+                toast.error('Failed to upload file');
                 setUploadProgress(0);
                 setIsUploading(false);
             }
@@ -157,16 +152,15 @@ export default function FileUpload({
                     return;
                 }
 
-                // More realistic progress simulation for large files
                 const progressInterval = setInterval(() => {
                     setUploadProgress(prev => {
-                        if (prev >= 85) {
+                        if (prev >= 90) {
                             clearInterval(progressInterval);
-                            return 85;
+                            return 90;
                         }
-                        return prev + 5;
+                        return prev + 10;
                     });
-                }, 1000);
+                }, 500);
 
                 const fileURL = await fileAPI.uploadFile(fileType, file, badgeId);
                 clearInterval(progressInterval);
@@ -180,11 +174,7 @@ export default function FileUpload({
 
             } catch (error) {
                 console.error('Error uploading file:', error);
-                if (error instanceof Error && error.message.includes('timeout')) {
-                    toast.error('Upload timeout - file is too large or connection is slow. Please try a smaller file or check your internet connection.');
-                } else {
-                    toast.error('Failed to upload file');
-                }
+                toast.error('Failed to upload file');
                 setUploadProgress(0);
                 setIsUploading(false);
             }
