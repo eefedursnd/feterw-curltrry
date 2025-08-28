@@ -16,6 +16,10 @@ class FileAPI {
                 formData.append("badgeID", badgeID.toString());
             }
 
+            // Create AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutes timeout
+
             const response = await fetch(`${this.baseURL}/files/upload`, {
                 method: "POST",
                 headers: {
@@ -23,7 +27,10 @@ class FileAPI {
                 },
                 body: formData,
                 credentials: 'include',
+                signal: controller.signal,
             });
+
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
                 const json = await parseJson(response);
@@ -34,6 +41,9 @@ class FileAPI {
             return json as string;
         } catch (error) {
             console.error("Error uploading file:", error);
+            if (error instanceof Error && error.name === 'AbortError') {
+                throw new Error('Upload timeout - file is too large or connection is slow');
+            }
             throw error;
         }
     }

@@ -66,9 +66,9 @@ func (fs *FileService) UploadFile(fileType, fileName string, userID uint, fileBy
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("X-Api-Key", config.R2APIKey)
 
-	// Set up HTTP client with timeout
+	// Set up HTTP client with extended timeout for large files
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 300 * time.Second, // 5 minutes for large file uploads
 	}
 
 	log.Printf("Sending request to S3 server...")
@@ -265,7 +265,7 @@ func (fs *FileService) UploadDataExport(fileName string, fileBytes []byte, passw
 	req.Header.Set("X-Password", password)
 
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 300 * time.Second, // 5 minutes for large file uploads
 	}
 
 	resp, err := client.Do(req)

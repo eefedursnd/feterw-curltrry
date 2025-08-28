@@ -104,7 +104,7 @@ func (b *Bot) handleUserRegistration(event *models.Event) error {
 		return fmt.Errorf("error unmarshaling registration data: %w", err)
 	}
 
-	channelID := "1363552022049067098"
+	channelID := "1401929667165945889"
 
 	ordinal := getOrdinalSuffix(data.UID)
 
@@ -112,7 +112,7 @@ func (b *Bot) handleUserRegistration(event *models.Event) error {
 	embed := &discordgo.MessageEmbed{
 		URL:         profileURL,
 		Title:       "New user registered!",
-		Description: fmt.Sprintf("**%s** just registered and is our **%d%s** user! 🎉", data.Username, data.UID, ordinal),
+		Description: fmt.Sprintf("**%s** just registered and is our **%d%s** user! <:5609purpleverified:1408558248285700156>", data.Username, data.UID, ordinal),
 		Color:       0x000000,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "cutz.lol",
