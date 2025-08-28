@@ -928,3 +928,123 @@ func (us *UserService) GetRemainingCooldown(timestamp time.Time) int {
 	}
 	return int(remaining.Minutes()) + 1
 }
+
+// DeleteUser completely removes a user from the database
+func (us *UserService) DeleteUser(uid uint, deletedBy uint) error {
+	tx := us.DB.Begin()
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	// Get user info for logging
+	var user models.User
+	if err := tx.Where("uid = ?", uid).First(&user).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("user not found: %w", err)
+	}
+
+	// Check if user is admin (prevent deleting admins)
+	if user.StaffLevel >= 4 {
+		tx.Rollback()
+		return errors.New("cannot delete administrator accounts")
+	}
+
+	// Delete all related data in the correct order
+	// 1. User sessions
+	if err := tx.Where("user_id = ?", uid).Delete(&models.UserSession{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user sessions: %w", err)
+	}
+
+	// 2. User punishments
+	if err := tx.Where("user_id = ?", uid).Delete(&models.Punishment{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user punishments: %w", err)
+	}
+
+	// 3. User badges
+	if err := tx.Where("uid = ?", uid).Delete(&models.UserBadge{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user badges: %w", err)
+	}
+
+	// 4. User socials
+	if err := tx.Where("uid = ?", uid).Delete(&models.UserSocial{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user socials: %w", err)
+	}
+
+	// 5. User widgets
+	if err := tx.Where("uid = ?", uid).Delete(&models.UserWidget{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user widgets: %w", err)
+	}
+
+	// 6. User subscription
+	if err := tx.Where("user_id = ?", uid).Delete(&models.UserSubscription{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user subscription: %w", err)
+	}
+
+	// 7. User profile
+	if err := tx.Where("uid = ?", uid).Delete(&models.UserProfile{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user profile: %w", err)
+	}
+
+	// 8. User views
+	if err := tx.Where("uid = ?", uid).Delete(&models.View{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user views: %w", err)
+	}
+
+	// 9. User reports (as reporter)
+	if err := tx.Where("reporter_id = ?", uid).Delete(&models.Report{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user reports: %w", err)
+	}
+
+	// 10. User applications
+	if err := tx.Where("user_id = ?", uid).Delete(&models.Application{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user applications: %w", err)
+	}
+
+	// 11. User moderation logs (as staff)
+	if err := tx.Where("staff_id = ?", uid).Delete(&models.ModerationLog{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user moderation logs: %w", err)
+	}
+
+	// 12. User data exports
+	if err := tx.Where("user_id = ?", uid).Delete(&models.DataExport{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user data exports: %w", err)
+	}
+
+	// 13. User invite codes (as creator)
+	if err := tx.Where("created_by = ?", uid).Delete(&models.InviteCode{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user invite codes: %w", err)
+	}
+
+	// 14. Finally, delete the user
+	if err := tx.Where("uid = ?", uid).Delete(&models.User{}).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error deleting user: %w", err)
+	}
+
+	// Commit the transaction
+	if err := tx.Commit().Error; err != nil {
+		return fmt.Errorf("error committing transaction: %w", err)
+	}
+
+	// Clear Redis cache
+	us.Client.Del(fmt.Sprintf("user:%d", uid))
+	us.Client.Del(fmt.Sprintf("profile:%d", uid))
+
+	// Log the deletion
+	log.Printf("User %s (UID: %d) was completely deleted by admin (UID: %d)", user.Username, uid, deletedBy)
+
+	return nil
+}

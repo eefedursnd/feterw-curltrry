@@ -1827,3 +1827,86 @@ func (c *Commands) handleDeleteInvite(s *discordgo.Session, m *discordgo.Message
 
 	s.ChannelMessageSendEmbed(m.ChannelID, embed)
 }
+
+func (c *Commands) handleDeleteUser(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	// Check if user is admin
+	admin, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil || admin.StaffLevel < StaffLevelAdmin {
+		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to delete users.")
+		return
+	}
+
+	if len(args) < 2 {
+		c.sendInvalidUsageEmbed(s, m, "Please specify the user to delete (username or UID).", 
+			"?deleteuser <username_or_uid>", "?deleteuser john_doe")
+		return
+	}
+
+	target := args[1]
+	var targetUser *models.User
+
+	// Try to find user by UID first
+	if uid, err := strconv.ParseUint(target, 10, 32); err == nil {
+		targetUser, err = c.services.User.GetUserByUID(uint(uid))
+		if err != nil {
+			c.sendErrorEmbed(s, m, "User not found with that UID.")
+			return
+		}
+	} else {
+		// Try to find user by username
+		targetUser, err = c.services.User.GetUserByUsername(target)
+		if err != nil {
+			c.sendErrorEmbed(s, m, "User not found with that username.")
+			return
+		}
+	}
+
+	// Prevent deleting admins
+	if targetUser.StaffLevel >= 4 {
+		c.sendErrorEmbed(s, m, "Cannot delete administrator accounts.")
+		return
+	}
+
+	// Prevent self-deletion
+	if targetUser.UID == admin.UID {
+		c.sendErrorEmbed(s, m, "You cannot delete your own account.")
+		return
+	}
+
+	// Delete the user
+	err = c.services.User.DeleteUser(targetUser.UID, admin.UID)
+	if err != nil {
+		c.sendErrorEmbed(s, m, "Failed to delete user: "+err.Error())
+		return
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "User Deleted",
+		Description: fmt.Sprintf("**%s** (UID: %d) has been completely deleted from the database.", 
+			targetUser.Username, targetUser.UID),
+		Color:       0xff0000,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Deleted By",
+				Value:  fmt.Sprintf("%s (UID: %d)", admin.Username, admin.UID),
+				Inline: true,
+			},
+			{
+				Name:   "User Email",
+				Value:  *targetUser.Email,
+				Inline: true,
+			},
+			{
+				Name:   "Staff Level",
+				Value:  staffLevelNames[targetUser.StaffLevel],
+				Inline: true,
+			},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol user management",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}

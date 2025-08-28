@@ -109,7 +109,7 @@ func (b *Bot) handleUserRegistration(event *models.Event) error {
 
 	ordinal := getOrdinalSuffix(data.UID)
 
-	profileURL := fmt.Sprintf("https://cutz.lol%s", data.Username)
+	profileURL := fmt.Sprintf("https://cutz.lol/%s", data.Username)
 	embed := &discordgo.MessageEmbed{
 		URL:         profileURL,
 		Title:       "New user registered!",
