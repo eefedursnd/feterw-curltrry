@@ -120,7 +120,7 @@ func (ds *DiscordService) LinkDiscordAccount(uid uint, discordID string) error {
 			LinkedAt:        time.Now(),
 		}
 
-		err = ds.UserService.EventService.Publish(models.EventDiscordLinked, eventData)
+		_, err = ds.UserService.EventService.Publish(models.EventDiscordLinked, eventData)
 		if err != nil {
 			log.Printf("Failed to publish discord linked event: %v", err)
 		}

@@ -79,7 +79,13 @@ export default function CustomizationContent({ }: CustomizationContentProps) {
         }
 
         try {
+            // For local preview force reload with cache-buster
+            const cacheBusted = `${fileName.split('?')[0]}?v=${Date.now()}`;
             handleSettingChange(type, fileName);
+            setProfile((prev) => ({ ...prev, [type]: cacheBusted } as any));
+            if (contextUser && updateUser) {
+                updateUser({ profile: { ...contextUser.profile, [type]: fileName } });
+            }
             toast.success(`${type === 'avatar_url' ? 'Avatar' : type === 'background_url' ? 'Background' : type === 'audio_url' ? 'Audio' : 'Banner'} uploaded successfully`);
         } catch (error) {
             console.error('Error handling file upload:', error);
