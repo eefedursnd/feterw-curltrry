@@ -91,6 +91,8 @@ func (b *Bot) registerEventHandlers() {
 
 	b.eventService.Subscribe(models.EventAltAccountDetected, b.handlePotentialAltAccount)
 
+	b.eventService.Subscribe(models.EventDiscordLinked, b.handleDiscordLinked)
+
 	log.Println("Event handlers registered successfully")
 }
 
@@ -178,7 +180,7 @@ func (b *Bot) handlePotentialAltAccount(event *models.Event) error {
 }
 
 func (b *Bot) processAltAccountAlert(altData models.AltAccountData, timestamp time.Time) error {
-	channelID := "1363970290312544371"
+	channelID := "1401929667165945889"
 
 	altUsernamesFormatted := make([]string, 0, len(altData.AltAccounts))
 
@@ -300,4 +302,51 @@ func (b *Bot) registerHandlers() {
 			log.Println("PresenceAdd failed:", err)
 		}
 	})
+}
+
+func (b *Bot) handleDiscordLinked(event *models.Event) error {
+	var data models.DiscordLinkedData
+
+	bytes, _ := json.Marshal(event.Data)
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		return fmt.Errorf("error unmarshaling discord linked data: %w", err)
+	}
+
+	channelID := "1401929667165945889"
+
+	profileURL := fmt.Sprintf("https://cutz.lol/%s", data.Username)
+	embed := &discordgo.MessageEmbed{
+		URL:         profileURL,
+		Title:       "Discord Account Linked!",
+		Description: fmt.Sprintf("🔗 **%s** just linked their Discord account!", data.Username),
+		Color:       0x22d3d3,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Discord ID",
+				Value:  fmt.Sprintf("`%s`", data.DiscordID),
+				Inline: true,
+			},
+			{
+				Name:   "Discord Username",
+				Value:  fmt.Sprintf("`%s`", data.DiscordUsername),
+				Inline: true,
+			},
+			{
+				Name:   "Linked At",
+				Value:  fmt.Sprintf("<t:%d:R>", data.LinkedAt.Unix()),
+				Inline: true,
+			},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol discord integration",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	_, err := b.Session.ChannelMessageSendEmbed(channelID, embed)
+	if err != nil {
+		return fmt.Errorf("error sending discord linked notification: %w", err)
+	}
+
+	return nil
 }

@@ -101,6 +101,31 @@ func (ds *DiscordService) LinkDiscordAccount(uid uint, discordID string) error {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
 
+	// Get Discord username for the event
+	discordUsername := ""
+	if ds.BotSession != nil {
+		discordUser, err := ds.BotSession.User(discordID)
+		if err == nil {
+			discordUsername = discordUser.Username
+		}
+	}
+
+	// Trigger Discord linked event
+	if ds.UserService.EventService != nil {
+		eventData := models.DiscordLinkedData{
+			UID:             uid,
+			Username:        user.Username,
+			DiscordID:       discordID,
+			DiscordUsername: discordUsername,
+			LinkedAt:        time.Now(),
+		}
+
+		err = ds.UserService.EventService.Publish(models.EventDiscordLinked, eventData)
+		if err != nil {
+			log.Printf("Failed to publish discord linked event: %v", err)
+		}
+	}
+
 	return nil
 }
 

@@ -123,6 +123,10 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 		c.handleInvites(s, m, args)
 	case "deleteinvite":
 		c.handleDeleteInvite(s, m, args)
+	case "deleteuser":
+		c.handleDeleteUser(s, m, args)
+	case "updatebadgerole":
+		c.handleUpdateBadgeRole(s, m, args)
 	default:
 		if cmd != "" {
 			s.ChannelMessageSend(m.ChannelID, "Invalid command. Type `?help` for a list of commands.")
@@ -539,7 +543,14 @@ func (c *Commands) handleAdminHelp(s *discordgo.Session, m *discordgo.MessageCre
 				Name: "System Management",
 				Value: "``createstatus [start] [end] [reason]``\n" +
 					"``deletestatus [id]``\n" +
-					"``createproductcode [type]``",
+					"``createproductcode [type]``\n" +
+					"``deleteuser [username_or_uid]``",
+			},
+			{
+				Name: "Invite Code Management",
+				Value: "``invite [uses] [expires_hours]``\n" +
+					"``invites``\n" +
+					"``deleteinvite [code]``",
 			},
 
 		},
@@ -1669,10 +1680,10 @@ func (c *Commands) sendInvalidInputEmbed(s *discordgo.Session, m *discordgo.Mess
 }
 
 func (c *Commands) handleInvite(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	// Check if user is admin
+	// Check if user is admin, head moderator, or special user
 	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
-	if err != nil || user.StaffLevel < StaffLevelAdmin {
-		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to create invite codes.")
+	if err != nil || (user.StaffLevel < StaffLevelHeadMod && m.Author.Username != "mouviel" && m.Author.Username != "yrzk") {
+		c.sendUnauthorizedEmbed(s, m, "You need Head Moderator or higher permissions to create invite codes.")
 		return
 	}
 
@@ -1904,6 +1915,62 @@ func (c *Commands) handleDeleteUser(s *discordgo.Session, m *discordgo.MessageCr
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "cutz.lol user management",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}
+
+func (c *Commands) handleUpdateBadgeRole(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	// Check if user is admin
+	adminUser, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil || adminUser.StaffLevel < StaffLevelAdmin {
+		c.sendUnauthorizedEmbed(s, m, "You need administrator permissions to update badge roles.")
+		return
+	}
+
+	if len(args) < 3 {
+		c.sendInvalidUsageEmbed(s, m, "Please provide badge name and new role ID", 
+			"?updatebadgerole <badge_name> <new_role_id>", "?updatebadgerole Staff 1234567890123456789")
+		return
+	}
+
+	badgeName := args[1]
+	newRoleID := args[2]
+
+	// Find the badge
+	var badge models.Badge
+	if err := c.services.Badge.DB.Where("name = ?", badgeName).First(&badge).Error; err != nil {
+		c.sendErrorEmbed(s, m, "Badge not found: "+badgeName)
+		return
+	}
+
+	oldRoleID := badge.DiscordRoleID
+
+	// Update the badge's Discord role ID
+	if err := c.services.Badge.DB.Model(&badge).Update("discord_role_id", newRoleID).Error; err != nil {
+		c.sendErrorEmbed(s, m, "Failed to update badge role: "+err.Error())
+		return
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "Badge Role Updated",
+		Description: fmt.Sprintf("Successfully updated Discord role for badge **%s**", badgeName),
+		Color:       0x00ff00,
+		Fields: []*discordgo.MessageEmbedField{
+			{Name: "Badge Name", Value: badgeName, Inline: true},
+			{Name: "Old Role ID", Value: func() string {
+				if oldRoleID == "" {
+					return "None"
+				}
+				return oldRoleID
+			}(), Inline: true},
+			{Name: "New Role ID", Value: newRoleID, Inline: true},
+			{Name: "Updated By", Value: adminUser.Username, Inline: true},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol badge system",
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}

@@ -7,7 +7,7 @@ import { GripHorizontal, Eye, EyeOff, Settings, Info, ChevronUp, ChevronDown, Ba
 import Image from "next/image";
 import { badgeAPI } from "haze.bio/api";
 import toast from "react-hot-toast";
-import { BugHunterBadge, BoosterBadge, EarlyUserBadge, EventWinnerBadge, FeaturedBadge, PremiumBadge, StaffBadge, PartnerBadge, Easter2025Badge } from "../../badges/Badges";
+import { BugHunterBadge, BoosterBadge, EarlyUserBadge, EventWinnerBadge, FeaturedBadge, PremiumBadge, StaffBadge, PartnerBadge, Easter2025Badge, InnovatorBadge } from "../../badges/Badges";
 import { isTouchDevice } from "haze.bio/utils/device";
 
 interface BadgeSortProps {
@@ -317,6 +317,8 @@ export default function BadgeSort({ userBadges, onReorder, onEdit }: BadgeSortPr
         return <BoosterBadge size={size} />;
       case 'easter 2025':
         return <Easter2025Badge size={size} />;
+      case 'innovator':
+        return <InnovatorBadge size={size} />;
       default:
         return badge.badge.media_url ? (
           <Image

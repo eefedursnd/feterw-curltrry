@@ -993,13 +993,13 @@ func (us *UserService) DeleteUser(uid uint, deletedBy uint) error {
 	}
 
 	// 8. User views
-	if err := tx.Where("uid = ?", uid).Delete(&models.View{}).Error; err != nil {
+	if err := tx.Where("user_id = ?", uid).Delete(&models.View{}).Error; err != nil {
 		tx.Rollback()
 		return fmt.Errorf("error deleting user views: %w", err)
 	}
 
 	// 9. User reports (as reporter)
-	if err := tx.Where("reporter_id = ?", uid).Delete(&models.Report{}).Error; err != nil {
+	if err := tx.Where("reporter_user_id = ?", uid).Delete(&models.Report{}).Error; err != nil {
 		tx.Rollback()
 		return fmt.Errorf("error deleting user reports: %w", err)
 	}
@@ -1022,8 +1022,8 @@ func (us *UserService) DeleteUser(uid uint, deletedBy uint) error {
 		return fmt.Errorf("error deleting user data exports: %w", err)
 	}
 
-	// 13. User invite codes (as creator)
-	if err := tx.Where("created_by = ?", uid).Delete(&models.InviteCode{}).Error; err != nil {
+	// 13. User invite codes (as creator and user)
+	if err := tx.Where("created_by = ? OR used_by = ?", uid, uid).Delete(&models.InviteCode{}).Error; err != nil {
 		tx.Rollback()
 		return fmt.Errorf("error deleting user invite codes: %w", err)
 	}

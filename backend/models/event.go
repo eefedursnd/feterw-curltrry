@@ -14,6 +14,7 @@ const (
 	EventUserLoggedIn       EventType = "user.logged_in"
 	EventAltAccountDetected EventType = "user.alt_account_detected"
 	EventUserDeleted        EventType = "user.deleted"
+	EventDiscordLinked      EventType = "user.discord_linked"
 )
 
 type Event struct {
@@ -80,4 +81,12 @@ type AltAccountInstance struct {
 	MatchReason     string   `json:"match_reason,omitempty"` // "ip", "browser_fingerprint", "email", etc.
 	SharedIPs       []string `json:"shared_ips,omitempty"`
 	ConfidenceScore float64  `json:"confidence_score,omitempty"` // 0.0-1.0
+}
+
+type DiscordLinkedData struct {
+	UID             uint      `json:"uid"`
+	Username        string    `json:"username"`
+	DiscordID       string    `json:"discord_id"`
+	DiscordUsername string    `json:"discord_username"`
+	LinkedAt        time.Time `json:"linked_at"`
 }
