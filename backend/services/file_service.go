@@ -66,9 +66,9 @@ func (fs *FileService) UploadFile(fileType, fileName string, userID uint, fileBy
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("X-Api-Key", config.R2APIKey)
 
-	// Set up HTTP client with timeout
+	// Set up HTTP client with extended timeout for large uploads
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 5 * time.Minute,
 	}
 
 	log.Printf("Sending request to S3 server...")
@@ -172,7 +172,7 @@ func (fs *FileService) UploadCustomBadgeMedia(badgeID uint, fileName string, fil
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("X-Api-Key", config.R2APIKey) // Changed header name
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 5 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
@@ -220,7 +220,7 @@ func (fs *FileService) UploadCustomSocialMedia(fileName string, fileBytes []byte
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("X-Api-Key", config.R2APIKey)
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 5 * time.Minute}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
@@ -265,7 +265,7 @@ func (fs *FileService) UploadDataExport(fileName string, fileBytes []byte, passw
 	req.Header.Set("X-Password", password)
 
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 5 * time.Minute,
 	}
 
 	resp, err := client.Do(req)
