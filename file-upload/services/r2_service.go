@@ -10,10 +10,14 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
-	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/aws/smithy-go"
 	"github.com/hazebio/haze.bio_file-upload/config"
 	"github.com/hazebio/haze.bio_file-upload/utils"
 )
@@ -25,32 +29,36 @@ type FileMetadata struct {
 }
 
 type R2Service struct {
-	client    *http.Client
-	endpoint  string
-	bucket    string
-	accessKey string
-	secretKey string
+	s3Client *s3.Client
 }
 
 func NewR2Service() (*R2Service, error) {
-	// Create optimized HTTP client for R2
-	client := &http.Client{
-		Timeout: 5 * time.Minute,
-		Transport: &http.Transport{
-			MaxIdleConns:        100,
-			MaxIdleConnsPerHost: 10,
-			IdleConnTimeout:     30 * time.Second,
-			DisableCompression:  true,
-			ForceAttemptHTTP2:   true,
-		},
+	var cfg aws.Config
+	var err error
+
+	// Cloudflare R2 uses S3-compatible API
+	customResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+		return aws.Endpoint{
+			URL: config.R2Endpoint,
+		}, nil
+	})
+
+	cfg, err = awsConfig.LoadDefaultConfig(context.TODO(),
+		awsConfig.WithRegion(config.R2Region),
+		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
+			config.R2AccessKeyId,
+			config.R2SecretAccessKey,
+			"",
+		)),
+		awsConfig.WithEndpointResolverWithOptions(customResolver),
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("unable to load SDK config: %w", err)
 	}
 
 	return &R2Service{
-		client:    client,
-		endpoint:  config.R2Endpoint,
-		bucket:    config.R2BucketName,
-		accessKey: config.R2AccessKeyId,
-		secretKey: config.R2SecretAccessKey,
+		s3Client: s3.NewFromConfig(cfg),
 	}, nil
 }
 
@@ -58,7 +66,6 @@ func (s *R2Service) UploadFile(key string, body io.Reader) error {
 	var contentLength int64
 	var bodyToUse io.Reader = body
 
-	// Optimized streaming approach
 	if seeker, ok := body.(io.Seeker); ok {
 		currentPos, err := seeker.Seek(0, io.SeekCurrent)
 		if err != nil {
@@ -76,9 +83,7 @@ func (s *R2Service) UploadFile(key string, body io.Reader) error {
 		}
 
 		contentLength = size
-		bodyToUse = body // Use original reader for streaming
 	} else {
-		// Only read into memory if we can't seek
 		bodyBytes, err := io.ReadAll(body)
 		if err != nil {
 			return fmt.Errorf("failed to read body: %w", err)
@@ -87,36 +92,14 @@ func (s *R2Service) UploadFile(key string, body io.Reader) error {
 		contentLength = int64(len(bodyBytes))
 	}
 
-	// Create R2 PUT request
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("PUT", url, bodyToUse)
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Set R2 headers
-	req.Header.Set("Content-Type", utils.GetContentType(key))
-	req.Header.Set("Content-Length", fmt.Sprintf("%d", contentLength))
-	req.Header.Set("Cache-Control", "public, max-age=31536000")
-	
-	// Add R2 authentication (using S3-compatible API)
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	// Execute request
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to upload to R2: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("R2 upload failed: status %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	log.Printf("Successfully uploaded %s to R2", key)
-	return nil
+	_, err := s.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket:        aws.String(config.R2BucketName),
+		Key:           aws.String(key),
+		Body:          bodyToUse,
+		ContentLength: aws.Int64(contentLength),
+		ContentType:   aws.String(utils.GetContentType(key)),
+	})
+	return err
 }
 
 func (s *R2Service) UploadTemporaryFile(key string, body io.Reader, expiration time.Duration) error {
@@ -172,7 +155,6 @@ func (s *R2Service) uploadFileWithMetadata(key string, body io.Reader, metadataJ
 		}
 
 		contentLength = size
-		bodyToUse = body
 	} else {
 		bodyBytes, err := io.ReadAll(body)
 		if err != nil {
@@ -182,162 +164,81 @@ func (s *R2Service) uploadFileWithMetadata(key string, body io.Reader, metadataJ
 		contentLength = int64(len(bodyBytes))
 	}
 
-	// Create R2 PUT request with metadata
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("PUT", url, bodyToUse)
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
+	metadata := map[string]string{
+		"file-metadata": metadataJSON,
 	}
 
-	// Set R2 headers
-	req.Header.Set("Content-Type", utils.GetContentType(key))
-	req.Header.Set("Content-Length", fmt.Sprintf("%d", contentLength))
-	req.Header.Set("X-Amz-Meta-File-Metadata", metadataJSON)
-	req.Header.Set("Cache-Control", "public, max-age=31536000")
-	
-	// Add R2 authentication
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	// Execute request
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to upload to R2: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("R2 upload failed: status %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	log.Printf("Successfully uploaded %s to R2 with metadata", key)
-	return nil
+	_, err := s.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket:        aws.String(config.R2BucketName),
+		Key:           aws.String(key),
+		Body:          bodyToUse,
+		ContentLength: aws.Int64(contentLength),
+		ContentType:   aws.String(utils.GetContentType(key)),
+		Metadata:      metadata,
+	})
+	return err
 }
 
-func (s *R2Service) GetFile(key string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Add R2 authentication
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get file from R2: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
-		return nil, fmt.Errorf("R2 get failed: status %d", resp.StatusCode)
-	}
-
-	return resp, nil
+func (s *R2Service) GetFile(key string) (*s3.GetObjectOutput, error) {
+	result, err := s.s3Client.GetObject(context.TODO(), &s3.GetObjectInput{
+		Bucket: aws.String(config.R2BucketName),
+		Key:    aws.String(key),
+	})
+	return result, err
 }
 
-func (s *R2Service) GetFileInfo(key string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("HEAD", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+func (s *R2Service) GetFileInfo(key string) (*s3.HeadObjectOutput, error) {
+	input := &s3.HeadObjectInput{
+		Bucket: aws.String(config.R2BucketName),
+		Key:    aws.String(key),
 	}
 
-	// Add R2 authentication
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get file info from R2: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
-		return nil, fmt.Errorf("R2 head failed: status %d", resp.StatusCode)
-	}
-
-	return resp, nil
+	return s.s3Client.HeadObject(context.TODO(), input)
 }
 
-func (s *R2Service) GetFileRange(key string, start, end int64) (*http.Response, error) {
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Set range header
+func (s *R2Service) GetFileRange(key string, start, end int64) (*s3.GetObjectOutput, error) {
 	rangeString := fmt.Sprintf("bytes=%d-%d", start, end)
-	req.Header.Set("Range", rangeString)
-
-	// Add R2 authentication
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get file range from R2: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusPartialContent && resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
-		return nil, fmt.Errorf("R2 range request failed: status %d", resp.StatusCode)
-	}
-
-	return resp, nil
+	result, err := s.s3Client.GetObject(context.TODO(), &s3.GetObjectInput{
+		Bucket: aws.String(config.R2BucketName),
+		Key:    aws.String(key),
+		Range:  aws.String(rangeString),
+	})
+	return result, err
 }
 
 func (s *R2Service) DeleteFile(key string) error {
-	url := fmt.Sprintf("%s/%s", s.endpoint, key)
-	req, err := http.NewRequest("DELETE", url, nil)
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Add R2 authentication
-	req.Header.Set("Authorization", fmt.Sprintf("AWS4-HMAC-SHA256 Credential=%s", s.accessKey))
-	req.Header.Set("X-Amz-Date", time.Now().Format("20060102T150405Z"))
-
-	resp, err := s.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to delete file from R2: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("R2 delete failed: status %d, response: %s", resp.StatusCode, string(body))
-	}
-
-	log.Printf("Successfully deleted %s from R2", key)
-	return nil
+	_, err := s.s3Client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+		Bucket: aws.String(config.R2BucketName),
+		Key:    aws.String(key),
+	})
+	return err
 }
 
 func (s *R2Service) FileExists(key string) (bool, error) {
-	resp, err := s.GetFileInfo(key)
+	_, err := s.s3Client.HeadObject(context.TODO(), &s3.HeadObjectInput{
+		Bucket: aws.String(config.R2BucketName),
+		Key:    aws.String(key),
+	})
+
 	if err != nil {
-		if strings.Contains(err.Error(), "404") {
-			return false, nil
+		var apiErr smithy.APIError
+		if errors.As(err, &apiErr) {
+			if apiErr.ErrorCode() == "NotFound" {
+				return false, nil
+			}
 		}
 		return false, err
 	}
-	defer resp.Body.Close()
 	return true, nil
 }
 
 func (s *R2Service) GetFileMetadata(key string) (*FileMetadata, error) {
-	resp, err := s.GetFileInfo(key)
+	headObj, err := s.GetFileInfo(key)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 
-	metadataJSON := resp.Header.Get("X-Amz-Meta-File-Metadata")
-	if metadataJSON != "" {
+	if metadataJSON, ok := headObj.Metadata["file-metadata"]; ok {
 		var metadata FileMetadata
 		if err := json.Unmarshal([]byte(metadataJSON), &metadata); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal metadata: %w", err)
@@ -348,6 +249,42 @@ func (s *R2Service) GetFileMetadata(key string) (*FileMetadata, error) {
 	return &FileMetadata{
 		CreatedAt: time.Now(),
 	}, nil
+}
+
+func (s *R2Service) S3Client() *s3.Client {
+	return s.s3Client
+}
+
+func (s *R2Service) FixContentTypes() error {
+	paginator := s3.NewListObjectsV2Paginator(s.s3Client, &s3.ListObjectsV2Input{
+		Bucket: aws.String(config.R2BucketName),
+	})
+
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(context.TODO())
+		if err != nil {
+			return err
+		}
+
+		for _, obj := range page.Contents {
+			key := *obj.Key
+			contentType := utils.GetContentType(key)
+
+			_, err := s.s3Client.CopyObject(context.TODO(), &s3.CopyObjectInput{
+				Bucket:            aws.String(config.R2BucketName),
+				CopySource:        aws.String(config.R2BucketName + "/" + key),
+				Key:               aws.String(key),
+				ContentType:       aws.String(contentType),
+				MetadataDirective: types.MetadataDirectiveReplace,
+			})
+			if err != nil {
+				log.Printf("Error updating Content-Type for %s: %v", key, err)
+			} else {
+				log.Printf("Updated Content-Type for %s to %s", key, contentType)
+			}
+		}
+	}
+	return nil
 }
 
 func (s *R2Service) UploadTemporaryProtectedFile(key string, body io.Reader, password string, expiration time.Duration) error {
@@ -369,9 +306,35 @@ func (s *R2Service) UploadTemporaryProtectedFile(key string, body io.Reader, pas
 }
 
 func (s *R2Service) CleanupExpiredFiles() error {
-	// R2 doesn't have a direct list operation, so we'll implement this differently
-	// For now, we'll rely on R2's automatic cleanup for expired files
-	log.Println("R2 automatic cleanup is handled by Cloudflare")
+	paginator := s3.NewListObjectsV2Paginator(s.s3Client, &s3.ListObjectsV2Input{
+		Bucket: aws.String(config.R2BucketName),
+	})
+
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(context.TODO())
+		if err != nil {
+			return err
+		}
+
+		for _, obj := range page.Contents {
+			key := *obj.Key
+
+			metadata, err := s.GetFileMetadata(key)
+			if err != nil {
+				log.Printf("Error getting metadata for %s: %v", key, err)
+				continue
+			}
+
+			if metadata.ExpiresAt != nil && metadata.ExpiresAt.Before(time.Now()) {
+				log.Printf("Deleting expired file: %s (expired at %v)", key, metadata.ExpiresAt)
+
+				if err := s.DeleteFile(key); err != nil {
+					log.Printf("Error deleting expired file %s: %v", key, err)
+				}
+			}
+		}
+	}
+
 	return nil
 }
 

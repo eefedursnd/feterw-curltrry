@@ -71,10 +71,10 @@ func (fs *FileService) UploadFile(fileType, fileName string, userID uint, fileBy
 		Timeout: 5 * time.Minute,
 	}
 
-	log.Printf("Sending request to R2 service...")
+	log.Printf("Sending request to S3 server...")
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("Error sending request to R2: %v", err)
+		log.Printf("Error sending request to S3: %v", err)
 		return "", fmt.Errorf("error communicating with storage server: %w", err)
 	}
 	defer resp.Body.Close()
@@ -86,10 +86,10 @@ func (fs *FileService) UploadFile(fileType, fileName string, userID uint, fileBy
 		return "", fmt.Errorf("error reading server response: %w", err)
 	}
 
-	log.Printf("R2 service responded with status: %d", resp.StatusCode)
+	log.Printf("S3 server responded with status: %d", resp.StatusCode)
 
 	if resp.StatusCode != http.StatusOK {
-		log.Printf("R2 upload failed. Status: %d, Response: %s", resp.StatusCode, string(body))
+		log.Printf("S3 upload failed. Status: %d, Response: %s", resp.StatusCode, string(body))
 		return "", fmt.Errorf("failed to upload file: error code: %d, response: %s",
 			resp.StatusCode, string(body))
 	}

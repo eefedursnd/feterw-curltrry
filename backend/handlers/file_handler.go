@@ -105,7 +105,6 @@ func (h *FileHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 	userID := middlewares.GetUserIDFromContext(r.Context())
 
 	fileURL, err := h.FileService.UploadFile(fileType, fileName, userID, fileBytes)
-	
 	if err != nil {
 		log.Println("Error uploading file:", err)
 		utils.RespondError(w, http.StatusInternalServerError, "Failed to upload file")
