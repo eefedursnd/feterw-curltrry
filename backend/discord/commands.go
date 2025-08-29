@@ -127,6 +127,8 @@ func (c *Commands) Execute(s *discordgo.Session, m *discordgo.MessageCreate) {
 		c.handleDeleteUser(s, m, args)
 	case "updatebadgerole":
 		c.handleUpdateBadgeRole(s, m, args)
+	case "claim":
+		c.handleClaim(s, m)
 	default:
 		if cmd != "" {
 			s.ChannelMessageSend(m.ChannelID, "Invalid command. Type `?help` for a list of commands.")
@@ -310,7 +312,7 @@ func (c *Commands) handleHelp(s *discordgo.Session, m *discordgo.MessageCreate) 
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:  "User Commands",
-				Value: "``profile [username]``\n``uidprofile [user_id]``\n``me``\n``leaderboard``\n``stats``\n``status``\n``generate``\n``timediff``\n``help``",
+				Value: "``profile [username]``\n``uidprofile [user_id]``\n``me``\n``leaderboard``\n``stats``\n``status``\n``generate``\n``timediff``\n``claim``\n``help``",
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
@@ -1976,4 +1978,73 @@ func (c *Commands) handleUpdateBadgeRole(s *discordgo.Session, m *discordgo.Mess
 	}
 
 	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+}
+
+func (c *Commands) handleClaim(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// Check if user has Discord account linked
+	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
+	if err != nil {
+		c.sendErrorEmbed(s, m, "You need to link your Discord account to cutz.lol to claim the Early User badge.\n\nVisit https://cutz.lol/settings to link your account.")
+		return
+	}
+
+	// Check if user already has the Early User badge
+	badges, err := c.services.Badge.GetUserBadges(user.UID)
+	if err != nil {
+		c.sendErrorEmbed(s, m, "Failed to check your badges. Please try again later.")
+		return
+	}
+
+	// Check if user already has Early User badge
+	for _, badge := range badges {
+		if badge.Badge.Name == "Early User" {
+			c.sendErrorEmbed(s, m, "You already have the Early User badge!")
+			return
+		}
+	}
+
+	// Try to assign the Early User badge
+	err = c.services.Badge.AssignBadge(user.UID, "Early User")
+	if err != nil {
+		if err.Error() == "badge not found" {
+			c.sendErrorEmbed(s, m, "Early User badge is not available at the moment. Please contact an administrator.")
+		} else {
+			c.sendErrorEmbed(s, m, fmt.Sprintf("Failed to claim Early User badge: %v", err))
+		}
+		return
+	}
+
+	// Success embed
+	embed := &discordgo.MessageEmbed{
+		Title:       "Early User Badge Claimed! 🎉",
+		Description: fmt.Sprintf("Congratulations **%s**! You've successfully claimed your Early User badge!", user.Username),
+		Color:       0x00ff00,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Badge",
+				Value:  "Early User",
+				Inline: true,
+			},
+			{
+				Name:   "Username",
+				Value:  user.Username,
+				Inline: true,
+			},
+			{
+				Name:   "Profile",
+				Value:  fmt.Sprintf("[View Profile](https://cutz.lol/%s)", user.Username),
+				Inline: true,
+			},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol Early User Program",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	}
+
+	s.ChannelMessageSendEmbed(m.ChannelID, embed)
+
+	// Log the claim
+	log.Printf("Early User badge claimed by %s (UID: %d, Discord ID: %s)", 
+		user.Username, user.UID, m.Author.ID)
 }

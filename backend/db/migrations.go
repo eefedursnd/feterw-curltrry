@@ -44,6 +44,12 @@ func StartMigration(db *gorm.DB) error {
 		return err
 	}
 
+	// Create Early User badge if it doesn't exist
+	if err := CreateEarlyUserBadge(db); err != nil {
+		log.Printf("Error creating Early User badge: %v", err)
+		return err
+	}
+
 	log.Println("Migration completed")
 	return nil
 }
@@ -202,5 +208,34 @@ func DisableParallaxForNonPremiumUsers(db *gorm.DB) error {
 	}
 
 	log.Printf("Migration completed: Disabled parallax effect for %d non-premium users", disabledCount)
+	return nil
+}
+
+func CreateEarlyUserBadge(db *gorm.DB) error {
+	log.Println("Starting migration: Creating Early User badge")
+
+	// Check if Early User badge already exists
+	var existingBadge models.Badge
+	if err := db.Where("name = ?", "Early User").First(&existingBadge).Error; err == nil {
+		log.Println("Early User badge already exists, skipping creation")
+		return nil
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		log.Printf("Error checking for existing Early User badge: %v", err)
+		return err
+	}
+
+	// Create the Early User badge
+	earlyUserBadge := models.Badge{
+		Name:     "Early User",
+		MediaURL: "https://cdn.discordapp.com/emojis/1408558248285700156.webp?size=96&quality=lossless",
+		IsCustom: false,
+	}
+
+	if err := db.Create(&earlyUserBadge).Error; err != nil {
+		log.Printf("Error creating Early User badge: %v", err)
+		return err
+	}
+
+	log.Println("Early User badge created successfully")
 	return nil
 }
