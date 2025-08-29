@@ -1984,7 +1984,7 @@ func (c *Commands) handleClaim(s *discordgo.Session, m *discordgo.MessageCreate)
 	// Check if user has Discord account linked
 	user, err := c.services.Discord.GetUserByDiscordID(m.Author.ID)
 	if err != nil {
-		c.sendErrorEmbed(s, m, "You need to link your Discord account to cutz.lol to claim the Early User badge.\n\nVisit https://cutz.lol/settings to link your account.")
+		c.sendErrorEmbed(s, m, "You need to link your Discord account to cutz.lol to claim the Early User badge.\n\nVisit https://cutz.lol/dashboard/settings to link your account.")
 		return
 	}
 
@@ -2016,9 +2016,9 @@ func (c *Commands) handleClaim(s *discordgo.Session, m *discordgo.MessageCreate)
 
 	// Success embed
 	embed := &discordgo.MessageEmbed{
-		Title:       "Early User Badge Claimed! 🎉",
+		Title:       "Early User Badge Claimed! <:1443purpleverifed:1408558279235338260>",
 		Description: fmt.Sprintf("Congratulations **%s**! You've successfully claimed your Early User badge!", user.Username),
-		Color:       0x00ff00,
+		Color:       0x8B5CF6,
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name:   "Badge",

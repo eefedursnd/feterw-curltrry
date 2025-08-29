@@ -15,6 +15,7 @@ const (
 	EventAltAccountDetected EventType = "user.alt_account_detected"
 	EventUserDeleted        EventType = "user.deleted"
 	EventDiscordLinked      EventType = "user.discord_linked"
+	EventRedeemCodeUsed     EventType = "redeem.code_used"
 )
 
 type Event struct {
@@ -89,4 +90,12 @@ type DiscordLinkedData struct {
 	DiscordID       string    `json:"discord_id"`
 	DiscordUsername string    `json:"discord_username"`
 	LinkedAt        time.Time `json:"linked_at"`
+}
+
+type RedeemCodeData struct {
+	UID         uint      `json:"uid"`
+	Username    string    `json:"username"`
+	Code        string    `json:"code"`
+	ProductName string    `json:"product_name"`
+	RedeemedAt  time.Time `json:"redeemed_at"`
 }

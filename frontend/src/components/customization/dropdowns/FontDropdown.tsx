@@ -18,6 +18,7 @@ const fonts = [
     { id: 'minecraft', name: 'Minecraft', sample: 'Pixelated & Fun' },
     { id: 'jetbrains-mono', name: 'JetBrains Mono', sample: 'Monospace & Tech' },
     { id: 'drippy', name: 'Drippy', sample: 'Gothic & Dramatic' },
+    { id: 'anton', name: 'Anton', sample: 'Bold & Impactful' },
     { id: 'grand-theft-auto', name: 'Grand Theft Auto', sample: 'Gritty & Urban', premium: true },
 ];
 
@@ -61,6 +62,7 @@ export default function FontDropdown({ profile, onFontChange, isPremium }: FontD
             case 'jetbrains-mono': return 'font-jetbrains';
             case 'grand-theft-auto': return 'font-grand-theft-auto';
             case 'drippy': return 'font-drippy';
+            case 'anton': return 'font-anton';
             default: return 'font-poppins';
         }
     };

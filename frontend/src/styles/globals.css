@@ -284,6 +284,12 @@ html {
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Anton';
+  src: url('/fonts/Anton-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
 .font-poppins {
   font-family: 'Poppins', sans-serif;
 }
@@ -306,6 +312,10 @@ html {
 
 .font-grand-theft-auto {
   font-family: 'Pricedown Bl', sans-serif;
+}
+
+.font-anton {
+  font-family: 'Anton', sans-serif;
 }
 
 /* Events */

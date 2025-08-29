@@ -93,6 +93,8 @@ func (b *Bot) registerEventHandlers() {
 
 	b.eventService.Subscribe(models.EventDiscordLinked, b.handleDiscordLinked)
 
+	b.eventService.Subscribe(models.EventRedeemCodeUsed, b.handleRedeemCodeUsed)
+
 	log.Println("Event handlers registered successfully")
 }
 
@@ -346,6 +348,58 @@ func (b *Bot) handleDiscordLinked(event *models.Event) error {
 	_, err := b.Session.ChannelMessageSendEmbed(channelID, embed)
 	if err != nil {
 		return fmt.Errorf("error sending discord linked notification: %w", err)
+	}
+
+	return nil
+}
+
+func (b *Bot) handleRedeemCodeUsed(event *models.Event) error {
+	var data models.RedeemCodeData
+
+	bytes, _ := json.Marshal(event.Data)
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		return fmt.Errorf("error unmarshaling redeem code data: %w", err)
+	}
+
+	channelID := "1401929667165945889"
+
+	profileURL := fmt.Sprintf("https://cutz.lol/%s", data.Username)
+	embed := &discordgo.MessageEmbed{
+		URL:         profileURL,
+		Title:       "Premium Code Redeemed! 💎",
+		Description: fmt.Sprintf("**%s** just redeemed a **%s** code! <:1443purpleverifed:1408558279235338260>", data.Username, data.ProductName),
+		Color:       0x8B5CF6,
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "User",
+				Value:  data.Username,
+				Inline: true,
+			},
+			{
+				Name:   "Product",
+				Value:  data.ProductName,
+				Inline: true,
+			},
+			{
+				Name:   "Code",
+				Value:  fmt.Sprintf("`%s`", data.Code),
+				Inline: true,
+			},
+			{
+				Name:   "Profile",
+				Value:  fmt.Sprintf("[View Profile](%s)", profileURL),
+				Inline: true,
+			},
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "cutz.lol Premium Redemption",
+		},
+		Timestamp: data.RedeemedAt.Format(time.RFC3339),
+	}
+
+	_, err := b.Session.ChannelMessageSendEmbed(channelID, embed)
+	if err != nil {
+		return fmt.Errorf("error sending redeem code notification: %w", err)
 	}
 
 	return nil

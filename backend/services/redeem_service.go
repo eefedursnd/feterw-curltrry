@@ -18,6 +18,7 @@ type RedeemService struct {
 	Client       *redis.Client
 	UserService  *UserService
 	BadgeService *BadgeService
+	EventService *EventService
 }
 
 func NewRedeemService(db *gorm.DB, client *redis.Client) *RedeemService {
@@ -137,6 +138,24 @@ func (rs *RedeemService) RedeemCode(uid uint, code string) (string, error) {
 		"used_at": redeemCode.UsedAt,
 	}).Error; err != nil {
 		return "", err
+	}
+
+	// Publish redeem code event
+	if rs.EventService != nil {
+		user, err := rs.UserService.GetUserByUID(uid)
+		if err == nil {
+			redeemData := models.RedeemCodeData{
+				UID:         uid,
+				Username:    user.Username,
+				Code:        code,
+				ProductName: productData.ProductName,
+				RedeemedAt:  time.Now(),
+			}
+
+			if _, err := rs.EventService.Publish(models.EventRedeemCodeUsed, redeemData); err != nil {
+				fmt.Printf("Error publishing redeem code event: %v\n", err)
+			}
+		}
 	}
 
 	return productData.ProductName, nil

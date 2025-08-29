@@ -55,6 +55,7 @@ func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, 
 	viewService := services.NewViewService(db, redisClient, profileService, analyticsService)
 	viewHandler := handlers.NewViewHandler(viewService)
 	redeemService := services.NewRedeemService(db, redisClient)
+	redeemService.EventService = eventService
 	redeemHandler := handlers.NewRedeemHandler(redeemService, userService)
 	punishService := services.NewPunishService(db, redisClient)
 	punishHandler := handlers.NewPunishHandler(punishService, redeemService)
