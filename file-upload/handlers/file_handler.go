@@ -1,21 +1,19 @@
 package handlers
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
-	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"io"
 
 	"github.com/gorilla/mux"
 	"github.com/hazebio/haze.bio_file-upload/config"
@@ -79,12 +77,7 @@ func (fh *FileHandler) HandleFileOperations(w http.ResponseWriter, r *http.Reque
 			fh.handlePutFile(w, r, key)
 		}
 	case http.MethodGet:
-		// Check if this is a poster request
-		if strings.HasSuffix(r.URL.Path, "/poster") {
-			fh.handleGetVideoPoster(w, r, key)
-		} else {
-			fh.handleGetFile(w, r, key)
-		}
+		fh.handleGetFile(w, r, key)
 	case http.MethodPost:
 		if strings.HasSuffix(r.URL.Path, "/verify") {
 			fh.handleVerifyPassword(w, r, key)
@@ -395,92 +388,6 @@ func (fh *FileHandler) handleDeleteFile(w http.ResponseWriter, key string) {
 	}
 
 	utils.RespondSuccess(w, "Deleted!", nil)
-}
-
-func (fh *FileHandler) handleGetVideoPoster(w http.ResponseWriter, r *http.Request, key string) {
-	// Remove /poster suffix from key
-	key = strings.TrimSuffix(key, "/poster")
-	
-	exists, err := fh.R2Service.FileExists(key)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to check file: "+err.Error())
-		return
-	}
-
-	if !exists {
-		utils.RespondError(w, http.StatusNotFound, "Object not found")
-		return
-	}
-
-	// Check if file is a video
-	ext := strings.ToLower(filepath.Ext(key))
-	if ext != ".mp4" && ext != ".webm" && ext != ".mov" {
-		utils.RespondError(w, http.StatusBadRequest, "File is not a supported video format")
-		return
-	}
-
-	// Get video file from R2
-	obj, err := fh.R2Service.GetFile(key)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to get video file: "+err.Error())
-		return
-	}
-	defer obj.Body.Close()
-
-	// Create temporary file for ffmpeg processing
-	tempVideoPath := fmt.Sprintf("/tmp/video_%d%s", time.Now().UnixNano(), ext)
-	tempPosterPath := fmt.Sprintf("/tmp/poster_%d.jpg", time.Now().UnixNano())
-
-	// Save video to temp file
-	videoData, err := io.ReadAll(obj.Body)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to read video data: "+err.Error())
-		return
-	}
-
-	err = os.WriteFile(tempVideoPath, videoData, 0644)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to create temp video file: "+err.Error())
-		return
-	}
-	defer os.Remove(tempVideoPath)
-
-	// Generate poster using ffmpeg
-	cmd := exec.Command("ffmpeg", 
-		"-i", tempVideoPath,
-		"-vframes", "1",
-		"-q:v", "2",
-		"-y", // Overwrite output file
-		tempPosterPath,
-	)
-
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-
-	err = cmd.Run()
-	if err != nil {
-		log.Printf("FFmpeg error: %s", stderr.String())
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to generate poster: "+err.Error())
-		return
-	}
-	defer os.Remove(tempPosterPath)
-
-	// Read generated poster
-	posterData, err := os.ReadFile(tempPosterPath)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to read poster file: "+err.Error())
-		return
-	}
-
-	// Set headers
-	w.Header().Set("Content-Type", "image/jpeg")
-	w.Header().Set("Content-Length", strconv.Itoa(len(posterData)))
-	w.Header().Set("Cache-Control", "public, max-age=86400, immutable")
-	w.Header().Set("Access-Control-Allow-Origin", config.Origin)
-	w.Header().Set("Cross-Origin-Resource-Policy", "cross-origin")
-
-	// Write poster data
-	w.Write(posterData)
 }
 
 func getContentTypeByExtension(filename string) string {

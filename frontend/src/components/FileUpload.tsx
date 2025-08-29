@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X, FileIcon, ImageIcon, Film, Music, Loader2 } from 'lucide-react';
 import { fileAPI } from 'haze.bio/api';
@@ -126,7 +126,6 @@ export default function FileUpload({
 }: FileUploadProps) {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [videoPoster, setVideoPoster] = useState('');
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
@@ -188,7 +187,6 @@ export default function FileUpload({
 
             await fileAPI.deleteFile(currentUrl);
             onUpload('');
-            setVideoPoster('');
         } catch (error) {
             console.error('Error removing file:', error);
             toast.error('Failed to remove file');
@@ -224,17 +222,6 @@ export default function FileUpload({
 
     const extension = getFileExtension(currentUrl);
 
-    // Video poster oluşturma
-    useEffect(() => {
-        if (extension === 'mp4' && currentUrl) {
-            // Backend'den poster image al
-            const posterUrl = `${currentUrl}/poster`;
-            setVideoPoster(posterUrl);
-        } else {
-            setVideoPoster('');
-        }
-    }, [currentUrl, extension]);
-
     return (
         <div className="space-y-2 sm:space-y-3">
             <div
@@ -252,45 +239,11 @@ export default function FileUpload({
                     <div className="relative group h-full" {...getRootProps()}>
                         <input {...getInputProps()} />
                         {extension === 'mp4' ? (
-                            <div className="relative w-full h-full">
-                                {/* Video poster image */}
-                                {videoPoster ? (
-                                    <Image
-                                        src={videoPoster}
-                                        draggable="false"
-                                        alt="Video preview"
-                                        fill
-                                        priority
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 100vw, 640px"
-                                    />
-                                ) : (
-                                    <video
-                                        src={currentUrl}
-                                        className="w-full h-full object-cover"
-                                        preload="metadata"
-                                        muted
-                                        playsInline
-                                    />
-                                )}
-                                
-                                {/* Play button overlay */}
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="w-12 h-12 bg-purple-600/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-purple-400/30">
-                                        <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8 5v14l11-7z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                {/* Video indicator */}
-                                <div className="absolute bottom-2 left-2 bg-black/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs border border-zinc-800/50">
-                                    <div className="flex items-center gap-1">
-                                        <Film className="w-3 h-3 text-purple-400" />
-                                        <span>Video</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <video
+                                src={currentUrl}
+                                className="w-full h-full object-cover"
+                                poster={currentUrl + '?poster=true'}
+                            />
                         ) : ['mp3', 'wav', 'ogg'].includes(extension) ? (
                             <div className="flex items-center justify-center h-full bg-black/30">
                                 <Music className="w-12 h-12 text-purple-400/50" />
