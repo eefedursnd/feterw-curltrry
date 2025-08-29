@@ -38,6 +38,7 @@ func StartMigration(db *gorm.DB) error {
 		&models.Event{},
 		&models.DataExport{},
 		&models.InviteCode{},
+		&models.Analytics{},
 	)
 	if err != nil {
 		log.Println("Error migrating models:", err)

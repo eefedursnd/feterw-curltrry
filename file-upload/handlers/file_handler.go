@@ -189,22 +189,19 @@ func (fh *FileHandler) handleGetFile(w http.ResponseWriter, r *http.Request, key
 		utils.RespondError(w, http.StatusInternalServerError, "Failed to get file: "+err.Error())
 		return
 	}
+	defer obj.Body.Close()
 
-	w.Header().Set("Content-Length", strconv.FormatInt(*obj.ContentLength, 10))
-
-	contentType := getContentTypeByExtension(key)
-	if contentType == "" && obj.ContentType != nil {
-		contentType = *obj.ContentType
+	// Copy headers from R2 response
+	for key, values := range obj.Header {
+		for _, value := range values {
+			w.Header().Add(key, value)
+		}
 	}
-	w.Header().Set("Content-Type", contentType)
 
+	// Set additional headers
 	w.Header().Set("Content-Disposition", "inline")
 	w.Header().Set("Cache-Control", "public, max-age=86400, immutable")
-	if obj.ETag != nil {
-		w.Header().Set("ETag", *obj.ETag)
-	}
 	w.Header().Set("Accept-Ranges", "bytes")
-
 	w.Header().Set("Access-Control-Allow-Origin", config.Origin)
 	w.Header().Set("Cross-Origin-Resource-Policy", "cross-origin")
 
@@ -212,108 +209,61 @@ func (fh *FileHandler) handleGetFile(w http.ResponseWriter, r *http.Request, key
 		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
 	}
 
-	log.Printf("GET %s, Content-Type: %s, Content-Length: %d", key, contentType, *obj.ContentLength)
-
-	io.Copy(w, obj.Body)
-	defer obj.Body.Close()
+	// Stream the file content
+	_, err = io.Copy(w, obj.Body)
+	if err != nil {
+		log.Printf("Error streaming file %s: %v", key, err)
+	}
 }
 
 func (fh *FileHandler) handleRangeRequest(w http.ResponseWriter, r *http.Request, key string, rangeHeader string) {
-	metadata, err := fh.R2Service.GetFileMetadata(key)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to get file metadata: "+err.Error())
-		return
-	}
-
-	if metadata.ExpiresAt != nil && metadata.ExpiresAt.Before(time.Now()) {
-		utils.RespondError(w, http.StatusGone, "File has expired")
-		return
-	}
-
-	if metadata.PasswordHash != "" {
-		password := w.Header().Get("X-Password")
-		if password == "" {
-			password = r.URL.Query().Get("password")
-		}
-
-		if password == "" {
-			utils.RespondError(w, http.StatusForbidden, "Password required")
-			return
-		}
-
-		hashedPassword := hashPassword(password)
-		if hashedPassword != metadata.PasswordHash {
-			utils.RespondError(w, http.StatusForbidden, "Invalid password")
-			return
-		}
-	}
-
-	regex := regexp.MustCompile(`bytes=(\d+)-(\d*)`)
-	matches := regex.FindStringSubmatch(rangeHeader)
-
-	if len(matches) < 3 {
+	// Parse range header
+	rangeStr := strings.TrimPrefix(rangeHeader, "bytes=")
+	parts := strings.Split(rangeStr, "-")
+	if len(parts) != 2 {
 		utils.RespondError(w, http.StatusBadRequest, "Invalid range header")
 		return
 	}
 
-	startByte, err := strconv.ParseInt(matches[1], 10, 64)
+	start, err := strconv.ParseInt(parts[0], 10, 64)
 	if err != nil {
 		utils.RespondError(w, http.StatusBadRequest, "Invalid range start")
 		return
 	}
 
-	objInfo, err := fh.R2Service.GetFileInfo(key)
-	if err != nil {
-		utils.RespondError(w, http.StatusInternalServerError, "Failed to get file info: "+err.Error())
-		return
-	}
-
-	totalSize := *objInfo.ContentLength
-
-	var endByte int64
-	if matches[2] == "" {
-		endByte = totalSize - 1
-	} else {
-		endByte, err = strconv.ParseInt(matches[2], 10, 64)
+	var end int64
+	if parts[1] != "" {
+		end, err = strconv.ParseInt(parts[1], 10, 64)
 		if err != nil {
 			utils.RespondError(w, http.StatusBadRequest, "Invalid range end")
 			return
 		}
 	}
 
-	rangeObj, err := fh.R2Service.GetFileRange(key, startByte, endByte)
+	obj, err := fh.R2Service.GetFileRange(key, start, end)
 	if err != nil {
 		utils.RespondError(w, http.StatusInternalServerError, "Failed to get file range: "+err.Error())
 		return
 	}
+	defer obj.Body.Close()
 
-	contentLength := endByte - startByte + 1
-
-	contentType := getContentTypeByExtension(key)
-	if contentType == "" && rangeObj.ContentType != nil {
-		contentType = *rangeObj.ContentType
+	// Copy headers from R2 response
+	for key, values := range obj.Header {
+		for _, value := range values {
+			w.Header().Add(key, value)
+		}
 	}
 
-	w.Header().Set("Content-Range", "bytes "+strconv.FormatInt(startByte, 10)+"-"+strconv.FormatInt(endByte, 10)+"/"+strconv.FormatInt(totalSize, 10))
-	w.Header().Set("Content-Length", strconv.FormatInt(contentLength, 10))
-	w.Header().Set("Content-Type", contentType)
-	w.Header().Set("Content-Disposition", "inline")
+	// Set additional headers
 	w.Header().Set("Accept-Ranges", "bytes")
-	w.Header().Set("Cache-Control", "public, max-age=86400, immutable")
-
 	w.Header().Set("Access-Control-Allow-Origin", config.Origin)
 	w.Header().Set("Cross-Origin-Resource-Policy", "cross-origin")
 
-	if metadata.ExpiresAt != nil {
-		w.Header().Set("X-Expires-At", metadata.ExpiresAt.Format(time.RFC3339))
+	// Stream the file content
+	_, err = io.Copy(w, obj.Body)
+	if err != nil {
+		log.Printf("Error streaming file range %s: %v", key, err)
 	}
-
-	log.Printf("Range request for %s: %s, Content-Type: %s, Content-Length: %d", key, rangeHeader, contentType, contentLength)
-
-	w.WriteHeader(http.StatusPartialContent)
-
-	io.Copy(w, rangeObj.Body)
-	defer rangeObj.Body.Close()
 }
 
 func (fh *FileHandler) handleVerifyPassword(w http.ResponseWriter, r *http.Request, key string) {

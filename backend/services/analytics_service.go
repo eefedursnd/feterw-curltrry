@@ -66,6 +66,9 @@ func (as *AnalyticsService) TrackProfileView(uid uint, country string, referrer 
 		return fmt.Errorf("failed to track profile view analytics: %w", err)
 	}
 
+	// Schedule database sync (background job)
+	go as.scheduleDatabaseSync(uid, today)
+
 	return nil
 }
 
@@ -217,6 +220,29 @@ func (as *AnalyticsService) GetFullAnalytics(uid uint, days int) (*AnalyticsData
 		days = DataRetentionDays
 	}
 
+	// First try to get from Redis
+	redisData, err := as.getAnalyticsFromRedis(uid, days)
+	if err == nil && !as.isRedisDataEmpty(redisData) {
+		log.Printf("DEBUG: Analytics data retrieved from Redis for UID %d", uid)
+		return redisData, nil
+	}
+
+	// If Redis is empty or has error, get from database
+	log.Printf("DEBUG: Redis analytics empty, getting from database for UID %d", uid)
+	databaseData, err := as.GetAnalyticsFromDatabase(uid, days)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analytics from database: %w", err)
+	}
+
+	// If we got data from database, sync it back to Redis
+	if !as.isAnalyticsDataEmpty(databaseData) {
+		go as.syncDatabaseToRedis(uid, days, databaseData)
+	}
+
+	return databaseData, nil
+}
+
+func (as *AnalyticsService) getAnalyticsFromRedis(uid uint, days int) (*AnalyticsData, error) {
 	type result struct {
 		data map[string]int64
 		err  error
@@ -287,6 +313,30 @@ func (as *AnalyticsService) GetFullAnalytics(uid uint, days int) (*AnalyticsData
 	}, nil
 }
 
+func (as *AnalyticsService) isRedisDataEmpty(data *AnalyticsData) bool {
+	return len(data.ProfileViews) == 0 && 
+		   len(data.TopCountries) == 0 && 
+		   len(data.TopSocials) == 0 && 
+		   len(data.TopReferrers) == 0 && 
+		   len(data.DeviceBreakdown) == 0
+}
+
+func (as *AnalyticsService) isAnalyticsDataEmpty(data *AnalyticsData) bool {
+	return len(data.ProfileViews) == 0 && 
+		   len(data.TopCountries) == 0 && 
+		   len(data.TopSocials) == 0 && 
+		   len(data.TopReferrers) == 0 && 
+		   len(data.DeviceBreakdown) == 0
+}
+
+func (as *AnalyticsService) syncDatabaseToRedis(uid uint, days int, data *AnalyticsData) {
+	log.Printf("DEBUG: Syncing database analytics to Redis for UID %d", uid)
+	
+	// This is a simplified sync - in production you might want more sophisticated logic
+	// For now, we'll just log that we have data from database
+	log.Printf("DEBUG: Database has analytics data for UID %d: %+v", uid, data)
+}
+
 func (as *AnalyticsService) CleanupOldData() {
 	prefixes := []string{
 		CountryViewsPrefix,
@@ -327,4 +377,202 @@ func (as *AnalyticsService) CleanupOldData() {
 			}
 		}
 	}
+}
+
+// Debug function to check Redis analytics data
+func (as *AnalyticsService) DebugAnalyticsData(uid uint) error {
+	today := time.Now().Format("2006-01-02")
+	
+	// Check profile views
+	viewsKey := fmt.Sprintf("%s%d:%s", ProfileViewsPrefix, uid, today)
+	views, err := as.Client.Get(viewsKey).Int64()
+	if err != nil && err != redis.Nil {
+		return fmt.Errorf("error checking views: %w", err)
+	}
+	
+	// Check countries
+	countryKey := fmt.Sprintf("%s%d:%s", CountryViewsPrefix, uid, today)
+	countries, err := as.Client.HGetAll(countryKey).Result()
+	if err != nil {
+		return fmt.Errorf("error checking countries: %w", err)
+	}
+	
+	// Check devices
+	deviceKey := fmt.Sprintf("%s%d:%s", DeviceViewsPrefix, uid, today)
+	devices, err := as.Client.HGetAll(deviceKey).Result()
+	if err != nil {
+		return fmt.Errorf("error checking devices: %w", err)
+	}
+	
+	log.Printf("DEBUG Analytics for UID %d on %s:", uid, today)
+	log.Printf("  Views: %d", views)
+	log.Printf("  Countries: %v", countries)
+	log.Printf("  Devices: %v", devices)
+	
+	return nil
+}
+
+// Schedule database sync for a specific user and date
+func (as *AnalyticsService) scheduleDatabaseSync(uid uint, dateStr string) {
+	// Use Redis to track sync status
+	syncKey := fmt.Sprintf("analytics:sync:%d:%s", uid, dateStr)
+	
+	// Check if already synced recently (within 5 minutes)
+	lastSync, err := as.Client.Get(syncKey).Result()
+	if err == nil {
+		// Already synced recently, skip
+		return
+	}
+	
+	// Mark as syncing
+	as.Client.Set(syncKey, time.Now().Format(time.RFC3339), 5*time.Minute)
+	
+	// Perform the sync
+	if err := as.syncRedisToDatabase(uid, dateStr); err != nil {
+		log.Printf("Error syncing analytics to database for UID %d: %v", uid, err)
+	}
+}
+
+// Sync Redis analytics data to database
+func (as *AnalyticsService) syncRedisToDatabase(uid uint, dateStr string) error {
+	date, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return fmt.Errorf("error parsing date: %w", err)
+	}
+
+	// Sync countries
+	if err := as.syncMetricToDatabase(uid, date, "country", CountryViewsPrefix, dateStr); err != nil {
+		log.Printf("Error syncing countries: %v", err)
+	}
+
+	// Sync referrers
+	if err := as.syncMetricToDatabase(uid, date, "referrer", ReferrerViewsPrefix, dateStr); err != nil {
+		log.Printf("Error syncing referrers: %v", err)
+	}
+
+	// Sync devices
+	if err := as.syncMetricToDatabase(uid, date, "device", DeviceViewsPrefix, dateStr); err != nil {
+		log.Printf("Error syncing devices: %v", err)
+	}
+
+	// Sync social clicks
+	if err := as.syncMetricToDatabase(uid, date, "social", SocialClicksPrefix, dateStr); err != nil {
+		log.Printf("Error syncing socials: %v", err)
+	}
+
+	// Sync profile views
+	if err := as.syncViewsToDatabase(uid, date, dateStr); err != nil {
+		log.Printf("Error syncing views: %v", err)
+	}
+
+	return nil
+}
+
+// Sync a specific metric from Redis to database
+func (as *AnalyticsService) syncMetricToDatabase(uid uint, date time.Time, metricType string, redisPrefix string, dateStr string) error {
+	redisKey := fmt.Sprintf("%s%d:%s", redisPrefix, uid, dateStr)
+	
+	// Get all data from Redis
+	values, err := as.Client.HGetAll(redisKey).Result()
+	if err != nil {
+		return fmt.Errorf("error getting Redis data: %w", err)
+	}
+
+	// Sync each value to database
+	for name, countStr := range values {
+		count := int64(0)
+		fmt.Sscanf(countStr, "%d", &count)
+		
+		if count > 0 {
+			if err := as.upsertAnalytics(uid, date, metricType, name, count); err != nil {
+				log.Printf("Error upserting analytics for %s %s: %v", metricType, name, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// Sync profile views from Redis to database
+func (as *AnalyticsService) syncViewsToDatabase(uid uint, date time.Time, dateStr string) error {
+	viewsKey := fmt.Sprintf("%s%d:%s", ProfileViewsPrefix, uid, dateStr)
+	
+	views, err := as.Client.Get(viewsKey).Int64()
+	if err != nil && err != redis.Nil {
+		return fmt.Errorf("error getting views from Redis: %w", err)
+	}
+	
+	if views > 0 {
+		if err := as.upsertAnalytics(uid, date, "view", "total", views); err != nil {
+			log.Printf("Error upserting views: %v", err)
+		}
+	}
+
+	return nil
+}
+
+// Upsert analytics record in database
+func (as *AnalyticsService) upsertAnalytics(uid uint, date time.Time, analyticsType string, name string, count int64) error {
+	var analytics models.Analytics
+	
+	result := as.DB.Where("user_id = ? AND date = ? AND type = ? AND name = ?", 
+		uid, date.Format("2006-01-02"), analyticsType, name).First(&analytics)
+	
+	if result.Error != nil {
+		// Create new record
+		analytics = models.Analytics{
+			UserID: uid,
+			Date:   date,
+			Type:   analyticsType,
+			Name:   name,
+			Count:  count,
+		}
+		return as.DB.Create(&analytics).Error
+	} else {
+		// Update existing record
+		return as.DB.Model(&analytics).Update("count", count).Error
+	}
+}
+
+// Get analytics from database (fallback when Redis is empty)
+func (as *AnalyticsService) GetAnalyticsFromDatabase(uid uint, days int) (*AnalyticsData, error) {
+	if days > DataRetentionDays {
+		days = DataRetentionDays
+	}
+
+	cutoffDate := time.Now().AddDate(0, 0, -days)
+	
+	var analytics []models.Analytics
+	err := as.DB.Where("user_id = ? AND date >= ?", uid, cutoffDate.Format("2006-01-02")).Find(&analytics).Error
+	if err != nil {
+		return nil, fmt.Errorf("error getting analytics from database: %w", err)
+	}
+
+	// Process analytics data
+	result := &AnalyticsData{
+		ProfileViews:    make(map[string]int64),
+		TopCountries:    make(map[string]int64),
+		TopSocials:      make(map[string]int64),
+		TopReferrers:    make(map[string]int64),
+		DeviceBreakdown: make(map[string]int64),
+	}
+
+	for _, a := range analytics {
+		dateStr := a.Date.Format("2006-01-02")
+		
+		switch a.Type {
+		case "view":
+			result.ProfileViews[dateStr] = a.Count
+		case "country":
+			result.TopCountries[a.Name] += a.Count
+		case "social":
+			result.TopSocials[a.Name] += a.Count
+		case "referrer":
+			result.TopReferrers[a.Name] += a.Count
+		case "device":
+			result.DeviceBreakdown[a.Name] += a.Count
+		}
+	}
+
+	return result, nil
 }

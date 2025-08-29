@@ -209,10 +209,15 @@ func (vs *ViewService) IncrementViewCount(uid uint, sessionID string, headers ma
 	device := detectDeviceType(userAgent)
 
 	if vs.AnalyticsService != nil {
+		log.Printf("DEBUG: Tracking analytics for UID %d - Country: %s, Referrer: %s, Device: %s", uid, country, referrer, device)
 		err = vs.AnalyticsService.TrackProfileView(uid, country, referrer, device)
 		if err != nil {
 			log.Printf("Error tracking analytics: %v", err)
+		} else {
+			log.Printf("DEBUG: Analytics tracking successful for UID %d", uid)
 		}
+	} else {
+		log.Printf("DEBUG: AnalyticsService is nil for UID %d", uid)
 	}
 
 	log.Println("Incremented view count for user:", uid)

@@ -43,8 +43,19 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { headers });
   }
 
-  // Dashboard authentication check
+  // Security: Block access to sensitive files
   const path = request.nextUrl.pathname;
+  if (path.startsWith('/.git') || 
+      path.includes('.env') || 
+      path.includes('config') ||
+      path.includes('wp-config') ||
+      path.includes('composer.json') ||
+      path.includes('package.json')) {
+    console.log(`[Middleware] SECURITY: Blocked access to sensitive file: ${path}`);
+    return new NextResponse('Access Denied', { status: 403 });
+  }
+
+  // Dashboard authentication check
   if (path.startsWith('/dashboard')) {
     console.log(`[Middleware] Dashboard route detected: ${path}`);
     
