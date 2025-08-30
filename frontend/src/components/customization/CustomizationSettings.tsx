@@ -880,6 +880,7 @@ export default function CustomizationSettings({
                                                 case 'jetbrains-mono': return 'font-jetbrains';
                                                 case 'grand-theft-auto': return 'font-grand-theft-auto';
                                                 case 'drippy': return 'font-drippy';
+                                                case 'anton': return 'font-anton';
                                                 default: return 'font-poppins';
                                             }
                                         };

@@ -51,6 +51,8 @@ func StartMigration(db *gorm.DB) error {
 		return err
 	}
 
+
+
 	log.Println("Migration completed")
 	return nil
 }
@@ -240,3 +242,5 @@ func CreateEarlyUserBadge(db *gorm.DB) error {
 	log.Println("Early User badge created successfully")
 	return nil
 }
+
+

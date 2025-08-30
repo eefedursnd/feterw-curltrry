@@ -304,6 +304,7 @@ func (b *Bot) registerHandlers() {
 			log.Println("PresenceAdd failed:", err)
 		}
 	})
+	b.Session.AddHandler(b.handleGuildMemberUpdate)
 }
 
 func (b *Bot) handleDiscordLinked(event *models.Event) error {
@@ -403,4 +404,26 @@ func (b *Bot) handleRedeemCodeUsed(event *models.Event) error {
 	}
 
 	return nil
+}
+
+func (b *Bot) handleGuildMemberUpdate(s *discordgo.Session, m *discordgo.GuildMemberUpdate) {
+	// Check if the member just got boosted
+	if m.PremiumSince != nil && m.PremiumSince.After(time.Now().Add(-time.Minute)) {
+		// This is a new boost (within the last minute)
+		log.Printf("New boost detected for user: %s (%s)", m.User.Username, m.User.ID)
+		
+		// Send boost notification
+		channelID := "1401929667165945889" // Replace with your channel ID
+		
+		embed := &discordgo.MessageEmbed{
+			Title:       "Thank you for boosting! <a:rgbheart:1411330051512995931>",
+			Description: "To claim your cutz.lol booster badge, link your discord account on cutz.lol",
+			Color:       0x8B5CF6, // Purple color
+		}
+		
+		_, err := s.ChannelMessageSendEmbed(channelID, embed)
+		if err != nil {
+			log.Printf("Error sending boost notification: %v", err)
+		}
+	}
 }
