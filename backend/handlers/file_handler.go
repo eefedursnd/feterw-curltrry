@@ -79,6 +79,7 @@ func (h *FileHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		log.Printf("Template preview uploaded successfully: %s", fileURL)
 		utils.RespondSuccess(w, "File uploaded successfully", fileURL)
 		return
 	}

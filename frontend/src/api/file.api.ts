@@ -31,6 +31,7 @@ class FileAPI {
             }
 
             const json = await parseJson(response);
+            console.log('File upload response:', json);
             return (json as any)?.data as string;
         } catch (error) {
             console.error("Error uploading file:", error);
