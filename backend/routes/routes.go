@@ -18,8 +18,6 @@ import (
 )
 
 func RegisterRoutes(router *mux.Router, db *gorm.DB, redisClient *redis.Client, bot *discord.Bot) {
-	// Apply security middleware to all routes
-	router.Use(middlewares.SecurityMiddleware)
 	eventService := services.NewEventService(db, redisClient, bot.Session)
 
 	userService := services.NewUserService(db, redisClient, bot.Session)

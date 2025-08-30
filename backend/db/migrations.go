@@ -38,7 +38,6 @@ func StartMigration(db *gorm.DB) error {
 		&models.Event{},
 		&models.DataExport{},
 		&models.InviteCode{},
-		&models.Analytics{},
 	)
 	if err != nil {
 		log.Println("Error migrating models:", err)
@@ -50,8 +49,6 @@ func StartMigration(db *gorm.DB) error {
 		log.Printf("Error creating Early User badge: %v", err)
 		return err
 	}
-
-
 
 	log.Println("Migration completed")
 	return nil
@@ -242,5 +239,3 @@ func CreateEarlyUserBadge(db *gorm.DB) error {
 	log.Println("Early User badge created successfully")
 	return nil
 }
-
-

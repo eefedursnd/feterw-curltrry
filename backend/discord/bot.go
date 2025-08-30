@@ -413,12 +413,28 @@ func (b *Bot) handleGuildMemberUpdate(s *discordgo.Session, m *discordgo.GuildMe
 		log.Printf("New boost detected for user: %s (%s)", m.User.Username, m.User.ID)
 		
 		// Send boost notification
-		channelID := "1401929667165945889" // Replace with your channel ID
+		channelID := "1401929667165945889"
 		
 		embed := &discordgo.MessageEmbed{
-			Title:       "Thank you for boosting! <a:rgbheart:1411330051512995931>",
-			Description: "To claim your cutz.lol booster badge, link your discord account on cutz.lol",
+			Title:       "Thank you for boosting! ❤️",
+			Description: fmt.Sprintf("**%s** just boosted the server! Thank you for your support! <:1443purpleverifed:1408558279235338260>", m.User.Username),
 			Color:       0x8B5CF6, // Purple color
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:   "User",
+					Value:  fmt.Sprintf("<@%s>", m.User.ID),
+					Inline: true,
+				},
+				{
+					Name:   "Boosted At",
+					Value:  fmt.Sprintf("<t:%d:R>", m.PremiumSince.Unix()),
+					Inline: true,
+				},
+			},
+			Footer: &discordgo.MessageEmbedFooter{
+				Text: "cutz.lol Discord Server",
+			},
+			Timestamp: time.Now().Format(time.RFC3339),
 		}
 		
 		_, err := s.ChannelMessageSendEmbed(channelID, embed)
